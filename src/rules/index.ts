@@ -1,16 +1,30 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var Pac = require('node-pac');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var net = require('net');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var LRU = require('lru-cache');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var path = require('path');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var parseUrl = require('url').parse;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var extend = require('extend');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var parseQuery = require('querystring').parse;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var lookup = require('./dns');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var Rules = require('./rules');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var values = require('./util').values;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var util = require('../util');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var logger = require('../util/logger');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var fileMgr = require('../util/file-mgr');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var config = require('../config');
 
 var tplCache = new LRU({ max: 36 });
@@ -27,11 +41,14 @@ var LOCALHOST = '127.0.0.1';
 var resolveReqRules = rules.resolveReqRules.bind(rules);
 var AUTH_RE = /^([^\\/]+)@/;
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.Rules = Rules;
 if (config.networkMode && !config.shadowRulesMode) {
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
   exports.parse = util.noop;
 } else {
-  exports.parse = function (text, root, _values) {
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+  exports.parse = function (text: any, root: any, _values: any) {
     if (config.pluginsMode || config.shadowRulesMode) {
       text = config.shadowRules || '';
     }
@@ -43,34 +60,51 @@ if (config.networkMode && !config.shadowRulesMode) {
     rules.parse(text, root, _values);
   };
 }
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.append = rules.append.bind(rules);
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.resolveSNICallback = rules.resolveSNICallback.bind(rules);
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.resolveHost = rules.resolveHost.bind(rules);
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.resolveInternalHost = rules.resolveInternalHost.bind(rules);
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.resolveProxy = rules.resolveProxy.bind(rules);
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.resolveEnable = rules.resolveEnable.bind(rules);
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.hasReqScript = rules.hasReqScript.bind(rules);
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.resolveDisable = rules.resolveDisable.bind(rules);
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.resolvePipe = rules.resolvePipe.bind(rules);
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.resolveRule = rules.resolveRule.bind(rules);
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.resolveRules = resolveReqRules;
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.resolveResRules = rules.resolveResRules.bind(rules);
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.resolveBodyFilter = rules.resolveBodyFilter.bind(rules);
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.lookupHost = rules.lookupHost.bind(rules);
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.resolveLocalRule = rules.resolveLocalRule.bind(rules);
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.clearAppend = rules.clearAppend.bind(rules);
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.disableDnsCache = function () {
   Rules.disableDnsCache();
 };
 
-var dnsResolve = function (host, callback) {
+var dnsResolve = function (host: any, callback: any) {
   return lookup(host, callback || util.noop, true);
 };
 var PROXY_HOSTS_RE = /[?&]proxyHosts?(?:&|$)/i;
 var P_HOST_RE = /[?&]host=([\w.:-]+)(?:&|$)/i;
 
-function isProxyHost(req, proxy, host) {
+function isProxyHost(req: any, proxy: any, host: any) {
   if (proxy) {
     req._proxyTunnel =
       isLineProp(proxy, 'proxyTunnel') ||
@@ -84,7 +118,7 @@ function isProxyHost(req, proxy, host) {
   return isLineProp(host, 'proxyHost');
 }
 
-function isProxyEnable(req, name) {
+function isProxyEnable(req: any, name: any) {
   var props = req._proxyProps;
   if (props === undefined) {
     props = rules.resolveProxyProps(req);
@@ -93,11 +127,12 @@ function isProxyEnable(req, name) {
   return props && util.isEnable(props, name);
 }
 
-function isLineProp(rule, name) {
+function isLineProp(rule: any, name: any) {
   return rule && rule.lineProps[name];
 }
 
-exports.getProxy = function (url, req, callback) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.getProxy = function (url: any, req: any, callback: any) {
   if (!req) {
     return callback();
   }
@@ -123,7 +158,7 @@ exports.getProxy = function (url, req, callback) {
   );
   var ignoreProxy;
   var proxy;
-  var pacRule;
+  var pacRule: any;
   var host = rules.getHost(req, pRules, fRules, hRules);
   var hostValue = util.getMatcherValue(host) || '';
   if (config.multiEnv || req._headerRulesFirst) {
@@ -167,7 +202,7 @@ exports.getProxy = function (url, req, callback) {
     var hostname = util.removeProtocol(host.matcher, true);
     if (!net.isIP(hostname)) {
       req.curUrl = hostname || url;
-      return rules.lookupHost(req, function (err, ip) {
+      return rules.lookupHost(req, function (err: any, ip: any) {
         callback(err, ip, host.port, host);
       });
     }
@@ -245,25 +280,31 @@ exports.getProxy = function (url, req, callback) {
   pacUrl = /^https?\:\/\//.test(pacUrl)
     ? pacUrl
     : util.join(pacRule.root, pacUrl);
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   var pac = cachedPacs[pacUrl];
   if (pac) {
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     delete cachedPacs[pacUrl];
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     cachedPacs[pacUrl] = pac;
   } else {
     var list = Object.keys(cachedPacs);
     if (list.length >= 10) {
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       delete cachedPacs[list[0]];
     }
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     cachedPacs[pacUrl] = pac = new Pac(pacUrl, dnsResolve);
   }
   reqRules.pac = pacRule;
   return pac.findWhistleProxyForURL(
     url.replace('tunnel:', 'https:'),
-    function (err, rule) {
+    function (err: any, rule: any) {
       if (rule) {
         tempRules.parse(pacRule.rawPattern + ' ' + rule);
         req.curUrl = url;
         if ((proxy = tempRules.resolveProxy(req, hostValue))) {
+          // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
           proxyHost = isProxyHost(req, proxy) || proxyHost; // 不能调换顺序
           req._proxyTunnel =
             req._proxyTunnel || isLineProp(pacRule, 'proxyTunnel');
@@ -285,7 +326,7 @@ exports.getProxy = function (url, req, callback) {
   );
 };
 
-function tpl(str, data) {
+function tpl(str: any, data: any) {
   if (
     typeof str !== 'string' ||
     str.indexOf('<%') === -1 ||
@@ -330,7 +371,7 @@ function tpl(str, data) {
   return fn(data || {}).replace(/\t/g, '\n');
 }
 
-function getScriptContext(req, res, body, pattern) {
+function getScriptContext(req: any, res: any, body: any, pattern: any) {
   var ip = req.clientIp || LOCALHOST;
   var ctx = req.scriptContenxt;
   if (!ctx) {
@@ -344,7 +385,7 @@ function getScriptContext(req, res, body, pattern) {
       url: req.fullUrl,
       method: util.toUpperCase(req.method) || 'GET',
       httpVersion: req.httpVersion || '1.1',
-      isLocalAddress: function (_ip) {
+      isLocalAddress: function (_ip: any) {
         return util.isLocalAddress(_ip || ip);
       },
       ip: ip,
@@ -360,7 +401,7 @@ function getScriptContext(req, res, body, pattern) {
   ctx.rules = [];
   ctx.values = {};
   ctx.value = req.globalValue;
-  ctx.getValue = function (key, onlyValues) {
+  ctx.getValue = function (key: any, onlyValues: any) {
     var value = !onlyValues && req._inlineValues && req._inlineValues[key];
     return typeof value === 'string' ? value : values.get(key);
   };
@@ -379,7 +420,7 @@ function getScriptContext(req, res, body, pattern) {
   return ctx;
 }
 
-function getReqPayload(req, res, cb) {
+function getReqPayload(req: any, res: any, cb: any) {
   if (res) {
     return cb();
   }
@@ -387,7 +428,7 @@ function getReqPayload(req, res, cb) {
     if (typeof req._reqBody === 'string') {
       cb(req._reqBody);
     } else {
-      req.getPayload(function (_, payload) {
+      req.getPayload(function (_: any, payload: any) {
         cb(fileMgr.decode(payload));
       });
     }
@@ -396,7 +437,7 @@ function getReqPayload(req, res, cb) {
   }
 }
 
-function execRulesScript(script, req, res, body, pattern) {
+function execRulesScript(script: any, req: any, res: any, body: any, pattern: any) {
   var context = getScriptContext(req, res, body, pattern);
   if (util.execScriptSync(script, context) && Array.isArray(context.rules)) {
     return {
@@ -406,11 +447,12 @@ function execRulesScript(script, req, res, body, pattern) {
   }
   return '';
 }
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.execRulesScript = execRulesScript;
 
-function handleDynamicRules(script, req, res, cb) {
-  util.getRuleValue(script, function (list) {
-    var scriptItem, index, text;
+function handleDynamicRules(script: any, req: any, res: any, cb: any) {
+  util.getRuleValue(script, function (list: any) {
+    var scriptItem, index: any, text: any;
     if (list) {
       index = script.scriptIndex;
       scriptItem = script.list[index];
@@ -419,20 +461,22 @@ function handleDynamicRules(script, req, res, cb) {
     if (!scriptItem || util.isRulesContent(text)) {
       return cb(list && list.join('\n'));
     }
-    getReqPayload(req, res, function (body) {
+    getReqPayload(req, res, function (body: any) {
       var result = execRulesScript(text, req, res, body, script.rawPattern);
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'rules' does not exist on type 'string | ... Remove this comment to see the full error message
       list[index] = result.rules;
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'values' does not exist on type 'string |... Remove this comment to see the full error message
       cb(list.join('\n'), result.values);
     });
   }, null, null, null, req);
 }
 
-function resolveRulesFile(req, callback) {
+function resolveRulesFile(req: any, callback: any) {
   if (req.rules.G) {
     var varMap = {};
-    var globalValue;
-    var pList;
-    req.rules.G.list.forEach(function (item) {
+    var globalValue: any;
+    var pList: any;
+    req.rules.G.list.forEach(function (item: any) {
       if (item.matcher[0] !== 'P') {
         if (!globalValue) {
           globalValue = item;
@@ -443,6 +487,7 @@ function resolveRulesFile(req, callback) {
       var index = value.indexOf('=');
       if (index !== -1) {
         var name = value.substring(0, index);
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
         var plugin = exports.getPlugin(name);
         if (!plugin || !plugin.pluginVars) {
           return;
@@ -451,7 +496,9 @@ function resolveRulesFile(req, callback) {
         if (value) {
           pList = pList || [];
           pList.push(item);
+          // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
           var list = varMap[name] || [];
+          // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
           varMap[name] = list;
           if (list.indexOf(value) === -1) {
             list.push(value);
@@ -464,7 +511,7 @@ function resolveRulesFile(req, callback) {
     req.rules.G = globalValue;
     req.globalValue = util.getMatcherValue(globalValue);
   }
-  handleDynamicRules(req.rules.rulesFile, req, null, function (text, vals) {
+  handleDynamicRules(req.rules.rulesFile, req, null, function (text: any, vals: any) {
     if (text) {
       var rulesFileMgr = rulesMgrCache.get(text);
       if (!rulesFileMgr) {
@@ -484,13 +531,15 @@ function resolveRulesFile(req, callback) {
   });
 }
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.resolveRulesFile = resolveRulesFile;
-exports.resolveResRulesFile = function (req, res, callback) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.resolveResRulesFile = function (req: any, res: any, callback: any) {
   handleDynamicRules(
     req.rules && req.rules.resScript,
     req,
     res,
-    function (text, vals) {
+    function (text: any, vals: any) {
       text = text && text.trim();
       callback(
         text && {
@@ -502,7 +551,7 @@ exports.resolveResRulesFile = function (req, res, callback) {
   );
 };
 
-function getValue(req, key, keep) {
+function getValue(req: any, key: any, keep: any) {
   var value = req.headers[key];
   if (value) {
     if (!keep && config.strict) {
@@ -518,7 +567,7 @@ function getValue(req, key, keep) {
   return value;
 }
 
-function initHeaderRules(req, needBodyFilters) {
+function initHeaderRules(req: any, needBodyFilters: any) {
   if (req._bodyFilters !== undefined) {
     return;
   }
@@ -527,7 +576,9 @@ function initHeaderRules(req, needBodyFilters) {
   var isPluginReq = req.isPluginReq && !req._isProxyReq;
   req._headerRulesFirst = isPluginReq;
   var rulesHeader = getValue(req, RULES_HEADER, isPluginReq);
+  // @ts-expect-error ts-migrate(2575) FIXME: No overload expects 2 arguments, but overloads do ... Remove this comment to see the full error message
   var hostHeader = util.trimStr(getValue(req, HOST_HEADER));
+  // @ts-expect-error ts-migrate(2575) FIXME: No overload expects 2 arguments, but overloads do ... Remove this comment to see the full error message
   var keyHeader = util.trimStr(getValue(req, KEY_HEADER));
   var kvHeader = getValue(req, KV_HEADER, isPluginReq);
 
@@ -555,6 +606,7 @@ function initHeaderRules(req, needBodyFilters) {
     var headerVars = rulesMgr._globalPluginVars;
     var vars = extend({}, curVars, headerVars);
     Object.keys(vars).forEach(function (key) {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
       var plugin = exports.getPlugin(key);
       if (!plugin || !plugin.pluginVars) {
         return;
@@ -569,6 +621,7 @@ function initHeaderRules(req, needBodyFilters) {
     });
   } else {
     Object.keys(curVars).forEach(function (key) {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
       if (!exports.getPlugin || exports.getPlugin(key)) {
         value = curVars[key];
         req._globalPluginVars[key] = value;
@@ -577,11 +630,13 @@ function initHeaderRules(req, needBodyFilters) {
   }
 }
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.initHeaderRules = initHeaderRules;
 
-function initRules(req) {
+function initRules(req: any) {
   var fullUrl = req.fullUrl || util.getFullUrl(req);
   req.curUrl = fullUrl;
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
   initHeaderRules(req);
   if (req.headerRulesMgr) {
     if (config.multiEnv || req._headerRulesFirst) {
@@ -597,11 +652,12 @@ function initRules(req) {
   return req.rules;
 }
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.initRules = initRules;
 
 var HTTPS_RE = /^(?:ws|http)s:\/\//;
 
-function checkCache(cacheKey, callback) {
+function checkCache(cacheKey: any, callback: any) {
   var result = clientCerts.peek(cacheKey);
   if (result) {
     if (result.pending) {
@@ -617,7 +673,8 @@ function checkCache(cacheKey, callback) {
   }
 }
 
-exports.getClientCert = function (req, cb) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.getClientCert = function (req: any, cb: any) {
   if (!req) {
     return cb();
   }
@@ -654,7 +711,7 @@ exports.getClientCert = function (req, cb) {
   var base = util.getString(matcher.base);
   var key = util.getString(matcher.key);
   var cert = util.getString(matcher.cert);
-  var cacheKey;
+  var cacheKey: any;
   try {
     if (key && cert) {
       if (base) {
@@ -663,7 +720,7 @@ exports.getClientCert = function (req, cb) {
       }
       cacheKey = 'cert\n' + key + '\n' + cert;
       if (
-        checkCache(cacheKey, function (data) {
+        checkCache(cacheKey, function (data: any) {
           if (data) {
             cb(data[0], data[1], false, cacheKey);
           } else {
@@ -673,7 +730,7 @@ exports.getClientCert = function (req, cb) {
       ) {
         return;
       }
-      return fileMgr.readFileList([key, cert], function (data) {
+      return fileMgr.readFileList([key, cert], function (data: any) {
         var list = clientCerts.peek(cacheKey);
         if (data[0] && data[1] && data[0].length && data[1].length) {
           clientCerts.set(cacheKey, data);
@@ -681,7 +738,7 @@ exports.getClientCert = function (req, cb) {
           clientCerts.del(cacheKey);
           data = '';
         }
-        list.forEach(function (fn) {
+        list.forEach(function (fn: any) {
           fn(data);
         });
       });
@@ -694,7 +751,7 @@ exports.getClientCert = function (req, cb) {
       }
       cacheKey = 'pfx\n' + pwd + '\n' + pfx;
       if (
-        checkCache(cacheKey, function (buf) {
+        checkCache(cacheKey, function (buf: any) {
           if (buf) {
             cb(pwd, buf, true, cacheKey);
           } else {
@@ -704,7 +761,7 @@ exports.getClientCert = function (req, cb) {
       ) {
         return;
       }
-      return fileMgr.readFile(pfx, function (buf) {
+      return fileMgr.readFile(pfx, function (buf: any) {
         var list = clientCerts.peek(cacheKey);
         if (buf && buf.length) {
           clientCerts.set(cacheKey, buf);
@@ -712,7 +769,7 @@ exports.getClientCert = function (req, cb) {
           clientCerts.del(cacheKey);
           buf = '';
         }
-        list.forEach(function (fn) {
+        list.forEach(function (fn: any) {
           fn(buf);
         });
       });

@@ -1,38 +1,61 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var path = require('path');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var http = require('http');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var fs = require('fs');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var net = require('net');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var dns = require('dns');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var https = require('https');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var crypto = require('crypto');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var qs = require('querystring');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var LRU = require('lru-cache');
 var httpAgent = http.Agent;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var httpsAgent = require('https').Agent;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var url = require('url');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var fse = require('fs-extra2');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var Buffer = require('safe-buffer').Buffer;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var extend = require('extend');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var tunnel = require('hagent').agent;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var socks = require('sockx');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var json5 = require('json5');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var pkgConf = require('../package.json');
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 var config = extend(exports, pkgConf);
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var common = require('./util/common');
 
-var customUIHost;
+var customUIHost: any;
 var customHostPluginMap = {};
 var customPluginNameHost = {};
 var WHISTLE_PLUGIN_RE = /^(?:whistle\.)?([a-z\d_\-]+)$/;
 var CMD_RE = /^[\w]{1,12}(?:\s+-g)?$/;
 var httpsAgents = new LRU({ max: 360 });
 var socksAgents = new LRU({ max: 100 });
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
 var version = process.version.substring(1).split('.');
 var disableAgent = version[0] > 10;
 var uid =
+  // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
   Date.now() + '-' + process.pid + '-' + Math.floor(Math.random() * 10000);
 var IPV4_RE = /^([\d.]+)(:\d{1,5})?$/;
 var IPV6_RE = /^\[([\w:]+)\](:\d{1,5})?$/;
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'noop'.
 var noop = function () {};
 var DATA_KEY_RE = /^(clientip|clientid|tunneldata)([=.])([\w.-]+)$/i;
 var LOCAL_UI_HOST_LIST = [
@@ -64,6 +87,7 @@ var variableProperties = [
 config.uid = uid;
 config.rejectUnauthorized = false;
 config.enableH2 = version[0] > 12; // 支持 HTTP2 要求的最低 Node 版本
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name '__dirname'.
 config.ASSESTS_PATH = path.join(__dirname, '../assets');
 config.REQ_FROM_HEADER = 'x-whistle-request-from';
 config.WHISTLE_POLICY_HEADER = 'x-whistle-policy';
@@ -75,6 +99,7 @@ config.HTTPS_PROTO_HEADER = 'x-forwarded-proto';
 config.REAL_HOST_HEADER = 'x-whistle-real-host';
 config.FWD_HOST_HEADER = 'x-forwarded-host';
 config.INTERNAL_ID =
+  // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
   Date.now() + '/' + process.pid + '/' + Math.floor(Math.random() * 100000);
 config.INTERNAL_ID_HEADER = '_x-whistle-internal-id';
 config.SNI_PLUGIN_HEADER = 'x-whistle-sni-callback-plugin-' + uid;
@@ -124,19 +149,23 @@ var CONN_TIMEOUT = 30000;
 
 config.CONN_TIMEOUT = CONN_TIMEOUT;
 
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'getHomedir'.
 var getHomedir = common.getHomedir;
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'getHomePath'.
 var getHomePath = common.getHomePath;
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'getWhistlePath'.
 var getWhistlePath = common.getWhistlePath;
 
 config.getHomedir = getHomedir;
 config.getHomePath = getHomePath;
 
-function getDataDir(dirname) {
+function getDataDir(dirname: any) {
   var dir = path.join(getWhistlePath(), dirname || '.' + config.name);
   fse.ensureDirSync(dir);
   return dir;
 }
 
+// @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
 config.baseDir = getDataDir();
 config.CUSTOM_PLUGIN_PATH = path.join(getWhistlePath(), 'custom_plugins');
 config.CUSTOM_CERTS_DIR = path.resolve(getWhistlePath(), 'custom_certs');
@@ -145,11 +174,14 @@ try {
   fse.ensureDirSync(config.CUSTOM_CERTS_DIR);
 } catch (e) {}
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.getWhistlePath = getWhistlePath;
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.getDataDir = getDataDir;
-var async_id_symbol;
+var async_id_symbol: any;
 if (version[0] < 16) {
   try {
+    // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
     async_id_symbol = process.binding('async_wrap').async_id_symbol;
   } catch (e) {}
 }
@@ -158,11 +190,11 @@ var emptyHandle = {
   getAsyncId: noop
 };
 
-function createAgent(agentConfig, https) {
+function createAgent(agentConfig: any, https: any) {
   var agent = new (https ? httpsAgent : httpAgent)(agentConfig);
   if (async_id_symbol) {
     var addRequest = agent.addRequest;
-    agent.addRequest = function (req, options) {
+    agent.addRequest = function (req: any, options: any) {
       // fix: https://github.com/nodejs/node/issues/13539
       var freeSockets = this.freeSockets[this.getName(options)];
       if (freeSockets && freeSockets.length) {
@@ -185,7 +217,7 @@ function createAgent(agentConfig, https) {
         };
       }
       var onSocket = req.onSocket;
-      req.onSocket = function (socket) {
+      req.onSocket = function (socket: any) {
         try {
           socket[async_id_symbol] = socket._handle.getAsyncId();
         } catch (e) {}
@@ -197,11 +229,12 @@ function createAgent(agentConfig, https) {
   return agent;
 }
 
-function capitalize(str) {
+function capitalize(str: any) {
   return (str && str[0].toUpperCase()) + str.substring(1);
 }
 
-function getHttpsAgent(options, reqOpts) {
+function getHttpsAgent(options: any, reqOpts: any) {
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
   var key = getCacheKey(options);
   var agent = httpsAgents.get(key);
   if (reqOpts) {
@@ -209,6 +242,7 @@ function getHttpsAgent(options, reqOpts) {
     var proxyHeaders = {};
     Object.keys(headers).forEach(function (key) {
       var rawKey = key.split('-').map(capitalize).join('-');
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       proxyHeaders[rawKey] = headers[key];
     });
     reqOpts._tunnelProxyHeaders = proxyHeaders;
@@ -235,9 +269,10 @@ function getHttpsAgent(options, reqOpts) {
   return agent;
 }
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.getHttpsAgent = getHttpsAgent;
 
-function getCacheKey(options, isSocks) {
+function getCacheKey(options: any, isSocks: any) {
   var auth = options.auth || options.proxyAuth;
   if (!auth) {
     var headers = options.headers || '';
@@ -256,14 +291,14 @@ function getCacheKey(options, isSocks) {
   ].join(':');
 }
 
-function getAuths(_url) {
+function getAuths(_url: any) {
   var options = typeof _url == 'string' ? url.parse(_url) : _url;
   if (!options || !options.auth) {
     return [socks.auth.None()];
   }
 
-  var auths = [];
-  options.auth.split('|').forEach(function (auth) {
+  var auths: any = [];
+  options.auth.split('|').forEach(function (auth: any) {
     auth = auth.trim();
     if (auth) {
       var index = auth.indexOf(':');
@@ -275,15 +310,18 @@ function getAuths(_url) {
   });
 
   return auths.length
+    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'auth' implicitly has an 'any' type.
     ? auths.map(function (auth) {
       return socks.auth.UserPassword(auth.username, auth.password);
     })
     : [socks.auth.None()];
 }
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.getAuths = getAuths;
 
-exports.setAuth = function (auth) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.setAuth = function (auth: any) {
   if (auth) {
     config.username = getString(auth.username);
     var password = (config.password = getString(auth.password));
@@ -293,7 +331,8 @@ exports.setAuth = function (auth) {
   return config;
 };
 
-exports.getPluginData = function (name) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.getPluginData = function (name: any) {
   var pluginsDataMap = name && config.pluginsDataMap;
   if (!pluginsDataMap) {
     return;
@@ -305,11 +344,13 @@ exports.getPluginData = function (name) {
   return pluginsDataMap[name];
 };
 
-exports.setGuestAuth = function (auth) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.setGuestAuth = function (auth: any) {
   auth && setGuestAuth(auth);
 };
 
-function parseHost(host) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function parseHost(host: any) {
   if (Array.isArray(host)) {
     return host.filter(function (h) {
       return h && typeof h === 'string';
@@ -319,35 +360,43 @@ function parseHost(host) {
   return host && host.split('|').map(getHostname);
 }
 
-exports.setUIHost = function (host) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.setUIHost = function (host: any) {
   customUIHost = parseHost(host);
 };
 
-exports.setPluginUIHost = function (pluginName, host) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.setPluginUIHost = function (pluginName: any, host: any) {
   if (!pluginName || !WHISTLE_PLUGIN_RE.test(pluginName)) {
     return;
   }
   pluginName = RegExp.$1;
   host = parseHost(host);
   if (host) {
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     customPluginNameHost[pluginName] = host;
-    host.forEach(function (h) {
+    host.forEach(function (h: any) {
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       delete customHostPluginMap[h];
     });
   } else {
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     delete customPluginNameHost[pluginName];
   }
   customHostPluginMap = {};
   Object.keys(customPluginNameHost).forEach(function (name) {
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     var list = customPluginNameHost[name];
     list &&
-      list.forEach(function (h) {
+      list.forEach(function (h: any) {
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         customHostPluginMap[h] = name;
       });
   });
 };
 
-function toBuffer(buf) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'toBuffer'.
+function toBuffer(buf: any) {
   if (buf == null || Buffer.isBuffer(buf)) {
     return buf;
   }
@@ -355,9 +404,11 @@ function toBuffer(buf) {
   return Buffer.from(buf);
 }
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.toBuffer = toBuffer;
 
-function setHeader(headers, name, value) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'setHeader'.
+function setHeader(headers: any, name: any, value: any) {
   var keys = Object.keys(headers);
   for (var i = 0, len = keys.length; i < len; i++) {
     var key = keys[i];
@@ -369,9 +420,10 @@ function setHeader(headers, name, value) {
   headers[name] = value;
 }
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.setHeader = setHeader;
 
-function getTunnelPath(headers) {
+function getTunnelPath(headers: any) {
   var host = headers.host || headers.Host;
   if (host) {
     return host;
@@ -385,7 +437,8 @@ function getTunnelPath(headers) {
   }
 }
 
-function connect(options, cb) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'connect'.
+function connect(options: any, cb: any) {
   var headers = options.headers || {};
   var proxyOptions = {
     method: 'CONNECT',
@@ -400,6 +453,7 @@ function connect(options, cb) {
   };
   var httpModule = http;
   if (options.proxyServername) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'servername' does not exist on type '{ me... Remove this comment to see the full error message
     proxyOptions.servername = options.proxyServername;
     httpModule = https;
   }
@@ -418,7 +472,7 @@ function connect(options, cb) {
   var req = httpModule.request(proxyOptions);
   req.on('error', noop);
   req
-    .on('connect', function (res, socket) {
+    .on('connect', function (res: any, socket: any) {
       clearTimeout(timer);
       socket.on('error', noop);
       if (res.statusCode !== 200) {
@@ -426,8 +480,10 @@ function connect(options, cb) {
           'Tunneling socket could not be established, statusCode=' +
             res.statusCode
         );
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'statusCode' does not exist on type 'Erro... Remove this comment to see the full error message
         err.statusCode = res.statusCode;
         socket.destroy();
+        // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
         process.nextTick(function () {
           req.emit('error', err);
         });
@@ -442,22 +498,24 @@ function connect(options, cb) {
   return req;
 }
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.connect = connect;
 
-function preventThrowOutError(socket) {
+function preventThrowOutError(socket: any) {
   if (socket.listeners('error').indexOf(freeSocketErrorListener) === -1) {
     socket.once('error', freeSocketErrorListener);
   }
 }
 
-function freeSocketErrorListener() {
+function freeSocketErrorListener(this: any) {
   var socket = this;
   socket.destroy();
   socket.emit('agentRemove');
   socket.removeListener('error', freeSocketErrorListener);
 }
 
-function resolvePath(file) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'resolvePath'.
+function resolvePath(file: any) {
   if (!file || !(file = file.trim())) {
     return file;
   }
@@ -465,7 +523,8 @@ function resolvePath(file) {
   return /^[\w-]+$/.test(file) ? file : path.resolve(file);
 }
 
-function getHostname(_url) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function getHostname(_url: any) {
   if (typeof _url != 'string') {
     return '';
   }
@@ -476,14 +535,14 @@ function getHostname(_url) {
   return index == -1 ? _url : _url.substring(0, index);
 }
 
-function getPaths(paths, isCustom) {
+function getPaths(paths: any, isCustom: any) {
   if (typeof paths === 'string') {
     paths = paths.trim().split(/\s*[|,;]\s*/);
   } else if (!Array.isArray(paths)) {
     return;
   }
-  var result = [];
-  paths.forEach(function (path) {
+  var result: any = [];
+  paths.forEach(function (path: any) {
     if (isCustom && ['self', 'buildin', 'buildIn', 'build-in'].indexOf(path) !== -1) {
       result.push(config.CUSTOM_PLUGIN_PATH);
     } else if (path && typeof path === 'string') {
@@ -493,7 +552,7 @@ function getPaths(paths, isCustom) {
   return result.length ? result : null;
 }
 
-function getSecureFilter(newConf) {
+function getSecureFilter(newConf: any) {
   var secureFilter = newConf.secureFilter;
   if (typeof secureFilter === 'function') {
     return secureFilter;
@@ -502,27 +561,31 @@ function getSecureFilter(newConf) {
     return;
   }
   try {
+    // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
     return require(secureFilter);
   } catch (e) {}
 }
 
-function getString(str) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function getString(str: any) {
   return str && typeof str === 'string' ? str : '';
 }
 
-function createHash(str) {
+function createHash(str: any) {
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'createHash' does not exist on type 'Cryp... Remove this comment to see the full error message
   var shasum = crypto.createHash('sha1');
   shasum.update(str);
   return shasum.digest('hex');
 }
 
-function readFileText(filepath) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function readFileText(filepath: any) {
   try {
     return fs.readFileSync(filepath, { encoding: 'utf8' }).trim();
   } catch (e) {}
 }
 
-function getHostPort(str) {
+function getHostPort(str: any) {
   if (!/^(?:([\w.-]+):)?([1-9]\d{0,4})$/.test(str)) {
     return;
   }
@@ -532,11 +595,11 @@ function getHostPort(str) {
   };
 }
 
-function isPort(port) {
+function isPort(port: any) {
   return /^\d+$/.test(port) && port <= 65535 && port > 0;
 }
 
-function setGuestAuth(auth) {
+function setGuestAuth(auth: any) {
   if (auth.guestName === '-' && !auth.guestPassword) {
     config.guest = {};
   } else if (auth.guestName && auth.guestPassword) {
@@ -549,7 +612,8 @@ function setGuestAuth(auth) {
   }
 }
 
-function parseString(str) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'parseString'.
+function parseString(str: any) {
   str = str && typeof str === 'string' && str.trim();
   if (!str) {
     return '';
@@ -568,11 +632,11 @@ function parseString(str) {
   return str;
 }
 
-function getPluginList(list) {
+function getPluginList(list: any) {
   if (typeof list == 'string') {
     list = list.trim().split(/\s*[,|]\s*/);
   }
-  var result;
+  var result: any;
   if (Array.isArray(list)) {
     list.forEach(function (name) {
       if (WHISTLE_PLUGIN_RE.test(name)) {
@@ -584,7 +648,8 @@ function getPluginList(list) {
   return result;
 }
 
-exports.extend = function (newConf) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.extend = function (newConf: any) {
   config.pluginHostMap = {};
   config.uiport = config.port;
 
@@ -605,6 +670,7 @@ exports.extend = function (newConf) {
     }
     if (newConf.cluster) {
       config.headless = true;
+      // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
       config.workerIndex = process.env.workerIndex;
       if (typeof newConf.mode !== 'string') {
         newConf.mode = '';
@@ -623,7 +689,7 @@ exports.extend = function (newConf) {
     }
 
     if (dns.getServers && Array.isArray(dnsServer)) {
-      var newServers = [];
+      var newServers: any = [];
       dnsServer.forEach(function (ip) {
         ip = typeof ip === 'string' && ip.trim();
         if (/^ipv6$/i.test(ip)) {
@@ -650,13 +716,14 @@ exports.extend = function (newConf) {
 
     if (newConf.inspect || newConf.inspectBrk) {
       config.inspectMode = true;
+      // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
       process.env.PFORK_MODE = 'inline';
     }
     variableProperties.forEach(function (name) {
       config[name] = newConf[name] || pkgConf[name];
     });
     var shadowRules = parseString(newConf.shadowRules);
-    var resolveShadowValues = function (obj) {
+    var resolveShadowValues = function (obj: any) {
       if (
         (!obj.rules || typeof obj.rules === 'string') &&
         obj.values &&
@@ -750,7 +817,7 @@ exports.extend = function (newConf) {
     config.allowMultipleChoice = newConf.allowMultipleChoice;
     if (typeof newConf.mode === 'string') {
       var mode = newConf.mode.trim().split(/\s*[|,&]\s*/);
-      mode.forEach(function (m) {
+      mode.forEach(function (m: any) {
         m = m.trim();
         if (
           /^(pureProxy|debug|master|disableAuthUI|captureData|headless|strict|proxyServer|encrypted|noGzip|disableUpdateTips|proxifier2?)$/.test(m)
@@ -826,6 +893,7 @@ exports.extend = function (newConf) {
         } else if (m === 'INADDR_ANY') {
           config.INADDR_ANY = true;
         } else if (m === 'buildIn' || m === 'build-in') {
+          // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
           process.env.PFORK_EXEC_PATH = process.execPath;
         } else if (m === 'safe' || m === 'rejectUnauthorized') {
           config.rejectUnauthorized = true;
@@ -923,11 +991,16 @@ exports.extend = function (newConf) {
     if (typeof secureFilter === 'function') {
       config.secureFilter = secureFilter;
     }
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
     config.notUninstallPluginPaths = getPaths(newConf.notUninstallPluginPath || newConf.notUninstallPluginPaths);
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
     config.pluginPaths = getPaths(newConf.pluginPaths || newConf.pluginsPath || newConf.pluginPath);
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
     config.prePluginsPath = config.projectPluginPaths = getPaths(newConf.projectPluginPaths || newConf.projectPluginsPath || newConf.projectPluginPath);
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
     config.accountPluginsPath = getPaths(newConf.accountPluginsPath);
     config.customPluginPaths = getPaths(newConf.customPluginPaths || newConf.customPluginsPath || newConf.customPluginPath, true);
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
     config.addon = getPaths(newConf.addonsPath || newConf.addonPath || newConf.addon);
     if (config.accountPluginsPath) {
       config.customPluginPaths = config.accountPluginsPath.concat(config.customPluginPaths || []);
@@ -943,7 +1016,7 @@ exports.extend = function (newConf) {
         var host = pluginHost[name];
         if (typeof host === 'string' && (host = host.trim())) {
           host = host.toLowerCase().split(/\s*[|,&]\s*/);
-          host.forEach(function (h) {
+          host.forEach(function (h: any) {
             config.pluginHostMap[h] = name;
           });
         }
@@ -980,9 +1053,10 @@ exports.extend = function (newConf) {
   var uiHostList = (config.uiHostList = []);
   if (typeof config.localUIHost === 'string') {
     var localHostList = config.localUIHost.toLowerCase().split(/\s*[|,&]\s*/);
-    localHostList.forEach(function (hostname) {
+    localHostList.forEach(function (hostname: any) {
       hostname = getHostname(hostname);
       if (hostname && LOCAL_UI_HOST_LIST.indexOf(hostname) == -1) {
+        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'any' is not assignable to parame... Remove this comment to see the full error message
         uiHostList.push(hostname);
       }
     });
@@ -991,15 +1065,16 @@ exports.extend = function (newConf) {
     config.customLocalUIHost = uiHostList[0];
   }
 
-  config.setLocalUIHost = function (hostname) {
+  config.setLocalUIHost = function (hostname: any) {
     config.customLocalUIHost = getHostname(hostname);
   };
 
   config.localUIHost = 'local.whistlejs.com';
 
-  var isWebUIHost = function (host) {
+  var isWebUIHost = function (host: any) {
     if (
       host === 'local.wproxy.org' ||
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'any' is not assignable to parame... Remove this comment to see the full error message
       uiHostList.indexOf(host) !== -1 ||
       (customUIHost && customUIHost.indexOf(host) !== -1)
     ) {
@@ -1010,21 +1085,25 @@ exports.extend = function (newConf) {
     }
     return LOCAL_UI_HOST_LIST.indexOf(host) !== -1;
   };
-  var isLocalUIUrl = function (url) {
+  var isLocalUIUrl = function (url: any) {
     var host = getHostname(url);
     return (
       isWebUIHost(host) ||
       !!config.pluginHostMap[host] ||
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       !!customHostPluginMap[host]
     );
   };
   config.isLocalUIUrl = isLocalUIUrl;
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
   exports.isWebUIHost = isWebUIHost;
-  exports.getPluginNameByHost = function (host) {
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+  exports.getPluginNameByHost = function (host: any) {
     host = getHostname(host);
     if (isWebUIHost(host)) {
       return;
     }
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     return config.pluginHostMap[host] || customHostPluginMap[host];
   };
 
@@ -1040,9 +1119,10 @@ exports.extend = function (newConf) {
   };
   // node 11及以上版本缓存连接有问题，先禁掉
   disableAgent = disableAgent || config.debug;
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
   config.httpAgent = disableAgent ? false : createAgent(agentConfig);
   config.httpsAgent = disableAgent ? false : createAgent(agentConfig, true);
-  config.getSocksAgent = function (options) {
+  config.getSocksAgent = function (options: any) {
     var key = getCacheKey(options, true);
     var agent = socksAgents.get(key);
     if (agent) {
@@ -1109,7 +1189,7 @@ exports.extend = function (newConf) {
   config.clientId = clientId;
   config.LOCAL_FILES = path.join(config.baseDir, 'local_files');
   fse.ensureDirSync(config.LOCAL_FILES);
-  config.setModified = function (clientId, isRules) {
+  config.setModified = function (clientId: any, isRules: any) {
     if (isRules) {
       config.mrulesClientId = clientId || '';
       config.mrulesTime = Date.now();

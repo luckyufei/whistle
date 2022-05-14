@@ -1,6 +1,7 @@
 var MAX_LEN = 1024 * 32;
 
-function isUtf8(buf, i) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'isUtf8'.
+function isUtf8(buf: any, i: any) {
   i = i || 0;
   for (var len = Math.min(buf.length, MAX_LEN); i < len; i++) {
     var byte = buf[i];
@@ -89,7 +90,8 @@ function isUtf8(buf, i) {
   return true;
 }
 
-module.exports = function (buf) {
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
+module.exports = function (buf: any) {
   if (isUtf8(buf)) {
     return true;
   }

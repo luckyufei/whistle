@@ -1,10 +1,18 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var url = require('url');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var net = require('net');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var extend = require('extend');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var util = require('../util');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var rulesUtil = require('./util');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var lookup = require('./dns');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var protoMgr = require('./protocols');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var config = require('../config');
 
 var rules = rulesUtil.rules;
@@ -75,7 +83,7 @@ var G_CR_RE = /\r/g;
 var G_LF_RE = /\n/g;
 var SUFFIX_RE = /^\\\.[\w-]+$/;
 var DOT_PATTERN_RE = /^\.[\w-]+(?:[?$]|$)/;
-var inlineValues;
+var inlineValues: any;
 var CONTROL_RE =
   /[\u001e\u001f\u200e\u200f\u200d\u200c\u202a\u202d\u202e\u202c\u206e\u206f\u206b\u206a\u206d\u206c]+/g;
 var ENABLE_PROXY_RE =
@@ -87,7 +95,7 @@ var NO_PROTO_RE = /[^\w!*|.-]/;
 var SKIP_RE = /^skip:\/\//;
 var SUB_VAR_RE = /\$\{RegExp\.\$([&\d])\}/g;
 
-function domainToRegExp(all, star, dot) {
+function domainToRegExp(all: any, star: any, dot: any) {
   var len = star.length;
   var result = len > 1 ? '([^/?]*)' : '([^/?.]*)';
   if (dot) {
@@ -99,7 +107,7 @@ function domainToRegExp(all, star, dot) {
   return result;
 }
 
-function pathToRegExp(all) {
+function pathToRegExp(all: any) {
   var len = all.length;
   if (len > 2) {
     return '(.*)';
@@ -107,11 +115,12 @@ function pathToRegExp(all) {
   return len > 1 ? '([^?]*)' : '([^?/]*)';
 }
 
-function queryToRegExp(all) {
+function queryToRegExp(all: any) {
   return all.length > 1 ? '(.*)' : '([^&]*)';
 }
 
-function isRegUrl(url, isCheck) {
+function isRegUrl(url: any, isCheck: any) {
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   var result = regUrlCache[url];
   if (result) {
     return isCheck ? result : extend({}, result);
@@ -184,6 +193,7 @@ function isRegUrl(url, isCheck) {
     (query ? util.escapeRegExp(query).replace(STAR_RE, queryToRegExp) : '');
   var pattern = '^' + protocol + domain + query + (hasEndSymbol ? '$' : '');
   try {
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     result = regUrlCache[oriUrl] = {
       not: not,
       pattern: new RegExp(pattern, ignoreCase ? 'i' : '')
@@ -192,7 +202,7 @@ function isRegUrl(url, isCheck) {
   return result;
 }
 
-function formatShorthand(url) {
+function formatShorthand(url: any) {
   if (NO_SCHEMA_RE.test(url)) {
     return url;
   }
@@ -231,7 +241,7 @@ function formatShorthand(url) {
   return url;
 }
 
-function formatUrl(pattern) {
+function formatUrl(pattern: any) {
   var queryString = '';
   var queryIndex = pattern.indexOf('?');
   if (queryIndex != -1) {
@@ -243,7 +253,7 @@ function formatUrl(pattern) {
   return (index == -1 ? pattern + '/' : pattern) + queryString;
 }
 
-function getKey(url) {
+function getKey(url: any) {
   if (url.indexOf('{') == 0) {
     var index = url.lastIndexOf('}');
     return index > 1 && url.substring(1, index);
@@ -252,7 +262,7 @@ function getKey(url) {
   return false;
 }
 
-function getValue(url) {
+function getValue(url: any) {
   if (url.indexOf('(') == 0) {
     var index = url.lastIndexOf(')');
     return index != -1 ? url.substring(1, index) : url;
@@ -261,7 +271,8 @@ function getValue(url) {
   return false;
 }
 
-function getPath(url) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function getPath(url: any) {
   if (url.indexOf('<') == 0) {
     var index = url.lastIndexOf('>');
     return index != -1 ? url.substring(1, index) : url;
@@ -270,13 +281,14 @@ function getPath(url) {
   return false;
 }
 
-function getFiles(path) {
+function getFiles(path: any) {
   return /^x?((raw)?file|tpl|jsonp|dust):\/\//.test(path)
     ? util.removeProtocol(path, true).split('|')
     : null;
 }
 
-function setProtocol(target, source) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function setProtocol(target: any, source: any) {
   if (util.hasProtocol(target)) {
     return target;
   }
@@ -289,7 +301,7 @@ function setProtocol(target, source) {
   return protocol + (NO_SCHEMA_RE.test(target) ? '' : '//') + target;
 }
 
-function isPathSeparator(ch) {
+function isPathSeparator(ch: any) {
   return ch == '/' || ch == '\\' || ch == '?';
 }
 
@@ -300,7 +312,7 @@ function isPathSeparator(ch) {
  * @param second
  * @returns
  */
-function joinQuery(firstQuery, secondQuery) {
+function joinQuery(firstQuery: any, secondQuery: any) {
   if (!firstQuery || !secondQuery) {
     return firstQuery || secondQuery;
   }
@@ -316,7 +328,8 @@ function joinQuery(firstQuery, secondQuery) {
       : '&';
   return firstQuery + sep + secondQuery;
 }
-function join(first, second) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function join(first: any, second: any) {
   if (!first || !second) {
     return first + second;
   }
@@ -351,11 +364,11 @@ function join(first, second) {
   return WEB_PROTOCOL_RE.test(first) ? formatUrl(first + query) : first + query;
 }
 
-function toLine(_, line) {
+function toLine(_: any, line: any) {
   return line.replace(SPACE_RE, ' ');
 }
 
-function getLines(text, root) {
+function getLines(text: any, root: any) {
   if (!text || !(text = text.trim())) {
     return [];
   }
@@ -363,8 +376,8 @@ function getLines(text, root) {
   var ruleKeys = {};
   var valueKeys = {};
   var lines = text.split(LINE_END_RE);
-  var result = [];
-  lines.forEach(function (line) {
+  var result: any = [];
+  lines.forEach(function (line: any) {
     line = line.trim();
     if (!line) {
       return;
@@ -375,11 +388,15 @@ function getLines(text, root) {
         var key = RegExp.$1;
         line = '';
         if (isRuleKey) {
+          // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
           if (!ruleKeys[key]) {
+            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             ruleKeys[key] = 1;
             line = rules.get(key);
           }
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         } else if (!valueKeys[key]) {
+          // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
           valueKeys[key] = 1;
           line = values.get(key);
         }
@@ -394,11 +411,11 @@ function getLines(text, root) {
   return result;
 }
 
-function resolvePropValue(obj, key) {
+function resolvePropValue(obj: any, key: any) {
   return (key && obj && obj[key.toLowerCase()]) || '';
 }
 
-function resolveUrlVar(req, key, escape) {
+function resolveUrlVar(req: any, key: any, escape: any) {
   var url = req.fullUrl || req.curUrl;
   if (!key) {
     return url;
@@ -421,7 +438,7 @@ function resolveUrlVar(req, key, escape) {
   }
   return util.getQueryValue(query[key.substring(6)]);
 }
-function resolveReqCookiesVar(req, key, escape) {
+function resolveReqCookiesVar(req: any, key: any, escape: any) {
   var cookie = req.headers.cookie || '';
   if (!cookie || !key) {
     return cookie;
@@ -433,7 +450,7 @@ function resolveReqCookiesVar(req, key, escape) {
   }
   return util.getQueryValue(cookies[key]);
 }
-function resolveResCookiesVar(req, key) {
+function resolveResCookiesVar(req: any, key: any) {
   var resHeaders = req.resHeaders;
   var cookie = resHeaders && resHeaders['set-cookie'];
   var isArray = Array.isArray(cookie);
@@ -452,34 +469,42 @@ function resolveResCookiesVar(req, key) {
   if (!cookies || req.__rawResCookies !== rawCookie) {
     req.__rawResCookies = cookie.join();
     cookies = req.__resCookies = {};
-    cookie.forEach(function (c) {
+    cookie.forEach(function (c: any) {
       c = util.parseQuery(c, '; ', null, escape);
       Object.keys(c).forEach(function (key) {
         var item = {};
         switch (key.toLowerCase()) {
         case 'domain':
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'domain' does not exist on type '{}'.
           item.domain = c[key];
           break;
         case 'path':
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'path' does not exist on type '{}'.
           item.path = c[key];
           break;
         case 'expires':
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'expires' does not exist on type '{}'.
           item.expires = c[key];
           break;
         case 'max-age':
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'maxAge' does not exist on type '{}'.
           item.maxAge = item['max-age'] = item['Max-Age'] = c[key];
           break;
         case 'httponly':
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'httpOnly' does not exist on type '{}'.
           item.httpOnly = true;
           break;
         case 'secure':
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'secure' does not exist on type '{}'.
           item.secure = true;
           break;
         case 'samesite':
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'samesite' does not exist on type '{}'.
           item.samesite = item.sameSite = item.SameSite = c[key];
           break;
         default:
           if (!cookies[key]) {
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type '{}'.
             item.value = c[key];
             cookies[key] = item;
           }
@@ -499,27 +524,27 @@ function resolveResCookiesVar(req, key) {
   }
   return (name ? cookie[name] : cookie.value) || '';
 }
-function resolveClientIpVar(req, key) {
+function resolveClientIpVar(req: any, key: any) {
   return req.clientIp;
 }
-function resolveServerIpVar(req, key) {
+function resolveServerIpVar(req: any, key: any) {
   if (!req.resHeaders) {
     return '';
   }
   return req.hostIp || '127.0.0.1';
 }
-function resolveMethodVar(req, key) {
+function resolveMethodVar(req: any, key: any) {
   return req.method;
 }
-function resolveStatusCodeVar(req, key) {
+function resolveStatusCodeVar(req: any, key: any) {
   return req.statusCode || '';
 }
 
-function resolveResHeadersVar(req, key) {
+function resolveResHeadersVar(req: any, key: any) {
   return resolvePropValue(req.resHeaders, key);
 }
 
-function getPluginVar(vars, index) {
+function getPluginVar(vars: any, index: any) {
   if (!vars) {
     return '';
   }
@@ -529,7 +554,7 @@ function getPluginVar(vars, index) {
   return (vars && vars[index || 0]) || '';
 }
 
-function resolveRuleValue(req, key) {
+function resolveRuleValue(req: any, key: any) {
   var curRules = key && req.rules;
   if (curRules) {
     if (VAR_INDEX_RE.test(key)) {
@@ -568,7 +593,7 @@ function resolveRuleValue(req, key) {
   return '';
 }
 
-function resolveVarValue(req, escape, name, key) {
+function resolveVarValue(req: any, escape: any, name: any, key: any) {
   var lname = name.toLowerCase();
   switch (lname) {
   case 'now':
@@ -605,6 +630,7 @@ function resolveVarValue(req, escape, name, key) {
     return resolveReqCookiesVar(req, key, escape);
   case 'rescookie':
   case 'rescookies':
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 3.
     return resolveResCookiesVar(req, key, escape);
   case 'method':
     return resolveMethodVar(req, key);
@@ -639,12 +665,12 @@ function resolveVarValue(req, escape, name, key) {
   }
 }
 
-function resetComma(str) {
+function resetComma(str: any) {
   return str && str.replace(G_CR_RE, ',').replace(G_LF_RE, '\\,');
 }
 
-function resolveTplVar(value, req) {
-  return value.replace(TPL_VAR_RE, function (all, escape, lb, name, key, rb) {
+function resolveTplVar(value: any, req: any) {
+  return value.replace(TPL_VAR_RE, function (all: any, escape: any, lb: any, name: any, key: any, rb: any) {
     if (
       (lb && !rb) ||
       (name === 'whistle' && (!key || !PLUGIN_NAME_RE.test(key)))
@@ -688,22 +714,23 @@ function resolveTplVar(value, req) {
   });
 }
 
-function renderTpl(rule, req) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function renderTpl(rule: any, req: any) {
   var matcher = rule.matcher;
   if (rule.isTpl === false) {
     return matcher;
   }
   rule.isTpl = false;
-  matcher = matcher.replace(TPL_RE, function (_, proto, value) {
+  matcher = matcher.replace(TPL_RE, function (_: any, proto: any, value: any) {
     rule.isTpl = true;
     return (proto || '') + resolveTplVar(value.slice(1, -1), req);
   });
   return matcher;
 }
 
-function resolveVar(rule, vals, req) {
+function resolveVar(rule: any, vals: any, req: any) {
   var matcher = renderTpl(rule, req);
-  return matcher.replace(VAR_RE, function (all, key) {
+  return matcher.replace(VAR_RE, function (all: any, key: any) {
     key = getValueFor(key, vals);
     if (typeof key === 'string') {
       return rule.isTpl && key ? resolveTplVar(key, req) : key;
@@ -712,7 +739,7 @@ function resolveVar(rule, vals, req) {
   });
 }
 
-function getValueFor(key, vals) {
+function getValueFor(key: any, vals: any) {
   if (!key) {
     return;
   }
@@ -724,19 +751,20 @@ function getValueFor(key, vals) {
   return values.get(key);
 }
 
-function getRule(req, list, vals, index, isFilter, host) {
+function getRule(req: any, list: any, vals: any, index: any, isFilter: any, host: any) {
   var rule = resolveRuleList(req, list, vals, index || 0, isFilter, null, host);
   resolveValue(rule, vals, req);
   return rule;
 }
 
-function getRuleList(req, list, vals, isEnableProxy) {
-  return resolveRuleList(req, list, vals, isEnableProxy).map(function (rule) {
+function getRuleList(req: any, list: any, vals: any, isEnableProxy: any) {
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 7 arguments, but got 4.
+  return resolveRuleList(req, list, vals, isEnableProxy).map(function (rule: any) {
     return resolveValue(rule, vals, req);
   });
 }
 
-function resolveValue(rule, vals, req) {
+function resolveValue(rule: any, vals: any, req: any) {
   if (!rule) {
     return;
   }
@@ -759,7 +787,7 @@ function resolveValue(rule, vals, req) {
   if (value !== false || (value = getValue(matcher)) !== false) {
     rule.value = protocol + value;
     if (rule.isTpl && regExp) {
-      rule.value = rule.value.replace(SUB_VAR_RE, function(_, index) {
+      rule.value = rule.value.replace(SUB_VAR_RE, function(_: any, index: any) {
         index = index === '&' ? 0 : index;
         return regExp[index] || '';
       });
@@ -774,7 +802,7 @@ function resolveValue(rule, vals, req) {
   return rule;
 }
 
-function getRelativePath(pattern, url, matcher) {
+function getRelativePath(pattern: any, url: any, matcher: any) {
   var index = url.indexOf('?');
   if (index === -1 || pattern.indexOf('?') !== -1) {
     return '';
@@ -786,7 +814,7 @@ function getRelativePath(pattern, url, matcher) {
   return (url && '&') + url;
 }
 
-function removeFilters(rule) {
+function removeFilters(rule: any) {
   var filters = rule.filters;
   if (filters) {
     if (filters.curFilter) {
@@ -796,14 +824,14 @@ function removeFilters(rule) {
   }
 }
 
-function replaceSubMatcher(url, regExp) {
+function replaceSubMatcher(url: any, regExp: any) {
   if (!regExp || !SUB_MATCH_RE.test(url)) {
     return url;
   }
   return util.replacePattern(url, regExp);
 }
 
-function resolveRuleList(req, list, vals, index, isFilter, isEnableProxy, host) {
+function resolveRuleList(req: any, list: any, vals: any, index: any, isFilter: any, isEnableProxy: any, host: any) {
   var curUrl = formatUrl(req.curUrl);
   var notHttp = list.isRuleProto && curUrl[0] !== 'h';
   //支持域名匹配
@@ -816,7 +844,7 @@ function resolveRuleList(req, list, vals, index, isFilter, isEnableProxy, host) 
   var results = [];
   var url = curUrl.replace(QUERY_RE, '');
   var _domainUrl = domainUrl.replace(QUERY_RE, '');
-  var rule, matchedUrl, files, matcher, result, origMatcher, filePath;
+  var rule: any, matchedUrl, files: any, matcher: any, result, origMatcher: any, filePath: any;
   var getPathRule = function () {
     result = extend(
       {
@@ -826,7 +854,7 @@ function resolveRuleList(req, list, vals, index, isFilter, isEnableProxy, host) 
       rule
     );
     if (files && filePath) {
-      result.files = files.map(function (file) {
+      result.files = files.map(function (file: any) {
         return join(file, filePath);
       });
       result.rawFiles = files;
@@ -838,7 +866,7 @@ function resolveRuleList(req, list, vals, index, isFilter, isEnableProxy, host) 
     }
     results.push(result);
   };
-  var getExactRule = function (relPath, regObj) {
+  var getExactRule = function (relPath: any, regObj: any) {
     origMatcher = resolveVar(rule, vals, req);
     origMatcher = replaceSubMatcher(origMatcher, regObj);
     matcher = setProtocol(origMatcher, curUrl);
@@ -881,11 +909,13 @@ function resolveRuleList(req, list, vals, index, isFilter, isEnableProxy, host) 
         regExp = {};
         if (!not) {
           for (var j = 1; j < 10; j++) {
+            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             regExp[j] = RegExp['$' + j];
           }
         }
       }
       if (matchedRes && checkFilter() && --index < 0) {
+        // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
         regExp['0'] = curUrl;
         matcher = resolveVar(rule, vals, req);
         // 支持 $x 包含 `|` 的情形
@@ -908,6 +938,7 @@ function resolveRuleList(req, list, vals, index, isFilter, isEnableProxy, host) 
         hostname = RegExp.$1;
         regObj = { 0: hostname };
         for (var k = 1; k < 9; k++) {
+          // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
           regObj[k] = RegExp['$' + (k + 1)];
         }
       }
@@ -955,6 +986,7 @@ function resolveRuleList(req, list, vals, index, isFilter, isEnableProxy, host) 
       matchedRes = pattern === url || pattern === curUrl;
       if ((not ? !matchedRes : matchedRes) && checkFilter() && --index < 0) {
         if (
+          // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
           (result = getExactRule(
             getRelativePath(pattern, curUrl, rule.matcher)
           ))
@@ -994,11 +1026,12 @@ function resolveRuleList(req, list, vals, index, isFilter, isEnableProxy, host) 
   return isIndex ? null : results;
 }
 
-function resolveProps(req, rules, vals, isIgnore) {
+function resolveProps(req: any, rules: any, vals: any, isIgnore: any) {
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
   var list = getRuleList(req, rules, vals);
   var result = {};
   if (isIgnore) {
-    list = list.filter(function(rule) {
+    list = list.filter(function(rule: any) {
       var matcher = rule.matcher;
       if (SKIP_RE.test(matcher)) {
         matcher = matcher.slice(7);
@@ -1008,17 +1041,19 @@ function resolveProps(req, rules, vals, isIgnore) {
         if (EXACT_SKIP_RE.test(matcher) || NO_PROTO_RE.test(matcher)) {
           var prop ='ignore|' + (RegExp.$1 === 'pattern' ? 'pattern' : 'matcher') + '=' + (RegExp.$2 || matcher);
           req._skipProps = req._skipProps || {};
+          // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
           result[prop] = true;
           req._skipProps[prop] = true;
           return false;
         }
-        matcher.split('|').forEach(function(name) {
+        matcher.split('|').forEach(function(name: any) {
           if (name) {
             req._skipProps = req._skipProps || {};
             req._skipProps[name] = true;
           }
         });
       } else if (EXACT_IGNORE_RE.test(matcher)) {
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         result['ignore|' + (RegExp.$1 === 'pattern' ? 'pattern' : 'matcher') + '=' + RegExp.$2] = true;
         return false;
       }
@@ -1031,7 +1066,7 @@ function resolveProps(req, rules, vals, isIgnore) {
   return util.resolveProperties(list, result);
 }
 
-function parseWildcard(pattern, not) {
+function parseWildcard(pattern: any, not: any) {
   if (!WILDCARD_RE.test(pattern)) {
     return;
   }
@@ -1097,10 +1132,11 @@ function parseWildcard(pattern, not) {
     isExact: isExact
   };
 }
-function parseRule(rulesMgr, pattern, matcher, raw, root, options) {
+function parseRule(rulesMgr: any, pattern: any, matcher: any, raw: any, root: any, options: any) {
   if (isNegativePattern(matcher)) {
     return;
   }
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   var regUrl = regUrlCache[pattern];
   var rawPattern = pattern;
   var rawMatcher = matcher;
@@ -1169,6 +1205,7 @@ function parseRule(rulesMgr, pattern, matcher, raw, root, options) {
     var origProto;
     if (index !== -1) {
       origProto = matcher.substring(0, index);
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       protocol = aliasProtocols[origProto];
     }
     if (!protocol) {
@@ -1230,11 +1267,14 @@ function parseRule(rulesMgr, pattern, matcher, raw, root, options) {
     hostFilter: options.hostFilter
   };
   if (protocol === 'proxy' || protocol === 'host') {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'rawProps' does not exist on type '{ not:... Remove this comment to see the full error message
     rule.rawProps = options.rawProps;
   } else if (protocol === 'log' || protocol === 'weinre') {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'isTpl' does not exist on type '{ not: an... Remove this comment to see the full error message
     rule.isTpl = false;
   }
   if (useRealPort) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'realPort' does not exist on type '{ not:... Remove this comment to see the full error message
     rule.realPort = config.realPort;
     rule.matcher = rule.matcher.replace(
       'realPort',
@@ -1244,21 +1284,27 @@ function parseRule(rulesMgr, pattern, matcher, raw, root, options) {
   if (proxyName) {
     switch (proxyName) {
     case 'socks':
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'isSocks' does not exist on type '{ not: ... Remove this comment to see the full error message
       rule.isSocks = true;
       break;
     case 'https-proxy':
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'isHttps' does not exist on type '{ not: ... Remove this comment to see the full error message
       rule.isHttps = true;
       break;
     case 'internal-http-proxy':
     case 'https2http-proxy':
     case 'internal-proxy':
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'isInternal' does not exist on type '{ no... Remove this comment to see the full error message
       rule.isInternal = true;
       break;
     case 'internal-https-proxy':
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'isInternal' does not exist on type '{ no... Remove this comment to see the full error message
       rule.isInternal = true;
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'isHttps' does not exist on type '{ not: ... Remove this comment to see the full error message
       rule.isHttps = true;
       break;
     case 'http2https-proxy':
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'isHttp2https' does not exist on type '{ ... Remove this comment to see the full error message
       rule.isHttp2https = true;
       break;
     }
@@ -1269,7 +1315,8 @@ function parseRule(rulesMgr, pattern, matcher, raw, root, options) {
   list.push(rule);
 }
 
-function parse(rulesMgr, text, root, append) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'parse'.
+function parse(rulesMgr: any, text: any, root: any, append: any) {
   if (!append) {
     protoMgr.resetRules(rulesMgr._rules);
     rulesMgr._globalPluginVars = {};
@@ -1284,7 +1331,7 @@ function parse(rulesMgr, text, root, append) {
   }
 }
 
-function isPattern(item) {
+function isPattern(item: any) {
   return (
     PORT_PATTERN_RE.test(item) ||
     NO_SCHEMA_RE.test(item) ||
@@ -1299,7 +1346,7 @@ function isPattern(item) {
 var IP_WITH_PORT_RE = /^\[([:\da-f.]+)\](?::(\d+))?$/i;
 var IPV4_RE = /^(?:::(?:ffff:)?)?([\d.]+)(?:\:(\d+))?$/;
 
-function parseHost(item) {
+function parseHost(item: any) {
   var port;
   if (IP_WITH_PORT_RE.test(item)) {
     item = RegExp.$1;
@@ -1321,16 +1368,18 @@ function parseHost(item) {
   };
 }
 
-function isHost(item) {
+function isHost(item: any) {
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   var result = hostCache[item];
   if (result == null) {
     result = parseHost(item);
   }
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   hostCache[item] = result;
   return result;
 }
 
-function indexOfPattern(list) {
+function indexOfPattern(list: any) {
   var ipIndex = -1;
   for (var i = 0, len = list.length; i < len; i++) {
     var item = list[i];
@@ -1349,7 +1398,7 @@ function indexOfPattern(list) {
   return ipIndex;
 }
 
-function resolveFilterPattern(matcher) {
+function resolveFilterPattern(matcher: any) {
   var not, isInclude, filter, caseIns, wildcard;
   if (PATTERN_FILTER_RE.test(matcher)) {
     filter = RegExp.$1;
@@ -1401,6 +1450,7 @@ function resolveFilterPattern(matcher) {
   }
   if (wildcard) {
     matcher =
+      // @ts-expect-error ts-migrate(2454) FIXME: Variable 'not' is used before being assigned.
       filter || matcher.substring(matcher.indexOf('://') + 3 + not.length);
     var path = util.escapeRegExp(matcher.substring(wildcard.length));
     if (path.indexOf('*') !== -1) {
@@ -1415,6 +1465,7 @@ function resolveFilterPattern(matcher) {
         '^[a-z]+://' + (wildcard.length > 3 ? '[^?]' : '[^/?]') + '+/' + path
     };
   }
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
   var result = isRegUrl('^' + filter);
   if (result) {
     result.not = not;
@@ -1423,12 +1474,12 @@ function resolveFilterPattern(matcher) {
   }
 }
 
-function resolveMatchFilter(list) {
-  var matchers = [];
+function resolveMatchFilter(list: any) {
+  var matchers: any = [];
   var lineProps = {};
-  var rawProps = [];
-  var filters, hasBodyFilter, hostFilter;
-  list.forEach(function (matcher) {
+  var rawProps: any = [];
+  var filters: any, hasBodyFilter, hostFilter: any;
+  list.forEach(function (matcher: any) {
     if (LINE_PROPS_RE.test(matcher)) {
       rawProps.push(matcher);
       extend(lineProps, util.parseLineProps(matcher));
@@ -1436,6 +1487,7 @@ function resolveMatchFilter(list) {
     }
     var filter, not, isInclude, orgVal;
     if (PROPS_FILTER_RE.test(matcher) || PURE_FILTER_RE.test(matcher)) {
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       var raw = RegExp['$&'];
       var propName = RegExp.$1;
       var value = RegExp.$2;
@@ -1501,6 +1553,7 @@ function resolveMatchFilter(list) {
           value = pattern;
         } else {
           propName = 'body';
+          // @ts-expect-error ts-migrate(2322) FIXME: Type '{ orgVal: any; value: string; }' is not assi... Remove this comment to see the full error message
           value = {
             orgVal: util.encodeURIComponent(value).toLowerCase(),
             value: value.toLowerCase()
@@ -1538,11 +1591,15 @@ function resolveMatchFilter(list) {
           not = !not;
         }
         orgVal = index === -1 ? '' : value.substring(index + 1);
+        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ key: string; }' is not assignable to type ... Remove this comment to see the full error message
         value = { key: key };
         if ((pattern = util.toRegExp(orgVal))) {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'hPattern' does not exist on type 'string... Remove this comment to see the full error message
           value.hPattern = pattern;
         } else {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'orgVal' does not exist on type 'string'.
           orgVal = value.orgVal = orgVal.toLowerCase();
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'string'.
           value.value = util.encodeURIComponent(orgVal);
         }
         switch (propName[2]) {
@@ -1557,7 +1614,9 @@ function resolveMatchFilter(list) {
         }
       }
       filter = { not: not, isInclude: isInclude };
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       filter[propName] = value;
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'raw' does not exist on type '{ not: bool... Remove this comment to see the full error message
       filter.raw = raw;
       if (isHostFilter) {
         hostFilter = hostFilter || [];
@@ -1601,8 +1660,9 @@ function resolveMatchFilter(list) {
   };
 }
 
-function parseText(rulesMgr, text, root) {
+function parseText(rulesMgr: any, text: any, root: any) {
   var pluginVars = rulesMgr._globalPluginVars;
+  // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'line' implicitly has an 'any' type.
   getLines(text, root).forEach(function (line) {
     var raw = line;
     line = line.replace(COMMENT_RE, '').trim();
@@ -1637,6 +1697,7 @@ function parseText(rulesMgr, text, root) {
     if (patternIndex > 0) {
       //supports: operator-uri1 operator-uriX pattern1 pattern2 ... patternN
       var opList = [pattern];
+      // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'p' implicitly has an 'any' type.
       var patternList = matchers.filter(function (p) {
         if (isPattern(p) || isHost(p) || !util.hasProtocol(p)) {
           return true;
@@ -1644,12 +1705,14 @@ function parseText(rulesMgr, text, root) {
         opList.push(p);
       });
       opList.forEach(function (matcher) {
+        // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'pattern' implicitly has an 'any' type.
         patternList.forEach(function (pattern) {
           parseRule(rulesMgr, pattern, matcher, raw, root, result);
         });
       });
     } else {
       //supports: pattern operator-uri1 operator-uri2 ... operator-uriN
+      // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'matcher' implicitly has an 'any' type.
       matchers.forEach(function (matcher) {
         parseRule(rulesMgr, pattern, matcher, raw, root, result);
       });
@@ -1659,18 +1722,18 @@ function parseText(rulesMgr, text, root) {
   hostCache = {};
 }
 
-function isExactPattern(pattern) {
+function isExactPattern(pattern: any) {
   return /^\$/.test(pattern);
 }
 
-function isNegativePattern(pattern) {
+function isNegativePattern(pattern: any) {
   return /^!/.test(pattern);
 }
 
-function getFilterResult(result, filter) {
+function getFilterResult(result: any, filter: any) {
   return result == null ? false : filter.not ? !result : result;
 }
-function matchFilter(url, filter, req) {
+function matchFilter(url: any, filter: any, req: any) {
   var result;
   if (filter.pattern) {
     result = filter.pattern.test(url);
@@ -1679,7 +1742,7 @@ function matchFilter(url, filter, req) {
   if (!req) {
     return false;
   }
-  var filterProp = function (value, expectVal, pattern) {
+  var filterProp = function (value: any, expectVal: any, pattern: any) {
     if (value == null) {
       return expectVal || pattern;
     }
@@ -1763,7 +1826,7 @@ function matchFilter(url, filter, req) {
     return filter.not ? !result : result;
   }
 
-  var filterHeader = function (headers, filterVal, resHeaders) {
+  var filterHeader = function (headers: any, filterVal: any, resHeaders: any) {
     if (!filterVal || !headers) {
       return;
     }
@@ -1793,16 +1856,18 @@ function matchFilter(url, filter, req) {
   if (filterHeader(req.headers, filter.header, req.resHeaders)) {
     return getFilterResult(result, filter);
   }
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   if (filterHeader(req.headers, filter.reqHeader)) {
     return getFilterResult(result, filter);
   }
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   if (filterHeader(req.resHeaders, filter.resHeader)) {
     return getFilterResult(result, filter);
   }
   return false;
 }
 
-function matchExcludeFilters(url, rule, options) {
+function matchExcludeFilters(url: any, rule: any, options: any) {
   var filters = rule.filters;
   if (!filters) {
     return;
@@ -1828,7 +1893,7 @@ function matchExcludeFilters(url, rule, options) {
   return hasIncludeFilter ? !include || exclude : exclude;
 }
 
-function Rules(values) {
+function Rules(this: any, values: any) {
   this._rules = protoMgr.getRules();
   this._globalPluginVars = {};
   this._sniCallback = [];
@@ -1837,12 +1902,13 @@ function Rules(values) {
 
 var proto = Rules.prototype;
 
-function resolveInlineValues(str) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function resolveInlineValues(str: any) {
   str = str && str.replace(CONTROL_RE, '').trim();
   if (!str || str.indexOf('```') === -1) {
     return str;
   }
-  return str.replace(MULTI_LINE_VALUE_RE, function (_, __, key, value) {
+  return str.replace(MULTI_LINE_VALUE_RE, function (_: any, __: any, key: any, value: any) {
     inlineValues = inlineValues || {};
     if (!inlineValues[key]) {
       inlineValues[key] = value;
@@ -1851,18 +1917,18 @@ function resolveInlineValues(str) {
   });
 }
 
-function resolveInlineValuesFn(item) {
+function resolveInlineValuesFn(item: any) {
   item.text = resolveInlineValues(item.text);
   return item;
 }
 
-function trimInlineValues(text) {
+function trimInlineValues(text: any) {
   return Array.isArray(text)
     ? text.map(resolveInlineValuesFn)
     : resolveInlineValues(text);
 }
 
-proto.parse = function (text, root, _inlineValues) {
+proto.parse = function (text: any, root: any, _inlineValues: any) {
   var item = {
     first: true,
     text: text,
@@ -1879,6 +1945,7 @@ proto.parse = function (text, root, _inlineValues) {
     this._rawText = [item];
   }
   inlineValues = _inlineValues ? extend({}, _inlineValues) : null;
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
   parse(this, trimInlineValues(text), root);
   if (!this.disabled) {
     for (var i = 1, len = this._rawText.length; i < len; i++) {
@@ -1898,6 +1965,7 @@ proto.clearAppend = function () {
   if (this._rawText && this._rawText[0].first) {
     var item = this._rawText[0];
     inlineValues = this._inlineValues ? extend({}, this._inlineValues) : null;
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
     !this.disabled && parse(this, trimInlineValues(item.text), item.root);
     this._rawText = [item];
     if (inlineValues) {
@@ -1909,7 +1977,7 @@ proto.clearAppend = function () {
   }
 };
 
-proto.append = function (text, root) {
+proto.append = function (text: any, root: any) {
   var item = {
     text: text,
     root: root
@@ -1927,11 +1995,11 @@ proto.append = function (text, root) {
 };
 
 proto.resolveHost = function (
-  req,
-  callback,
-  pluginRulesMgr,
-  rulesFileMgr,
-  headerRulesMgr
+  req: any,
+  callback: any,
+  pluginRulesMgr: any,
+  rulesFileMgr: any,
+  headerRulesMgr: any
 ) {
   if (!req.curUrl) {
     return callback();
@@ -1951,7 +2019,7 @@ proto.resolveHost = function (
   this.lookupHost(req, callback);
 };
 
-proto.lookupHost = function (req, callback) {
+proto.lookupHost = function (req: any, callback: any) {
   req.curUrl = formatUrl(util.setProtocol(req.curUrl));
   var options = url.parse(req.curUrl);
   lookup(
@@ -1961,7 +2029,7 @@ proto.lookupHost = function (req, callback) {
   );
 };
 
-var ignoreHost = function (req, rulesMgr, filter) {
+var ignoreHost = function (req: any, rulesMgr: any, filter: any) {
   if (!rulesMgr) {
     return false;
   }
@@ -1974,7 +2042,7 @@ var ignoreHost = function (req, rulesMgr, filter) {
     ignore['ignore|hosts']
   );
 };
-proto.getHost = function (req, pluginRulesMgr, rulesFileMgr, headerRulesMgr) {
+proto.getHost = function (req: any, pluginRulesMgr: any, rulesFileMgr: any, headerRulesMgr: any) {
   var curUrl = formatUrl(util.setProtocol(req.curUrl));
   req.curUrl = curUrl;
   var filter = {};
@@ -1991,18 +2059,26 @@ proto.getHost = function (req, pluginRulesMgr, rulesFileMgr, headerRulesMgr) {
   if (config.multiEnv) {
     host =
       (pluginRulesMgr &&
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 3.
         getRule(req, pluginRulesMgr._rules.host, pluginRulesMgr._values)) ||
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 3.
       (headerRulesMgr && getRule(req, headerRulesMgr._rules.host, vals)) ||
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 3.
       getRule(req, this._rules.host, vals) ||
       (rulesFileMgr &&
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 3.
         getRule(req, rulesFileMgr._rules.host, req._scriptValues));
   } else {
     host =
       (pluginRulesMgr &&
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 3.
         getRule(req, pluginRulesMgr._rules.host, pluginRulesMgr._values)) ||
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 3.
       getRule(req, this._rules.host, vals) ||
       (rulesFileMgr &&
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 3.
         getRule(req, rulesFileMgr._rules.host, req._scriptValues)) ||
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 3.
       (headerRulesMgr && getRule(req, headerRulesMgr._rules.host, vals));
   }
   if (!host || util.exactIgnore(filter, host)) {
@@ -2016,7 +2092,8 @@ proto.getHost = function (req, pluginRulesMgr, rulesFileMgr, headerRulesMgr) {
   return host;
 };
 
-proto.resolveFilter = function (req) {
+proto.resolveFilter = function (req: any) {
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
   var filter = resolveProps(req, this._rules.filter, this._values);
   var ignore = resolveProps(req, this._rules.ignore, this._values, true);
   util.resolveFilter(ignore, filter);
@@ -2026,7 +2103,8 @@ proto.resolveFilter = function (req) {
   delete filter['ignore|ignore'];
   return filter;
 };
-proto.resolveDisable = function (req) {
+proto.resolveDisable = function (req: any) {
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
   return resolveProps(req, this._rules.disable, this._values);
 };
 var pluginProtocols = [
@@ -2049,7 +2127,7 @@ var proxyProtocols = [
   'forwardedFor'
 ];
 
-function resolveRules(req, isReq, isRes) {
+function resolveRules(this: any, req: any, isReq: any, isRes: any) {
   if (req.isInternalUrl) {
     return {};
   }
@@ -2065,28 +2143,32 @@ function resolveRules(req, isReq, isRes) {
     protos = isRes ? pureResProtocols : isReq ? reqProtocols : protocols;
   }
   req._inlineValues = vals;
-  protos.forEach(function (name) {
+  protos.forEach(function (name: any) {
     if (
       name !== 'pipe' &&
       (name === 'proxy' ||
         name === 'rule' ||
         name === 'plugin' ||
         !filter[name]) &&
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 3.
       (rule = getRule(req, rules[name], vals))
     ) {
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       _rules[name] = rule;
     }
   });
 
-  multiMatchs.forEach(function (name) {
+  multiMatchs.forEach(function (name: any) {
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     rule = _rules[name];
     if (rule) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
       rule.list = getRuleList(req, rules[name], vals);
       util.filterRepeatPlugin(rule);
       if (name === 'rulesFile' || name === 'resScript') {
-        var hasScript,
+        var hasScript: any,
           scriptIndex = -1;
-        rule.list = rule.list.filter(function (item, i) {
+        rule.list = rule.list.filter(function (item: any, i: any) {
           if (item.isRules) {
             return true;
           }
@@ -2106,30 +2188,34 @@ function resolveRules(req, isReq, isRes) {
   return _rules;
 }
 
-proto.resolveRules = function (req) {
+proto.resolveRules = function (req: any) {
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 2.
   return resolveRules.call(this, req);
 };
 
-proto.resolveReqRules = function (req) {
+proto.resolveReqRules = function (req: any) {
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
   return resolveRules.call(this, req, true);
 };
 
-proto.resolveResRules = function (req) {
+proto.resolveResRules = function (req: any) {
   return resolveRules.call(this, req, false, true);
 };
 
-proto.resolveEnable = function (req) {
+proto.resolveEnable = function (req: any) {
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
   return resolveProps(req, this._rules.enable, this._values);
 };
 
-function mergeRule(rules, list, name) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function mergeRule(rules: any, list: any, name: any) {
   if (list.length) {
     if (rules[name]) {
       var curList = rules[name].list;
-      var flags = curList.map(function (item) {
+      var flags = curList.map(function (item: any) {
         return item.raw;
       });
-      list.forEach(function (item) {
+      list.forEach(function (item: any) {
         if (flags.indexOf(item.raw) === -1) {
           curList.push(item);
         }
@@ -2140,7 +2226,7 @@ function mergeRule(rules, list, name) {
   }
 }
 
-proto.resolveProxyProps = function (req) {
+proto.resolveProxyProps = function (req: any) {
   if (req.curUrl === req.fullUrl) {
     return;
   }
@@ -2174,7 +2260,7 @@ proto.resolveProxyProps = function (req) {
   };
 };
 
-function resolveSingleRule(req, protocol, multi) {
+function resolveSingleRule(this: any, req: any, protocol: any, multi: any) {
   req.curUrl = req.curUrl || req.fullUrl;
   var filter = this.resolveFilter(req);
   if (util.isIgnored(filter, protocol)) {
@@ -2182,30 +2268,35 @@ function resolveSingleRule(req, protocol, multi) {
   }
   var list = protocol === 'sniCallback' ? this._sniCallback : this._rules[protocol];
   if (multi) {
-    list = getRuleList(req, list, this._values).filter(function(rule) {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
+    list = getRuleList(req, list, this._values).filter(function(rule: any) {
       return !util.exactIgnore(filter, rule);
     });
     return list.length ? list : null;
   }
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 3.
   var rule = getRule(req, list, this._values);
   return rule && !util.exactIgnore(filter, rule) ? rule : null;
 }
 
-proto.resolvePipe = function (req) {
+proto.resolvePipe = function (req: any) {
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
   return req.isPluginReq ? null : resolveSingleRule.call(this, req, 'pipe');
 };
 
-proto.resolvePac = function (req) {
+proto.resolvePac = function (req: any) {
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
   return resolveSingleRule.call(this, req, 'pac');
 };
 
-proto.resolveRule = function (req) {
+proto.resolveRule = function (req: any) {
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
   return resolveSingleRule.call(this, req, 'rule');
 };
 
 var WHISTLE_INTERNAL_HOST =
   /^reqHeaders:\/\/whistleInternalHost=([a-z\d.-]+(?::\d{1,5})?)$/;
-proto.resolveInternalHost = function (req) {
+proto.resolveInternalHost = function (req: any) {
   var list = resolveSingleRule.call(this, req, 'reqHeaders', true);
   if (list) {
     for (var i = 0, len = list.length; i < len; i++) {
@@ -2217,13 +2308,14 @@ proto.resolveInternalHost = function (req) {
   }
 };
 
-proto.hasReqScript = function (req) {
+proto.hasReqScript = function (req: any) {
   return req.isPluginReq
     ? null
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 3.
     : getRule(req, this._rules.rulesFile, this._values);
 };
 
-proto.resolveProxy = function resolveProxy(req, host) {
+proto.resolveProxy = function resolveProxy(req: any, host: any) {
   var proxy = getRule(req, this._rules.proxy, this._values, null, null, host);
   var matcher = proxy && proxy.matcher;
   var name = matcher && matcher.substring(0, matcher.indexOf(':'));
@@ -2249,19 +2341,23 @@ proto.resolveProxy = function resolveProxy(req, host) {
   return proxy;
 };
 
-proto.resolveSNICallback = function (req) {
+proto.resolveSNICallback = function (req: any) {
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
   return resolveSingleRule.call(this, req, 'sniCallback');
 };
 
-proto.resolveLocalRule = function (req) {
+proto.resolveLocalRule = function (req: any) {
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 2.
   return getRule(req, this._rules._localRule);
 };
-proto.resolveClientCert = function (req) {
+proto.resolveClientCert = function (req: any) {
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 2.
   return getRule(req, this._rules._clientCerts);
 };
-proto.resolveBodyFilter = function (req) {
+proto.resolveBodyFilter = function (req: any) {
   return req.isPluginReq
     ? null
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 5.
     : getRule(
         req,
         req._bodyFilters || this._rules._bodyFilters,
@@ -2275,4 +2371,5 @@ Rules.disableDnsCache = function () {
   allowDnsCache = false;
 };
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = Rules;

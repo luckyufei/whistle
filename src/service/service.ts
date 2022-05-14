@@ -1,10 +1,18 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 require('../util/patch');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var express = require('express');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var bodyParser = require('body-parser');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var multer = require('multer2');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var util = require('./util');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var extractSaz = require('./extract-saz');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var generateSaz = require('./generate-saz');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var getServer = require('hagent').getServer;
 
 var SESSIONS_FILE_RE = /\.(txt|json|saz)$/i;
@@ -17,7 +25,7 @@ var upload = multer({
 
 function sessionsHandler() {
   var app = express();
-  app.use(function (req, res, next) {
+  app.use(function (req: any, res: any, next: any) {
     req.on('error', abort);
     res.on('error', abort);
     function abort() {
@@ -28,7 +36,7 @@ function sessionsHandler() {
   app.use(
     '/cgi-bin/sessions/import',
     upload.single('importSessions'),
-    function (req, res) {
+    function (req: any, res: any) {
       var file = req.file;
       var suffix;
       if (file && SESSIONS_FILE_RE.test(file.originalname)) {
@@ -50,7 +58,7 @@ function sessionsHandler() {
   );
   app.use(bodyParser.urlencoded({ extended: true, limit: LIMIT_SIZE }));
   app.use(bodyParser.json());
-  app.use('/cgi-bin/sessions/export', function (req, res) {
+  app.use('/cgi-bin/sessions/export', function (req: any, res: any) {
     var body = req.body;
     var type = body.exportFileType;
     var sessions = type === 'Fiddler' ? generateSaz(body) : body.sessions;
@@ -59,8 +67,9 @@ function sessionsHandler() {
   return app;
 }
 
-module.exports = function (_, callback) {
-  getServer(function (server, port) {
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
+module.exports = function (_: any, callback: any) {
+  getServer(function (server: any, port: any) {
     server.on('request', sessionsHandler());
     callback(null, { port: port });
   });

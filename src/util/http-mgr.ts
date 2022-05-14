@@ -1,15 +1,23 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var http = require('http');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var https = require('https');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var fs = require('fs');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var extend = require('extend');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var fileMgr = require('./file-mgr');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var logger = require('./logger');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var parseUrl = require('./parse-url');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var zlib = require('./zlib');
 
 var cache = {};
-var listeners = [];
-var newUrls;
+var listeners: any = [];
+var newUrls: any;
 var TIMEOUT = 16000;
 var MAX_RULES_LEN = 1024 * 72;
 var MAX_FILE_LEN = 1024 * 256;
@@ -17,23 +25,27 @@ var MAX_INTERVAL = 1000 * 30;
 var MIN_INTERVAL = 1000 * 10;
 var EXCEED = 'EXCEED';
 var OPTIONS = { encoding: 'utf8' };
-var queue = [];
-var queueTimer;
+var queue: any = [];
+var queueTimer: any;
 var FILE_RE = /^(?:[a-z]:[\\/]|[~～]?\/)/i;
 var GZIP_RE = /gzip/i;
+// @ts-expect-error ts-migrate(2403) FIXME: Subsequent variable declarations must have the sam... Remove this comment to see the full error message
 var pendingList = process.whistleStarted ? null : [];
 var pluginMgr;
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
 process.once('whistleStarted', function () {
   if (pendingList) {
-    pendingList.forEach(function (item) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'forEach' does not exist on type '{}'.
+    pendingList.forEach(function (item: any) {
       add(item[0], item[1], item[2]);
     });
+    // @ts-expect-error ts-migrate(2322) FIXME: Type 'null' is not assignable to type '{}'.
     pendingList = null;
   }
 });
 
-function getInterval(time, isLocal) {
+function getInterval(time: any, isLocal: any) {
   var len = Object.keys(cache).length || 1;
   var interval = isLocal
     ? 5000
@@ -42,7 +54,7 @@ function getInterval(time, isLocal) {
   return Math.max(minTime, 1000);
 }
 
-function triggerChange(data, body) {
+function triggerChange(data: any, body: any) {
   if (data) {
     body = (body && body.trim()) || '';
     if (data.body === body) {
@@ -54,17 +66,19 @@ function triggerChange(data, body) {
     return;
   }
   newUrls = {};
+  // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'l' implicitly has an 'any' type.
   listeners.forEach(function (l) {
     l();
   });
   Object.keys(newUrls).forEach(function (url) {
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     newUrls[url] = cache[url];
   });
   cache = newUrls;
   newUrls = null;
 }
 
-function parseOptions(options) {
+function parseOptions(options: any) {
   if (typeof options === 'string') {
     options = parseUrl(options);
   } else {
@@ -87,7 +101,7 @@ function parseOptions(options) {
   return options;
 }
 
-function toString(obj) {
+function toString(obj: any) {
   if (obj == null) {
     return;
   }
@@ -102,15 +116,17 @@ function toString(obj) {
 
 var NOT_PLUGIN_ERR = new Error('Error: not found');
 var NOT_UI_SERVER_ERR = new Error('Error: not implemented uiServer');
+// @ts-expect-error ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Error'.
 NOT_PLUGIN_ERR.code = 404;
+// @ts-expect-error ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Error'.
 NOT_UI_SERVER_ERR.code = 501;
 
-function loadPlugin(options, callback) {
+function loadPlugin(options: any, callback: any) {
   var name = options.pluginName;
   if (!name) {
     return callback();
   }
-  pluginMgr.loadPluginByName(name, function (err, ports) {
+  pluginMgr.loadPluginByName(name, function (err: any, ports: any) {
     if (err || !ports || !ports.uiPort) {
       return callback(err || (ports ? NOT_UI_SERVER_ERR : NOT_PLUGIN_ERR));
     }
@@ -120,22 +136,23 @@ function loadPlugin(options, callback) {
   });
 }
 
-function request(options, callback) {
-  loadPlugin(options, function (err) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'request'.
+function request(options: any, callback: any) {
+  loadPlugin(options, function (err: any) {
     if (err) {
       return callback(err, '', '');
     }
     options = parseOptions(options);
     var isHttps = options.protocol === 'https:';
     var httpModule = isHttps ? https : http;
-    var done, timer, res;
+    var done: any, timer: any, res: any;
     var body = '';
-    var callbackHandler = function (err) {
+    var callbackHandler = function (err: any) {
       clearTimeout(timer);
       err && client && client.abort();
       if (!done) {
         done = true;
-        var handleCallback = function(e, data) {
+        var handleCallback = function(e: any, data: any) {
           data = e ? '' : (options.needRawData ? data : data + '');
           callback(e, data, res || '');
         };
@@ -155,16 +172,17 @@ function request(options, callback) {
     addTimeout();
     var maxLength = options.maxLength;
     try {
-      var client = httpModule.request(options, function (r) {
+      var client = httpModule.request(options, function (r: any) {
         res = r;
         res.on('error', callbackHandler);
-        res.on('data', function (data) {
+        res.on('data', function (data: any) {
           body = body ? Buffer.concat([body, data]) : data;
           addTimeout();
           if (maxLength && body.length > maxLength) {
             var err;
             if (!options.ignoreExceedError) {
               err = new Error('The response body exceeded length limit');
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Error'.
               err.code = EXCEED;
             }
             callbackHandler(err);
@@ -181,16 +199,18 @@ function request(options, callback) {
   });
 }
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.request = request;
 
-function readFile(url, callback) {
-  var data;
+function readFile(url: any, callback: any) {
+  var data: any;
   var now = Date.now();
   var execCallback = function () {
     callback(url, Date.now() - now);
   };
   var filePath = fileMgr.convertSlash(url);
-  fs.stat(filePath, function (err, stat) {
+  fs.stat(filePath, function (err: any, stat: any) {
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     data = cache[url];
     if (!data) {
       return execCallback();
@@ -201,11 +221,13 @@ function readFile(url, callback) {
       } else {
         logger.error(url, err.message);
       }
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       triggerChange(data);
       data.mtime = null;
       return execCallback();
     }
     if (!stat.isFile()) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       triggerChange(data);
       data.mtime = null;
       return execCallback();
@@ -216,9 +238,9 @@ function readFile(url, callback) {
     }
 
     var stream = fs.createReadStream(filePath, OPTIONS);
-    var done;
+    var done: any;
     var body = '';
-    var listener = function (err) {
+    var listener = function (err: any) {
       if (done) {
         return;
       }
@@ -231,12 +253,13 @@ function readFile(url, callback) {
       stream.close();
       triggerChange(data, body);
     };
-    stream.on('data', function (text) {
+    stream.on('data', function (text: any) {
       if (done) {
         return;
       }
       body += text;
       if (body.length > MAX_FILE_LEN) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
         listener();
       }
     });
@@ -245,7 +268,8 @@ function readFile(url, callback) {
   });
 }
 
-function addQueue(url, consumeTime) {
+function addQueue(url: any, consumeTime: any) {
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   if (cache[url] && queue.indexOf(url) === -1) {
     queue.push(url);
   }
@@ -255,10 +279,12 @@ function addQueue(url, consumeTime) {
     if (!url) {
       return;
     }
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     data = cache[url];
     if (data) {
       queueTimer = setTimeout(function () {
         queueTimer = null;
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
         updateBody(url, addQueue);
       }, getInterval(consumeTime, data.isLocalUrl || data.isLocalPath));
       return;
@@ -266,7 +292,8 @@ function addQueue(url, consumeTime) {
   }
 }
 
-function updateBody(url, callback, init) {
+function updateBody(url: any, callback: any, init: any) {
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   var data = cache[url];
   if (!data) {
     return callback && callback();
@@ -282,9 +309,11 @@ function updateBody(url, callback, init) {
     ignoreExceedError: true
   };
   if (data.headers) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'headers' does not exist on type '{ url: ... Remove this comment to see the full error message
     options.headers = data.headers;
   }
-  request(options, function (err, body, res) {
+  request(options, function (err: any, body: any, res: any) {
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     data = cache[url];
     callback && callback(url, Date.now() - now);
     if (!data) {
@@ -309,10 +338,12 @@ function updateBody(url, callback, init) {
     }
     if (notFound || err) {
       if (init) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
         updateBody(url);
         return;
       }
     }
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
     addQueue(url);
     if (notFound || err) {
       return;
@@ -322,13 +353,16 @@ function updateBody(url, callback, init) {
   return true;
 }
 
-exports.addChangeListener = function (l) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.addChangeListener = function (l: any) {
   listeners.push(l);
 };
 
-function add(url, headers, pluginName) {
+function add(url: any, headers: any, pluginName: any) {
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   var data = cache[url];
   if (!data) {
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     cache[url] = data = {
       body: '',
       pluginName: pluginName,
@@ -344,28 +378,35 @@ function add(url, headers, pluginName) {
   return data.body;
 }
 
-exports.add = function (url, headers, pluginName) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.add = function (url: any, headers: any, pluginName: any) {
   if (pendingList && headers && headers['x-whistle-internal-id']) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'push' does not exist on type '{}'.
     pendingList.push([url, headers, pluginName]);
     return '';
   }
   return add(url, headers, pluginName);
 };
 
-exports.forceUpdate = function (root) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.forceUpdate = function (root: any) {
   Object.keys(cache).forEach(function (url) {
     if (url.indexOf(root) === 0) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
       updateBody(url);
     }
   });
 };
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.clean = function () {
   if (!newUrls && Object.keys(cache).length) {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 0.
     triggerChange();
   }
 };
 
-exports.setPluginMgr = function (mgr) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.setPluginMgr = function (mgr: any) {
   pluginMgr = mgr;
 };

@@ -1,19 +1,32 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var forge = require('node-forge');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var fs = require('fs');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var net = require('net');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var path = require('path');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var crypto = require('crypto');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var LRU = require('lru-cache');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var hagent = require('hagent');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var extend = require('extend');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var h2 = require('./h2');
 var createSecureContext =
+  // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
   require('tls').createSecureContext || crypto.createCredentials;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var util = require('../util');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var config = require('../config');
 
 var pki = forge.pki;
 var workerIndex = util.workerIndex;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
 var CUR_VERSION = process.version;
 var requiredVersion = parseInt(CUR_VERSION.slice(1), 10) >= 6;
 var HTTPS_DIR = mkdir(path.join(config.getDataDir(), 'certs'));
@@ -44,12 +57,15 @@ var RANDOM_SERIAL = '.' + Date.now() + '.' + Math.floor(Math.random() * 10000);
 var CLEAR_CERTS_INTERVAL = 1000 * 60 * 60 * 24 * 20;
 var MAX_INNTERFAL = 18;
 var PORT_RE = /:\d*$/;
-var customRoot;
-var ROOT_KEY, ROOT_CRT;
-var rootKey, rootCrt;
+var customRoot: any;
+var ROOT_KEY: any, ROOT_CRT: any;
+var rootKey: any, rootCrt: any;
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.remoteCerts = remoteCerts;
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.createSecureContext = createSecureContext;
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.CUSTOM_CERTS_DIR = CUSTOM_CERTS_DIR;
 
 // When delay is larger than 2147483647 or less than 1, the delay will be set to 1. Non-integer delays are truncated to an integer.
@@ -62,7 +78,9 @@ var timer = setInterval(function () {
   }
 }, CLEAR_CERTS_INTERVAL);
 
+// @ts-expect-error ts-migrate(2339) FIXME: Property 'unref' does not exist on type 'number'.
 if (timer && typeof timer.unref === 'function') {
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'unref' does not exist on type 'number'.
   timer.unref();
 }
 
@@ -73,7 +91,7 @@ if (!useNewKey && requiredVersion && !checkCertificate()) {
   } catch (e) {}
 }
 
-function mkdir(path) {
+function mkdir(path: any) {
   !fs.existsSync(path) && fs.mkdirSync(path);
   return path;
 }
@@ -89,7 +107,7 @@ function checkCertificate() {
   return true;
 }
 
-function getCommonName(crt) {
+function getCommonName(crt: any) {
   var attrs = crt.issuer && crt.issuer.attributes;
   if (Array.isArray(attrs)) {
     for (var i = 0, len = attrs.length; i < len; i++) {
@@ -102,7 +120,8 @@ function getCommonName(crt) {
   return '';
 }
 
-function getDomain(hostname) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'getDomain'.
+function getDomain(hostname: any) {
   if (getCacheCert(hostname) || net.isIP(hostname)) {
     return hostname;
   }
@@ -131,27 +150,33 @@ function getDomain(hostname) {
   return hostname;
 }
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.getDomain = getDomain;
-exports.existsCustomCert = function (hostname) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.existsCustomCert = function (hostname: any) {
   if (!customCertCount) {
     return false;
   }
   hostname = hostname.replace(PORT_RE, '');
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   var cert = customPairs[hostname];
   if (cert) {
     return true;
   }
   hostname = hostname.split('.');
   hostname[0] = '*';
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   return customPairs[hostname.join('.')];
 };
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.hasCustomCerts = function () {
   return customCertCount;
 };
 
-function getCacheCert(hostname) {
+function getCacheCert(hostname: any) {
   return (
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     customPairs[hostname] ||
     cachePairs.get(hostname) ||
     certsCache.get(hostname)
@@ -159,6 +184,7 @@ function getCacheCert(hostname) {
 }
 
 var curIndex = 0;
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
 function getIndex() {
   ++curIndex;
   if (curIndex < 10) {
@@ -171,9 +197,10 @@ function getIndex() {
   return curIndex;
 }
 
-function createSelfCert(hostname) {
+function createSelfCert(hostname: any) {
   var serialNumber =
     crypto
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'createHash' does not exist on type 'Cryp... Remove this comment to see the full error message
       .createHash('sha1')
       .update(hostname + RANDOM_SERIAL, 'binary')
       .digest('hex') +
@@ -214,7 +241,8 @@ function createSelfCert(hostname) {
   };
 }
 
-exports.createCertificate = function (hostname) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.createCertificate = function (hostname: any) {
   hostname = getDomain(hostname);
   var cert = cachePairs.get(hostname); // 确保使用自己生成的证书，防止把用户证书下载出去
   if (!cert) {
@@ -224,7 +252,7 @@ exports.createCertificate = function (hostname) {
   return cert;
 };
 
-function parseCert(cert) {
+function parseCert(cert: any) {
   var pem = pki.certificateFromPem(cert.cert);
   var altNames = getAltNames(pem.extensions);
   if (!altNames || !altNames.length) {
@@ -239,29 +267,37 @@ function parseAllCustomCerts() {
   var certFiles = {};
   var keys = Object.keys(allCustomCerts).sort(function (key1, key2) {
     return util.compare(
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       allCustomCerts[key1].cert.mtime,
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       allCustomCerts[key2].cert.mtime
     );
   });
   keys.forEach(function (filename) {
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     var info = allCustomCerts[filename];
     var cert = info.cert;
     var mtime = cert.mtime;
     var validity = info.validity;
     var altNames = info.altNames;
-    var dnsName = [];
-    altNames.forEach(function (item) {
+    var dnsName: any = [];
+    altNames.forEach(function (item: any) {
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       if ((item.type === 2 || item.type === 7) && !pairs[item.value]) {
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         var preCert = customPairs[item.value];
         if (preCert && preCert.key === cert.key && preCert.cert === cert.cert) {
           if (preCert.mtime < mtime) {
             preCert.mtime = mtime;
           }
+          // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
           pairs[item.value] = preCert;
         } else {
+          // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
           pairs[item.value] = cert;
         }
         dnsName.push(item.value);
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         certsInfo[item.value] = extend(
           { filename: filename, mtime: mtime, domain: item.value },
           validity
@@ -269,6 +305,7 @@ function parseAllCustomCerts() {
       }
     });
     if (dnsName.length) {
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       certFiles[filename] = extend(
         { mtime: mtime, dir: cert.dir, dnsName: dnsName.join(', ') },
         validity
@@ -282,18 +319,19 @@ function parseAllCustomCerts() {
   checkExpired();
 }
 
-function loadCustomCerts(certDir, isCustom) {
+function loadCustomCerts(certDir: any, isCustom: any) {
   if (!certDir) {
     return;
   }
   var certs = {};
   try {
-    fs.readdirSync(certDir).forEach(function (name) {
+    fs.readdirSync(certDir).forEach(function (name: any) {
       if (!/^(.+)\.(crt|key)$/.test(name)) {
         return;
       }
       var filename = RegExp.$1;
       var suffix = RegExp.$2;
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       var cert = (certs[filename] = certs[filename] || {});
       if (suffix === 'crt') {
         suffix = 'cert';
@@ -309,7 +347,9 @@ function loadCustomCerts(certDir, isCustom) {
       } catch (e) {}
     });
   } catch (e) {}
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'root' does not exist on type '{}'.
   var rootCA = certs.root;
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'root' does not exist on type '{}'.
   delete certs.root;
   if (rootCA && rootCA.key && rootCA.cert && !customRoot) {
     customRoot = rootCA;
@@ -317,11 +357,13 @@ function loadCustomCerts(certDir, isCustom) {
     ROOT_CRT_FILE = path.join(certDir, 'root.crt');
   }
   Object.keys(certs).filter(function (key) {
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     var cert = certs[key];
     if (cert && cert.mtime != null && cert.key && cert.cert) {
       try {
         cert = parseCert(cert);
         if (cert) {
+          // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
           allCustomCerts[isCustom ? 'z/' + key : key] = cert;
         }
       } catch (e) {}
@@ -329,7 +371,7 @@ function loadCustomCerts(certDir, isCustom) {
   });
 }
 
-function getAltNames(exts) {
+function getAltNames(exts: any) {
   for (var i = 0, len = exts.length; i < len; i++) {
     var item = exts[i];
     if (item.name === 'subjectAltName') {
@@ -341,6 +383,7 @@ function getAltNames(exts) {
 function createRootCA() {
   allCustomCerts = {};
   loadCustomCerts(customCertDir, true);
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
   loadCustomCerts(CUSTOM_CERTS_DIR);
   parseAllCustomCerts();
   if (ROOT_KEY && ROOT_CRT) {
@@ -359,6 +402,7 @@ function createRootCA() {
     ROOT_KEY = pki.privateKeyFromPem(ROOT_KEY);
     ROOT_CRT = pki.certificateFromPem(ROOT_CRT);
     if (customRoot) {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'root' does not exist on type '{}'.
       customCertsFiles.root = extend(
         {
           mtime: customRoot.mtime,
@@ -370,8 +414,8 @@ function createRootCA() {
     }
     try {
       var altNames = getAltNames(ROOT_CRT.extensions);
-      var dnsName = [];
-      altNames.forEach(function (item) {
+      var dnsName: any = [];
+      altNames.forEach(function (item: any) {
         if (
           (item.type === 2 || item.type === 7) &&
           dnsName.indexOf(item.value) === -1
@@ -379,9 +423,11 @@ function createRootCA() {
           dnsName.push(item.value);
         }
       });
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'root' does not exist on type '{}'.
       customCertsFiles.root.dnsName = dnsName.join(', ');
     } catch (e) {}
   } else {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
     var cert = createCACert();
     ROOT_CRT = cert.cert;
     ROOT_KEY = cert.key;
@@ -403,9 +449,10 @@ function getRandom() {
   return '' + random;
 }
 
-function createCACert(opts) {
+function createCACert(opts: any) {
   opts = opts || {};
   var keys = pki.rsa.generateKeyPair(requiredVersion ? 2048 : 1024);
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
   var cert = createCert(keys.publicKey);
   var now = Date.now() + getRandom();
   var attrs = [
@@ -478,14 +525,15 @@ function createCACert(opts) {
   };
 }
 
-exports.createRootCA = function(opts) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.createRootCA = function(opts: any) {
   var cert = createCACert(opts);
   cert.key = pki.privateKeyToPem(cert.key).toString();
   cert.cert = pki.certificateToPem(cert.cert).toString();
   return cert;
 };
 
-function createCert(publicKey, serialNumber, isShortPeriod) {
+function createCert(publicKey: any, serialNumber: any, isShortPeriod: any) {
   var cert = pki.createCertificate();
   cert.publicKey = publicKey;
   cert.serialNumber = serialNumber || '01';
@@ -504,7 +552,7 @@ function getRootCAFile() {
 
 createRootCA(); // 启动生成ca
 
-function getOrCreateCert(servername) {
+function getOrCreateCert(servername: any) {
   var requestCert = servername[0] === ':';
   if (requestCert) {
     servername = servername.substring(1);
@@ -536,7 +584,7 @@ var cbs = {};
 var ports = {};
 var TIMEOUT = 6000;
 
-var SNICallback = function (servername, cb) {
+var SNICallback = function (servername: any, cb: any) {
   var options = getOrCreateCert(servername);
   if (!options._ctx) {
     try {
@@ -546,6 +594,7 @@ var SNICallback = function (servername, cb) {
   cb(null, options._ctx);
 };
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.getRootCA = function () {
   return {
     key: rootKey,
@@ -553,38 +602,48 @@ exports.getRootCA = function () {
   };
 };
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.getCustomCertsInfo = function () {
   return customCertsInfo;
 };
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.getCustomCertsFiles = function () {
   return customCertsFiles;
 };
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.getRootCAFile = getRootCAFile;
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.serverAgent = hagent.serverAgent;
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.SNICallback = SNICallback;
 
-function addCallback(name, callback) {
+function addCallback(name: any, callback: any) {
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   var cbList = cbs[name];
   if (!cbList) {
     cbList = [];
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     cbs[name] = cbList;
   }
   cbList.push(callback);
   return cbList;
 }
 
-function createServer(name, cbList, listener, options) {
-  var removeServer = function () {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'createServer'.
+function createServer(name: any, cbList: any, listener: any, options: any) {
+  var removeServer = function(this: any) {
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     ports[name] = null;
     try {
       this.close();
     } catch (e) {} //重复关闭会导致异常
   };
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   ports[name] = false; // pending
   var getServer = options ? getHttpsServer : getHttp2Server;
-  getServer(options, listener, function (server, port) {
+  getServer(options, listener, function (server: any, port: any) {
     server.on('error', removeServer);
     var timeout = setTimeout(removeServer, TIMEOUT);
     var clearup = function () {
@@ -596,16 +655,20 @@ function createServer(name, cbList, listener, options) {
     } else {
       server.once('connection', clearup);
     }
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     ports[name] = port;
-    cbList.forEach(function (cb) {
+    cbList.forEach(function (cb: any) {
       cb(port);
     });
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     cbs[name] = [];
   });
 }
 
-exports.getHttp2Server = function (listener, callback) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.getHttp2Server = function (listener: any, callback: any) {
   var name = 'httpH2';
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   var curPort = ports[name];
   if (curPort) {
     return callback(curPort);
@@ -614,12 +677,15 @@ exports.getHttp2Server = function (listener, callback) {
   if (curPort === false) {
     return;
   }
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
   createServer(name, cbList, listener);
 };
 
-exports.getSNIServer = function (listener, callback, disableH2, requestCert) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.getSNIServer = function (listener: any, callback: any, disableH2: any, requestCert: any) {
   var enableH2 = config.enableH2 && !disableH2;
   var name = (enableH2 ? 'h2Sni' : 'sni') + (requestCert ? 'WithCert' : '');
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   var curPort = ports[name];
   if (curPort) {
     return callback(curPort);
@@ -629,6 +695,7 @@ exports.getSNIServer = function (listener, callback, disableH2, requestCert) {
     return;
   }
   var options = { SNICallback: SNICallback };
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'allowHTTP1' does not exist on type '{ SN... Remove this comment to see the full error message
   options.allowHTTP1 = enableH2; // 是否启用http2
   if (requestCert) {
     options = extend(
@@ -642,22 +709,26 @@ exports.getSNIServer = function (listener, callback, disableH2, requestCert) {
   createServer(name, cbList, listener, options);
 };
 
-var checkTimer;
+var checkTimer: any;
 
 function checkExpired() {
   clearTimeout(checkTimer);
   var now = Date.now();
   var files = Object.keys(customCertsFiles);
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
   exports.hasInvalidCerts = false;
   for (var i = 0, len = files.length; i < len; i++) {
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     var file = customCertsFiles[files[i]];
     try {
       var startDate = new Date(file.notBefore);
       var endDate = new Date(file.notAfter);
       if (startDate.getTime() > now) {
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
         exports.hasInvalidCerts = true;
         return;
       } else if (endDate.getTime() < now) {
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
         exports.hasInvalidCerts = true;
         return;
       }
@@ -666,14 +737,14 @@ function checkExpired() {
   checkTimer = setTimeout(checkExpired, 600000);
 }
 
-function removeFile(filename) {
-  fs.unlink(filename, function (err) {
+function removeFile(filename: any) {
+  fs.unlink(filename, function (err: any) {
     err && fs.unlink(filename, util.noop);
   });
 }
 
-function writeFile(filename, ctn, callback) {
-  fs.writeFile(filename, ctn, function (err) {
+function writeFile(filename: any, ctn: any, callback: any) {
+  fs.writeFile(filename, ctn, function (err: any) {
     if (!err) {
       return callback();
     }
@@ -681,12 +752,12 @@ function writeFile(filename, ctn, callback) {
   });
 }
 // 异步重试，出错重试即可
-function removeCertFile(filename) {
+function removeCertFile(filename: any) {
   removeFile(path.join(CUSTOM_CERTS_DIR, filename + '.key'));
   removeFile(path.join(CUSTOM_CERTS_DIR, filename + '.crt'));
 }
 // 异步写入，出错重试即可
-function writeCertFile(filename, cert, mtime) {
+function writeCertFile(filename: any, cert: any, mtime: any) {
   var keyFile = path.join(CUSTOM_CERTS_DIR, filename + '.key');
   var certFile = path.join(CUSTOM_CERTS_DIR, filename + '.crt');
   writeFile(keyFile, cert.key, function () {
@@ -699,22 +770,27 @@ function writeCertFile(filename, cert, mtime) {
 
 var ILLEGAL_PATH_RE = /[/\\]/;
 
-function checkFilename(name) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function checkFilename(name: any) {
   return name && !ILLEGAL_PATH_RE.test(name) && name !== 'root';
 }
 
-exports.removeCert = function (filename) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.removeCert = function (filename: any) {
   if (!CUSTOM_CERTS_DIR) {
     return;
   }
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   if (checkFilename(filename) && allCustomCerts[filename]) {
     removeCertFile(filename);
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     delete allCustomCerts[filename];
     parseAllCustomCerts();
   }
 };
 
-exports.uploadCerts = function (certs) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.uploadCerts = function (certs: any) {
   if (!CUSTOM_CERTS_DIR) {
     return;
   }
@@ -748,6 +824,7 @@ exports.uploadCerts = function (certs) {
         });
         if (cert) {
           writeCertFile(filename, cert.cert, new Date(mtime));
+          // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
           allCustomCerts[filename] = cert;
           hasChanged = true;
         }

@@ -1,9 +1,16 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var path = require('path');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var fs = require('fs');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var fse = require('fs-extra2');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var util = require('../util');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var pluginUtil = require('./util');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var mp = require('./module-paths');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var config = require('../config');
 
 var CUSTOM_PLUGIN_PATH = config.CUSTOM_PLUGIN_PATH;
@@ -13,7 +20,7 @@ var projectPluginPaths = config.projectPluginPaths || [];
 var accountPluginsPath = config.accountPluginsPath || [];
 var paths = mp.getPaths();
 
-function readPluginModulesSync(dir, plugins) {
+function readPluginModulesSync(dir: any, plugins: any) {
   plugins = plugins || {};
   var isAccount = accountPluginsPath.indexOf(dir) !== -1;
   var account = isAccount ? config.account : undefined;
@@ -22,7 +29,7 @@ function readPluginModulesSync(dir, plugins) {
   var notUn = notUninstallPluginPaths.indexOf(dir) !== -1;
 
   try {
-    var list = fs.readdirSync(dir).filter(function (name) {
+    var list = fs.readdirSync(dir).filter(function (name: any) {
       if (pluginUtil.isWhistleModule(name)) {
         return true;
       }
@@ -31,7 +38,7 @@ function readPluginModulesSync(dir, plugins) {
         try {
           var _dir = path.join(dir, name);
           var org = name;
-          fs.readdirSync(_dir).forEach(function (name) {
+          fs.readdirSync(_dir).forEach(function (name: any) {
             if (!plugins[name] && pluginUtil.isWhistleModule(name)) {
               var root = isSys
                 ? path.join(_dir, name, 'node_modules', org, name)
@@ -52,7 +59,7 @@ function readPluginModulesSync(dir, plugins) {
       return false;
     });
 
-    list.forEach(function (name) {
+    list.forEach(function (name: any) {
       if (!plugins[name]) {
         var root = isSys
           ? path.join(dir, name, 'node_modules', name)
@@ -73,9 +80,10 @@ function readPluginModulesSync(dir, plugins) {
   return plugins;
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = function () {
   var plugins = {};
-  paths.forEach(function (dir) {
+  paths.forEach(function (dir: any) {
     readPluginModulesSync(dir, plugins);
   });
 
@@ -85,6 +93,7 @@ module.exports = function () {
     if (pluginUtil.excludePlugin(simpleName)) {
       return;
     }
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     var dir = plugins[name];
     var account = dir.account;
     var isSys = dir.isSys;
@@ -163,6 +172,7 @@ module.exports = function () {
           )
         };
 
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         plugin[util.PLUGIN_VALUES] = pluginUtil.parseValues(
           util.renderPluginRules(
             util.readFileSync(path.join(dir, '_values.txt')),
@@ -170,9 +180,12 @@ module.exports = function () {
             simpleName
           )
         );
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         plugin[util.PLUGIN_MENU_CONFIG] = util.getPluginMenuConfig(conf);
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         plugin[util.PLUGIN_INSPECTOR_CONFIG] =
           util.getPluginInspectorConfig(conf);
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         _plugins[simpleName + ':'] = plugin;
       }
     } catch (e) {}

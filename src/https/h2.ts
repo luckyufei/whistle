@@ -1,10 +1,18 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var https = require('https');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var LRU = require('lru-cache');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var tls = require('tls');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var sockx = require('sockx');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var PassThrough = require('stream').PassThrough;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var util = require('../util');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var config = require('../config');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var http2 = config.enableH2 ? require('http2') : null;
 
 var SUPPORTED_PROTOS = ['h2', 'http/1.1', 'http/1.0'];
@@ -23,15 +31,18 @@ var CONCURRENT = 3;
 setInterval(function () {
   var now = Date.now();
   Object.keys(clients).forEach(function (name) {
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     var client = clients[name];
     if (now - client._updateTime > CACHE_TIMEOUT) {
       client.close();
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       delete clients[name];
     }
   });
 }, INTERVAL);
 
-function getKey(options) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function getKey(options: any) {
   var proxyOpts = options._proxyOptions;
   var proxyType = '';
   if (proxyOpts) {
@@ -55,9 +66,9 @@ function getKey(options) {
   ].join('/');
 }
 
-function getSocksSocket(options, callback) {
-  var done;
-  var handleCallback = function (err, socket) {
+function getSocksSocket(options: any, callback: any) {
+  var done: any;
+  var handleCallback = function (err: any, socket: any) {
     if (!done) {
       done = true;
       callback(err, socket);
@@ -73,28 +84,28 @@ function getSocksSocket(options, callback) {
       host: options.host,
       port: options.port || 443
     },
-    function (socket) {
+    function (socket: any) {
       handleCallback(null, socket);
     }
   );
   client.on('error', handleCallback);
 }
 
-function getTunnelSocket(options, callback) {
-  var done;
-  var handleCallback = function (err, socket) {
+function getTunnelSocket(options: any, callback: any) {
+  var done: any;
+  var handleCallback = function (err: any, socket: any) {
     if (!done) {
       done = true;
       callback(err, socket);
     }
   };
-  var connReq = config.connect(options._proxyOptions, function (socket) {
+  var connReq = config.connect(options._proxyOptions, function (socket: any) {
     handleCallback(null, socket);
   });
   connReq.on('error', handleCallback);
 }
 
-function addCert(opts, options) {
+function addCert(opts: any, options: any) {
   if (options.cert) {
     opts.key = options.key;
     opts.cert = options.cert;
@@ -107,8 +118,8 @@ function addCert(opts, options) {
   return opts;
 }
 
-function getProxySocket(options, callback, ciphers, isHttp) {
-  var handleConnect = function (err, socket) {
+function getProxySocket(options: any, callback: any, ciphers: any, isHttp: any) {
+  var handleConnect = function (err: any, socket: any) {
     if (err) {
       return callback(err);
     }
@@ -117,13 +128,15 @@ function getProxySocket(options, callback, ciphers, isHttp) {
     }
     var timer = setTimeout(function () {
       if (timer) {
+        // @ts-expect-error ts-migrate(2322) FIXME: Type 'null' is not assignable to type 'number'.
         timer = null;
         socket.destroy();
       }
     }, REQ_TIMEOUT);
-    var handleCallback = function (err) {
+    var handleCallback = function (err: any) {
       if (timer) {
         clearTimeout(timer);
+        // @ts-expect-error ts-migrate(2322) FIXME: Type 'null' is not assignable to type 'number'.
         timer = null;
         callback(err, err ? null : socket);
       }
@@ -143,8 +156,9 @@ function getProxySocket(options, callback, ciphers, isHttp) {
         ),
         handleCallback
       );
-      socket.on('error', function (e) {
+      socket.on('error', function (e: any) {
         if (!ciphers && util.isCiphersError(e)) {
+          // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
           return getProxySocket(
             options,
             callback,
@@ -164,8 +178,8 @@ function getProxySocket(options, callback, ciphers, isHttp) {
     : getTunnelSocket(options, handleConnect);
 }
 
-function getSocket(options, callback, isHttp) {
-  var handleCallback = function (err, socket) {
+function getSocket(options: any, callback: any, isHttp: any) {
+  var handleCallback = function (err: any, socket: any) {
     if (err) {
       return callback(false, null, err);
     }
@@ -196,7 +210,7 @@ function getSocket(options, callback, isHttp) {
       );
 }
 
-function getClient(req, socket, name, callback) {
+function getClient(req: any, socket: any, name: any, callback: any) {
   var origin = (req.useHttpH2 ? 'http' : 'https') + '://' + req.headers.host;
   var client = http2.connect(
     origin,
@@ -213,12 +227,14 @@ function getClient(req, socket, name, callback) {
       callback = null;
     }
   );
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   clients[name] = client;
   client._updateTime = Date.now();
-  var closed;
+  var closed: any;
   var handleClose = function () {
     if (!closed) {
       closed = true;
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       delete clients[name];
       client.close();
       socket.destroy();
@@ -233,7 +249,7 @@ function getClient(req, socket, name, callback) {
   return client;
 }
 
-function requestH2(client, req, res, callback) {
+function requestH2(client: any, req: any, res: any, callback: any) {
   if (req._hasError) {
     return;
   }
@@ -244,7 +260,7 @@ function requestH2(client, req, res, callback) {
   delete req.headers['proxy-connection'];
   delete req.headers['transfer-encoding'];
   var options = req.options;
-  var responsed;
+  var responsed: any;
   headers[':path'] = options.path;
   headers[':method'] = options.method;
   headers[':authority'] = req.headers.host;
@@ -261,7 +277,7 @@ function requestH2(client, req, res, callback) {
       h2Session.on('error', errorHandler);
       h2Session.once('close', errorHandler);
     }
-    h2Session.on('response', function (h2Headers) {
+    h2Session.on('response', function (h2Headers: any) {
       if (responsed) {
         return;
       }
@@ -270,7 +286,7 @@ function requestH2(client, req, res, callback) {
       var newHeaders = {};
       var statusCode = h2Headers[':status'];
       var svrRes = h2Session;
-      svrRes.on('trailers', function (trailers) {
+      svrRes.on('trailers', function (trailers: any) {
         svrRes.trailers = trailers;
       });
       svrRes.statusCode = statusCode;
@@ -289,10 +305,12 @@ function requestH2(client, req, res, callback) {
           name !== 'content-length' &&
           name !== 'transfer-encoding'
         ) {
+          // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
           newHeaders[name] = h2Headers[name];
         }
       });
       if (req.isPluginReq && !req._isProxyReq) {
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         newHeaders[config.PROXY_ID_HEADER] = 'h2';
       }
       res.response(svrRes);
@@ -304,7 +322,7 @@ function requestH2(client, req, res, callback) {
   }
 }
 
-function bindListner(server, listener) {
+function bindListner(server: any, listener: any) {
   server.timeout = config.timeout;
   if (typeof listener === 'function') {
     server.on('request', listener);
@@ -316,7 +334,8 @@ function bindListner(server, listener) {
   return server;
 }
 
-exports.getServer = function (options, listener) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.getServer = function (options: any, listener: any) {
   var server;
   if (options.allowHTTP1 && http2) {
     options.maxSessionMemory = 128;
@@ -328,7 +347,8 @@ exports.getServer = function (options, listener) {
   return bindListner(server, listener);
 };
 
-exports.getHttpServer = function (_, listener) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.getHttpServer = function (_: any, listener: any) {
   var server = http2.createServer({
     maxSessionMemory: 128,
     settings: H2_SVR_SETTINGS,
@@ -337,7 +357,7 @@ exports.getHttpServer = function (_, listener) {
   return bindListner(server, listener);
 };
 
-function checkTlsError(err) {
+function checkTlsError(err: any) {
   if (!err) {
     return true;
   }
@@ -348,18 +368,21 @@ function checkTlsError(err) {
   return code.indexOf('ERR_TLS_') === 0 || code.indexOf('ERR_SSL_') === 0;
 }
 
-exports.request = function (req, res, callback) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.request = function (req: any, res: any, callback: any) {
   var options = req.useH2 && req.options;
   if (!options || options.isPlugin || req._isInternalProxy) {
     return callback();
   }
   var key = getKey(options);
   var name = req.clientIp + '\n' + key;
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   var client = clients[name];
   if (client) {
     if (client.curIndex) {
       name = name + '\n' + client.curIndex;
       client.curIndex = ++client.curIndex % CONCURRENT;
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       client = clients[name];
     } else {
       client.curIndex = 1;
@@ -370,15 +393,19 @@ exports.request = function (req, res, callback) {
     }
   }
   var time = notH2.peek(key);
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   if (time && (Date.now() - time < TIMEOUT || pendingH2[key])) {
     return callback();
   }
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   pendingH2[key] = 1;
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   var pendingItem = pendingList[name];
   if (pendingItem) {
     return pendingItem.push([req, res, callback]);
   }
   pendingItem = [[req, res, callback]];
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   pendingList[name] = pendingItem;
   options._rules = req.rules;
   var proxyOpts = options._proxyOptions;
@@ -388,16 +415,18 @@ exports.request = function (req, res, callback) {
   }
   getSocket(
     options,
-    function (isH2, socket, err) {
+    function (isH2: any, socket: any, err: any) {
       if (socket) {
         socket.secureConnecting = false; // fix: node bug
       }
-      var handleH2 = function (clt) {
+      var handleH2 = function (clt: any) {
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         delete pendingList[name];
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         delete pendingH2[key];
         if (clt) {
           notH2.del(key);
-          pendingItem.forEach(function (list) {
+          pendingItem.forEach(function (list: any) {
             requestH2(clt, list[0], list[1], list[2]);
           });
         } else {
@@ -405,7 +434,7 @@ exports.request = function (req, res, callback) {
           if (req.useHttpH2) {
             socket = null;
           }
-          pendingItem.forEach(function (list) {
+          pendingItem.forEach(function (list: any) {
             list[2](socket);
             socket = null;
           });
@@ -414,6 +443,7 @@ exports.request = function (req, res, callback) {
       if (isH2) {
         getClient(req, socket, name, handleH2);
       } else {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
         handleH2();
       }
     },

@@ -1,17 +1,32 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var socks = require('sockx');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var url = require('url');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var net = require('net');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var extend = require('extend');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var LRU = require('lru-cache');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var EventEmitter = require('events').EventEmitter;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var hparser = require('hparser');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var dispatch = require('./https');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var util = require('./util');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var rules = require('./rules');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var socketMgr = require('./socket-mgr');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var rulesUtil = require('./rules/util');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var ca = require('./https/ca');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var pluginMgr = require('./plugins');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var config = require('./config');
 
 var hasCustomCerts = ca.hasCustomCerts;
@@ -20,18 +35,20 @@ var IP_CACHE = new LRU({ max: 600 });
 var LOCALHOST = '127.0.0.1';
 var TUNNEL_HOST_RE = /^[^:\/]+\.[^:\/]+:\d+$/;
 var X_RE = /^x/;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var STATUS_CODES = require('http').STATUS_CODES || {};
 var getRawHeaderNames = hparser.getRawHeaderNames;
 var formatHeaders = hparser.formatHeaders;
 var getRawHeaders = hparser.getRawHeaders;
 
-function tunnelProxy(server, proxy, type) {
-  proxy.getTunnelIp = function (id) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'tunnelProxy'.
+function tunnelProxy(server: any, proxy: any, type: any) {
+  proxy.getTunnelIp = function (id: any) {
     return IP_CACHE.get(id);
   };
   var fromHttpServer = type === 2;
   var fromHttpsServer = type === 1;
-  server.on('connect', function (req, reqSocket) {
+  server.on('connect', function (req: any, reqSocket: any) {
     //ws, wss, https proxy
     var headers = req.headers;
     if (headers[config.WEBUI_HEAD]) {
@@ -45,10 +62,10 @@ function tunnelProxy(server, proxy, type) {
       TUNNEL_HOST_RE.test(req.url) ? req.url : headers.host,
       true
     ));
-    var options;
-    var socketErr;
-    var _emitError;
-    var parseUrl = function (_url, port) {
+    var options: any;
+    var socketErr: any;
+    var _emitError: any;
+    var parseUrl = function (_url: any, port: any) {
       _url = _url || tunnelUrl;
       options = req.options = url.parse(_url);
       options.port = options.port || port || 443;
@@ -57,10 +74,11 @@ function tunnelProxy(server, proxy, type) {
       }
       return options;
     };
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 0.
     parseUrl();
     tunnelUrl = req.fullUrl = 'tunnel://' + options.host;
     proxy.emit('_request', tunnelUrl);
-    util.onSocketEnd(reqSocket, function (err) {
+    util.onSocketEnd(reqSocket, function (err: any) {
       socketErr = err;
       if (req.isLogRequests) {
         --util.proc.tunnelRequests;
@@ -72,8 +90,8 @@ function tunnelProxy(server, proxy, type) {
         reqSocket.destroy();
       }
     });
-    var resSocket, proxyClient, responsed, reqEmitter, data, originPort;
-    var reqData, resData, res, rollBackTunnel, buf;
+    var resSocket: any, proxyClient: any, responsed: any, reqEmitter: any, data: any, originPort: any;
+    var reqData: any, resData: any, res: any, rollBackTunnel: any, buf: any;
     req.isTunnel = true;
     req.method = util.toUpperCase(req.method) || 'CONNECT';
     var clientInfo = util.parseClientInfo(req);
@@ -158,7 +176,7 @@ function tunnelProxy(server, proxy, type) {
           !disable.proxifier;
         return reqSocket.useProxifier;
       };
-      var resolvedPlugin;
+      var resolvedPlugin: any;
       if (isIntercept()) {
         if (util.isAuthCapture(req)) {
           req.justAuth = true;
@@ -168,12 +186,13 @@ function tunnelProxy(server, proxy, type) {
         resolvedPlugin = true;
       }
       var plugin = resolvedPlugin ? pluginMgr.resolveWhistlePlugins(req) : null;
-      var handlePluginRules = function (_rulesMgr) {
+      var handlePluginRules = function (_rulesMgr: any) {
         if (_rulesMgr) {
           req.pluginRules = _rulesMgr;
           req.curUrl = tunnelUrl;
           util.mergeRules(req, _rulesMgr.resolveReqRules(req));
           util.filterWeakRule(req);
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'rule' does not exist on type '{}'.
           plugin = pluginMgr.getPluginByRuleUrl(util.rule.getUrl(_rules.rule));
         } else {
           util.filterWeakRule(req);
@@ -192,7 +211,7 @@ function tunnelProxy(server, proxy, type) {
           req._enableCapture = true;
         }
       }
-      pluginMgr.getTunnelRules(req, function (_rulesMgr) {
+      pluginMgr.getTunnelRules(req, function (_rulesMgr: any) {
         handlePluginRules(_rulesMgr);
         policy = headers[config.WHISTLE_POLICY_HEADER];
         if (!reqSocket._hasError && !req._authForbidden &&
@@ -204,7 +223,7 @@ function tunnelProxy(server, proxy, type) {
           reqSocket.rules = _rules;
           dispatch(
             reqSocket,
-            function (chunk) {
+            function (chunk: any) {
               if (
                 isLocalUIUrl ||
                 (isIPHost &&
@@ -236,7 +255,7 @@ function tunnelProxy(server, proxy, type) {
           if (!resolvedPlugin) {
             plugin = pluginMgr.resolveWhistlePlugins(req);
           }
-          pluginMgr.getTunnelRules(req, function (_rulesMgr2) {
+          pluginMgr.getTunnelRules(req, function (_rulesMgr2: any) {
             handlePluginRules(_rulesMgr2);
             handleTunnel();
           });
@@ -288,7 +307,8 @@ function tunnelProxy(server, proxy, type) {
           if (reqSocket._hasError) {
             return emitError(socketErr);
           }
-          util.parseRuleJson(_rules.reqHeaders, function (reqHeaders) {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'reqHeaders' does not exist on type '{}'.
+          util.parseRuleJson(_rules.reqHeaders, function (reqHeaders: any) {
             if (reqSocket._hasError) {
               return emitError(socketErr);
             }
@@ -304,6 +324,7 @@ function tunnelProxy(server, proxy, type) {
             if (disable.clientIp || disable.clientIP) {
               delete headers[config.CLIENT_IP_HEAD];
             } else {
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'forwardedFor' does not exist on type '{}... Remove this comment to see the full error message
               var forwardedFor = util.getMatcherValue(_rules.forwardedFor);
               if (net.isIP(forwardedFor)) {
                 headers[config.CLIENT_IP_HEAD] = forwardedFor;
@@ -330,6 +351,7 @@ function tunnelProxy(server, proxy, type) {
               util.deleteReqHeaders(req);
               if (statusCode == 200) {
                 resSocket = util.getEmptyRes();
+                // @ts-expect-error ts-migrate(2339) FIXME: Property 'reqDelay' does not exist on type '{}'.
                 var reqDelay = util.getMatcherValue(_rules.reqDelay);
                 data.requestTime = data.dnsTime = Date.now();
                 if (reqDelay > 0) {
@@ -339,20 +361,22 @@ function tunnelProxy(server, proxy, type) {
                 }
                 return;
               }
+              // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
               return sendEstablished(statusCode);
             }
 
             pluginMgr.loadPlugin(
               req.isPluginReq ? null : plugin,
-              function (err, ports) {
+              function (err: any, ports: any) {
                 if (reqSocket._hasError) {
                   return emitError(socketErr);
                 }
                 if (err) {
+                  // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
                   return sendEstablished(500);
                 }
                 var tunnelPort = ports && ports.tunnelPort;
-                var proxyUrl;
+                var proxyUrl: any;
                 if (tunnelPort) {
                   proxyUrl = 'proxy://127.0.0.1:' + tunnelPort;
                   reqSocket.customParser = req.customParser =
@@ -364,6 +388,7 @@ function tunnelProxy(server, proxy, type) {
                   data.reqPlugin = 1;
                 }
 
+                // @ts-expect-error ts-migrate(2339) FIXME: Property 'rule' does not exist on type '{}'.
                 var realUrl = _rules.rule && _rules.rule.url;
                 if (realUrl) {
                   var isHttp;
@@ -379,22 +404,25 @@ function tunnelProxy(server, proxy, type) {
                   }
                 }
                 originPort = options.port;
+                // @ts-expect-error ts-migrate(2339) FIXME: Property 'ua' does not exist on type '{}'.
                 if (_rules.ua) {
+                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'ua' does not exist on type '{}'.
                   var ua = util.getMatcherValue(_rules.ua);
                   headers['user-agent'] = ua;
                 }
                 rules.getProxy(
                   tunnelUrl,
                   proxyUrl ? null : req,
-                  function (err, hostIp, hostPort) {
-                    var isInternalProxy;
+                  function (err: any, hostIp: any, hostPort: any) {
+                    var isInternalProxy: any;
+                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'proxy' does not exist on type '{}'.
                     var proxyRule = _rules.proxy || '';
                     if (!proxyUrl) {
                       proxyUrl = proxyRule
                         ? util.rule.getMatcher(proxyRule)
                         : null;
                     }
-                    var isXProxy;
+                    var isXProxy: any;
                     if (proxyUrl) {
                       isXProxy = X_RE.test(proxyUrl);
                       isInternalProxy = proxyRule.isInternal || util.isInternalProxy(req);
@@ -402,7 +430,8 @@ function tunnelProxy(server, proxy, type) {
                       var isHttpsProxy = proxyRule.isHttps;
                       var _url = 'http:' + util.removeProtocol(proxyUrl);
                       data.proxy = true;
-                      getServerIp(_url, function (ip) {
+                      // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+                      getServerIp(_url, function (ip: any) {
                         options = parseUrl(
                           _url,
                           isSocks ? 1080 : isHttpsProxy ? 443 : 80
@@ -416,7 +445,7 @@ function tunnelProxy(server, proxy, type) {
                             )
                           );
                         }
-                        var handleProxy = function (proxySocket, _res) {
+                        var handleProxy = function (proxySocket: any, _res: any) {
                           resSocket = proxySocket;
                           res = _res;
                           // 通知插件连接建立成功的回调
@@ -461,6 +490,7 @@ function tunnelProxy(server, proxy, type) {
                           _headers['x-whistle-request-tunnel-ack'] = 1;
                         }
                         var netMgr = isSocks ? socks : config;
+                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'reqDelay' does not exist on type '{}'.
                         var reqDelay = util.getMatcherValue(_rules.reqDelay);
                         util.setProxyHost(req, dstOptions, true);
                         if (isHttpsProxy) {
@@ -494,9 +524,10 @@ function tunnelProxy(server, proxy, type) {
                             }
                             var s = netMgr.connect(dstOptions, handleProxy);
                             proxyClient = s._sock || s;
-                            s.on('error', function (err) {
+                            s.on('error', function (err: any) {
                               if (isXProxy) {
                                 resData.phost = undefined;
+                                // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 0.
                                 tunnel();
                               } else {
                                 emitError(err);
@@ -521,12 +552,13 @@ function tunnelProxy(server, proxy, type) {
             );
           }, req);
         }
-        var retryConnect;
+        var retryConnect: any;
         var retryXHost = 0;
-        function tunnel(hostIp, hostPort) {
+        function tunnel(hostIp: any, hostPort: any) {
+          // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 4.
           getServerIp(
             tunnelUrl,
-            function (ip, port) {
+            function (ip: any, port: any) {
               if (port) {
                 req.hostIp = resData.ip = util.getHostIp(ip, port);
                 resData.port = port;
@@ -549,14 +581,16 @@ function tunnelProxy(server, proxy, type) {
                 retryConnect = function () {
                   if (
                     retryXHost < 2 &&
+                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'host' does not exist on type '{}'.
                     _rules.host &&
+                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'host' does not exist on type '{}'.
                     X_RE.test(_rules.host.matcher)
                   ) {
                     ++retryXHost;
                     retryConnect = false;
                     if (retryXHost > 1) {
                       req.curUrl = tunnelUrl;
-                      rules.lookupHost(req, function (_err, _ip) {
+                      rules.lookupHost(req, function (_err: any, _ip: any) {
                         if (_err) {
                           return emitError(_err);
                         }
@@ -567,8 +601,8 @@ function tunnelProxy(server, proxy, type) {
                   }
                   tunnel(ip, port);
                 };
-                var retried;
-                resSocket.on('error', function () {
+                var retried: any;
+                resSocket.on('error', function(this: any) {
                   if (!retried) {
                     retried = true;
                     this.destroy && this.destroy();
@@ -617,7 +651,7 @@ function tunnelProxy(server, proxy, type) {
             var connHandler = function () {
               if (buf) {
                 var _pipe = reqSocket.pipe;
-                reqSocket.pipe = function (stream) {
+                reqSocket.pipe = function (stream: any) {
                   if (buf) {
                     stream.write(buf);
                     buf = null;
@@ -632,9 +666,11 @@ function tunnelProxy(server, proxy, type) {
                 sendEstablished(200, connHandler);
               } else {
                 connHandler();
+                // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 0.
                 sendEstablished();
               }
             };
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'resDelay' does not exist on type '{}'.
             var resDelay = util.getMatcherValue(_rules.resDelay);
             if (resDelay > 0) {
               setTimeout(handleEstablished, resDelay);
@@ -644,8 +680,8 @@ function tunnelProxy(server, proxy, type) {
           });
         }
 
-        function getServerIp(url, callback, hostIp, hostPort, proxyRule) {
-          var hostHandler = function (err, ip, port, host) {
+        function getServerIp(url: any, callback: any, hostIp: any, hostPort: any, proxyRule: any) {
+          var hostHandler = function (err: any, ip: any, port: any, host: any) {
             if (host) {
               (proxyRule || _rules).host = host;
             }
@@ -655,6 +691,7 @@ function tunnelProxy(server, proxy, type) {
             err ? emitError(err) : callback(ip, port);
           };
           if (hostIp) {
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
             hostHandler(null, hostIp, hostPort);
           } else {
             req.curUrl = url;
@@ -668,11 +705,11 @@ function tunnelProxy(server, proxy, type) {
           }
         }
 
-        function handleError(socket) {
+        function handleError(socket: any) {
           socket.on('error', emitError);
         }
 
-        function sendEstablished(code, cb) {
+        function sendEstablished(code: any, cb: any) {
           if (res) {
             code = res.statusCode || 200;
             if (!res.headers['proxy-agent']) {
@@ -699,7 +736,7 @@ function tunnelProxy(server, proxy, type) {
             var reqRules = req.rules;
             util.parseRuleJson(
               rollBackTunnel ? null : reqRules.resHeaders,
-              function (newResHeaders) {
+              function (newResHeaders: any) {
                 if (rollBackTunnel) {
                   reqSocket.resume();
                   cb && cb();
@@ -740,7 +777,7 @@ function tunnelProxy(server, proxy, type) {
                   } else {
                     if (tunnelAck) {
                       reqSocket.write(rawData);
-                      reqSocket.once('data', function (chunk) {
+                      reqSocket.once('data', function (chunk: any) {
                         buf = chunk.length > 1 ? chunk.slice(1) : null;
                         reqSocket.pause();
                         cb();
@@ -773,8 +810,8 @@ function tunnelProxy(server, proxy, type) {
           });
           return reqSocket;
         }
-        var reqDestroyed, resDestroyed;
-        function emitError(err) {
+        var reqDestroyed: any, resDestroyed: any;
+        function emitError(err: any) {
           if (!reqDestroyed) {
             reqDestroyed = true;
             reqSocket.destroy();
@@ -822,4 +859,5 @@ function tunnelProxy(server, proxy, type) {
   return server;
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = tunnelProxy;

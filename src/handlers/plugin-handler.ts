@@ -1,8 +1,12 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var util = require('../util');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var pluginMgr = require('../plugins');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var protoMgr = require('../rules/protocols');
 
-module.exports = function (req, res, next) {
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
+module.exports = function (req: any, res: any, next: any) {
   var protocol = req.options && req.options.protocol;
   req.isWebProtocol = protoMgr.isWebProtocol(protocol);
   var plugin = !req.isWebProtocol && pluginMgr.getPlugin(protocol);
@@ -10,7 +14,7 @@ module.exports = function (req, res, next) {
     return next();
   }
 
-  pluginMgr.loadPlugin(req.isPluginReq ? null : plugin, function (err, ports) {
+  pluginMgr.loadPlugin(req.isPluginReq ? null : plugin, function (err: any, ports: any) {
     if (err) {
       res.response(util.wrapGatewayError(err));
       return;

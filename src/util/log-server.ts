@@ -3,9 +3,9 @@ var MIN_LENGTH = 420;
 var SIZE = 1024 * 64;
 var COUNT = 100;
 var count = 0;
-var logs = [];
+var logs: any = [];
 
-function sliceLogs(index, count, logId) {
+function sliceLogs(index: any, count: any, logId: any) {
   if (!logId) {
     return logs.slice(index, index + count);
   }
@@ -22,7 +22,8 @@ function sliceLogs(index, count, logId) {
   return result;
 }
 
-function getLogs(startTime, count, logId) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function getLogs(startTime: any, count: any, logId: any) {
   var len = logs.length;
   if (!len || startTime == -1) {
     return [];
@@ -44,8 +45,9 @@ function getLogs(startTime, count, logId) {
   return sliceLogs(0, count, logId);
 }
 
-module.exports = function init(proxy) {
-  proxy.addLog = function set(log) {
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
+module.exports = function init(proxy: any) {
+  proxy.addLog = function set(log: any) {
     if (!log) {
       return;
     }

@@ -1,7 +1,10 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var Transform = require('pipestream').Transform;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var util = require('util');
 
-function ReplaceStringTransform(str, value) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'ReplaceStringTransform'.
+function ReplaceStringTransform(this: any, str: any, value: any) {
   Transform.call(this);
   this._str = str;
   this._length = this._str.length;
@@ -12,7 +15,7 @@ function ReplaceStringTransform(str, value) {
 util.inherits(ReplaceStringTransform, Transform);
 
 var proto = ReplaceStringTransform.prototype;
-proto._transform = function (chunk, encoding, callback) {
+proto._transform = function (chunk: any, encoding: any, callback: any) {
   if (chunk != null) {
     chunk = this._rest + chunk;
     var minIndex = chunk.length + 1 - this._length;
@@ -32,8 +35,9 @@ proto._transform = function (chunk, encoding, callback) {
   callback(null, replace(chunk, this._str, this._value));
 };
 
-function replace(chunk, str, value) {
+function replace(chunk: any, str: any, value: any) {
   return chunk ? chunk.split(str).join(value) : null;
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = ReplaceStringTransform;

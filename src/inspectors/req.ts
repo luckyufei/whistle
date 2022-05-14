@@ -1,15 +1,26 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var qs = require('querystring');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var iconv = require('iconv-lite');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var util = require('../util');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var extend = require('extend');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var hparser = require('hparser');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var pluginMgr = require('../plugins');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var config = require('../config');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var Transform = require('pipestream').Transform;
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'WhistleTransform'.
 var WhistleTransform = util.WhistleTransform;
 var ReplacePatternTransform = util.ReplacePatternTransform;
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'ReplaceStringTransform'.
 var ReplaceStringTransform = util.ReplaceStringTransform;
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'FileWriterTransform'.
 var FileWriterTransform = util.FileWriterTransform;
 var toMultiparts = hparser.toMultiparts;
 var MultipartParser = hparser.MultipartParser;
@@ -33,7 +44,7 @@ var REQ_TYPE = {
  * @param req：method、body、headers，top，bottom，speed、delay，charset,timeout
  * @param data
  */
-function handleReq(req, data) {
+function handleReq(req: any, data: any) {
   extend(req.headers, data.headers);
   if (typeof data.charset == 'string') {
     var type = req.headers['content-type'];
@@ -65,12 +76,12 @@ function handleReq(req, data) {
   util.handleHeaderReplace(req.headers, opList);
 }
 
-function handleAuth(data, auth) {
+function handleAuth(data: any, auth: any) {
   auth = util.getAuthBasic(auth);
   auth && util.setHeader(data, 'authorization', auth);
 }
 
-function handleParams(req, params, urlParams) {
+function handleParams(req: any, params: any, urlParams: any) {
   var originParams = params;
   var hasBody;
   if ((params = params && qs.stringify(params))) {
@@ -80,8 +91,8 @@ function handleParams(req, params, urlParams) {
     if (isJson || util.isUrlEncoded(req)) {
       delete headers['content-length'];
       transform = new Transform();
-      var buffer, interrupt;
-      transform._transform = function (chunk, encoding, callback) {
+      var buffer: any, interrupt: any;
+      transform._transform = function (chunk: any, encoding: any, callback: any) {
         if (chunk) {
           if (!interrupt) {
             buffer = buffer ? Buffer.concat([buffer, chunk]) : chunk;
@@ -104,7 +115,7 @@ function handleParams(req, params, urlParams) {
             body = buffer + '';
           }
           if (isJson) {
-            body = body.replace(JSON_RE, function (json) {
+            body = body.replace(JSON_RE, function (json: any) {
               var obj = util.parseRawJson(json);
               return obj
                 ? JSON.stringify(extend(true, obj, originParams))
@@ -149,7 +160,7 @@ function handleParams(req, params, urlParams) {
       var sepLength = sepBoundary.length;
       transform = new Transform();
 
-      transform.parse = function (chunk) {
+      transform.parse = function (chunk: any) {
         var index, result, sep, data;
         while (
           (index = util.indexOfList(chunk, boundary)) != -1 &&
@@ -181,7 +192,7 @@ function handleParams(req, params, urlParams) {
 
         return result;
       };
-      transform._transform = function (chunk, encoding, callback) {
+      transform._transform = function (chunk: any, encoding: any, callback: any) {
         if (this.badMultipart) {
           return callback(null, chunk);
         }
@@ -230,7 +241,8 @@ function handleParams(req, params, urlParams) {
   }
 }
 
-function handleReplace(req, replacement) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function handleReplace(req: any, replacement: any) {
   if (!util.hasRequestBody(req) || !replacement) {
     return;
   }
@@ -254,7 +266,8 @@ function handleReplace(req, replacement) {
   });
 }
 
-module.exports = function (req, res, next) {
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
+module.exports = function (req: any, res: any, next: any) {
   var reqRules = req.rules;
   var authObj = util.getAuthByRules(reqRules);
 
@@ -270,33 +283,41 @@ module.exports = function (req, res, next) {
       reqRules.urlParams
     ],
     function (
-      headers,
-      cookies,
-      auth,
-      params,
-      cors,
-      replacement,
-      urlReplace,
-      urlParams
+      headers: any,
+      cookies: any,
+      auth: any,
+      params: any,
+      cors: any,
+      replacement: any,
+      urlReplace: any,
+      urlParams: any
     ) {
       var data = {};
       if (headers) {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'headers' does not exist on type '{}'.
         data.headers = extend(data.headers || {}, headers);
       }
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{}'.
       if (data.body && typeof data.body !== 'string') {
         try {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{}'.
           data.body = JSON.stringify(data.body);
         } catch (e) {}
       }
 
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'headers' does not exist on type '{}'.
       if (data.headers) {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'headers' does not exist on type '{}'.
         data.headers = util.lowerCaseify(data.headers, req.rawHeaderNames);
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'headers' does not exist on type '{}'.
         req._customHost = data.headers.host;
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'headers' does not exist on type '{}'.
         req._customXFF = data.headers[config.CLIENT_IP_HEAD];
       }
 
       if (reqRules.method) {
         var method = util.getMatcherValue(reqRules.method);
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'method' does not exist on type '{}'.
         data.method = method;
       }
 
@@ -306,6 +327,7 @@ module.exports = function (req, res, next) {
         newType[0] =
           !type || type.indexOf('/') != -1
             ? type
+            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             : REQ_TYPE[type] || REQ_TYPE.defaultType;
         type = newType.join(';');
         if (type.indexOf(';') == -1) {
@@ -320,6 +342,7 @@ module.exports = function (req, res, next) {
       }
 
       if (reqRules.reqCharset) {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'charset' does not exist on type '{}'.
         data.charset = util.getMatcherValue(reqRules.reqCharset);
       }
 
@@ -336,8 +359,10 @@ module.exports = function (req, res, next) {
       var reqSpeed = util.getMatcherValue(reqRules.reqSpeed);
       reqSpeed = reqSpeed && parseFloat(reqSpeed);
       if (reqSpeed > 0) {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'speed' does not exist on type '{}'.
         data.speed = reqSpeed;
       }
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'headers' does not exist on type '{}'.
       var cookie = data.headers && data.headers.cookie;
       if (typeof cookie !== 'string') {
         if (Array.isArray(cookie)) {
@@ -349,8 +374,9 @@ module.exports = function (req, res, next) {
       util.setReqCookies(data, cookies, cookie);
       handleAuth(data, auth || authObj);
       util.setReqCors(data, cors);
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'method' does not exist on type '{}'.
       req.method = util.getMethod(data.method || req.method);
-      util.readInjectFiles(data, function (data) {
+      util.readInjectFiles(data, function (data: any) {
         var bodyList = [
           reqRules.reqBody,
           reqRules.reqPrepend,
@@ -358,7 +384,7 @@ module.exports = function (req, res, next) {
         ];
         util.getRuleValue(
           bodyList,
-          function (reqBody, reqPrepend, reqAppend) {
+          function (reqBody: any, reqPrepend: any, reqAppend: any) {
             if (reqBody != null) {
               data.body = reqBody || util.EMPTY_BUFFER;
             }
@@ -399,7 +425,7 @@ module.exports = function (req, res, next) {
               : null;
             util.getFileWriters(
               [reqWriter, util.getRuleFile(reqRules.reqWriteRaw)],
-              function (writer, rawWriter) {
+              function (writer: any, rawWriter: any) {
                 if (writer) {
                   req.addZipTransform(
                     new FileWriterTransform(writer, req, false, false, true)

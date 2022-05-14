@@ -1,13 +1,18 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var Transform = require('pipestream').Transform;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var util = require('util');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var iconv = require('iconv-lite');
 
 var LT_RE = /^\s*</;
 var JSON_RE = /^\s*[\[\{]/;
 
-function WhistleTransform(options) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'WhistleTransform'.
+function WhistleTransform(this: any, options: any) {
   Transform.call(this);
   options = options || {};
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
   var value = parseInt((options.speed * 1000) / 8);
   if (value > 0) {
     this._speed = value;
@@ -32,7 +37,7 @@ function WhistleTransform(options) {
   }
 }
 
-function getBuffer(options, name, charset) {
+function getBuffer(options: any, name: any, charset: any) {
   var buf = options[name];
   return buf == null || Buffer.isBuffer(buf)
     ? buf
@@ -41,7 +46,7 @@ function getBuffer(options, name, charset) {
 
 util.inherits(WhistleTransform, Transform);
 
-WhistleTransform.prototype.allowInject = function (chunk) {
+WhistleTransform.prototype.allowInject = function (chunk: any) {
   if (!chunk || (!this._strictHtml && !this._safeHtml)) {
     return true;
   }
@@ -50,7 +55,7 @@ WhistleTransform.prototype.allowInject = function (chunk) {
     : !JSON_RE.test(chunk.toString());
 };
 
-WhistleTransform.prototype._transform = function (chunk, encoding, callback) {
+WhistleTransform.prototype._transform = function (chunk: any, encoding: any, callback: any) {
   var self = this;
   var cb = function () {
     if (self._allowInject && self._ended && self._bottom) {
@@ -93,4 +98,5 @@ WhistleTransform.prototype._transform = function (chunk, encoding, callback) {
   cb();
 };
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = WhistleTransform;

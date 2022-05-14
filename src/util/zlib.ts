@@ -1,10 +1,12 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var zlib = require('zlib');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var Limiter = require('async-limiter');
 
 var limiter = new Limiter({ concurrency: 10 });
 
-function createConvenienceMethod(ctor, sync) {
-  return function (buffer, opts, callback) {
+function createConvenienceMethod(ctor: any, sync: any) {
+  return function (buffer: any, opts: any, callback: any) {
     if (typeof opts === 'function') {
       callback = opts;
       opts = {};
@@ -13,7 +15,7 @@ function createConvenienceMethod(ctor, sync) {
   };
 }
 
-function zlibBuffer(engine, buffer, callback) {
+function zlibBuffer(engine: any, buffer: any, callback: any) {
   engine.buffers = [];
   engine.nread = 0;
   engine.cb = callback;
@@ -23,18 +25,18 @@ function zlibBuffer(engine, buffer, callback) {
   engine.end(buffer);
 }
 
-function zlibBufferOnData(chunk) {
+function zlibBufferOnData(this: any, chunk: any) {
   if (!this.buffers) this.buffers = [chunk];
   else this.buffers.push(chunk);
   this.nread += chunk.length;
 }
 
-function zlibBufferOnError(err) {
+function zlibBufferOnError(this: any, err: any) {
   this.removeAllListeners('end');
   this.cb(err);
 }
 
-function zlibBufferOnEnd() {
+function zlibBufferOnEnd(this: any) {
   var buf;
   var err;
   var bufs = this.buffers;
@@ -49,7 +51,7 @@ var inflate = createConvenienceMethod(zlib.Inflate, false);
 var gunzip = createConvenienceMethod(zlib.Gunzip, false);
 var inflateRaw = createConvenienceMethod(zlib.InflateRaw, false);
 
-function unzip(encoding, body, callback) {
+function unzip(encoding: any, body: any, callback: any) {
   if (body && typeof encoding === 'string') {
     encoding = encoding.trim().toLowerCase();
     if (encoding === 'gzip') {
@@ -57,8 +59,9 @@ function unzip(encoding, body, callback) {
         callback(null, body);
         return true;
       }
-      limiter.push(function (done) {
-        gunzip(body, function (err, data) {
+      limiter.push(function (done: any) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
+        gunzip(body, function (err: any, data: any) {
           done();
           callback(err, data);
         });
@@ -66,13 +69,15 @@ function unzip(encoding, body, callback) {
       return;
     }
     if (encoding === 'deflate') {
-      limiter.push(function (done) {
-        inflate(body, function (err, data) {
+      limiter.push(function (done: any) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
+        inflate(body, function (err: any, data: any) {
           if (!err) {
             done();
             return callback(null, data);
           }
-          inflateRaw(body, function (e2, data2) {
+          // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
+          inflateRaw(body, function (e2: any, data2: any) {
             done();
             callback(e2, data2);
           });
@@ -84,6 +89,7 @@ function unzip(encoding, body, callback) {
   callback(null, body);
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   unzip: unzip,
   inflate: inflate,

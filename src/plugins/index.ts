@@ -1,28 +1,50 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var path = require('path');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var p = require('pfork');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var fs = require('fs');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var fse = require('fs-extra2');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var http = require('http');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var LRU = require('lru-cache');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var extend = require('extend');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var EventEmitter = require('events').EventEmitter;
 var pluginMgr = new EventEmitter();
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var colors = require('colors/safe');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var util = require('../util');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var logger = require('../util/logger');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var pluginUtil = require('./util');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var config = require('../config');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var getPluginsSync = require('./get-plugins-sync');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var getPlugin = require('./get-plugins');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var rulesMgr = require('../rules');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var RulesMgr = require('../rules/rules');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var properties = require('../rules/util').properties;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var httpMgr = require('../util/http-mgr');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var protocols = require('../rules/protocols');
 
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'encodeURIComponent'.
 var encodeURIComponent = util.encodeURIComponent;
 var REMOTE_RULES_RE =
   /^\s*@(`?)(whistle\.[a-z\d_\-]+(?:\/[^\s#]*)?|(?:https?:\/\/|[a-z]:[\\/]|~?\/)[^\s#]+|\$(?:whistle\.)?[a-z\d_-]+[/:][^\s#]+)\s*?\1(?:#.*)?$/im;
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name '__dirname'.
 var PLUGIN_MAIN = path.join(__dirname, './load-plugin');
 var PIPE_PLUGIN_RE =
   /^pipe:\/\/(?:whistle\.|plugin\.)?([a-z\d_\-]+)(?:\(([\s\S]*)\))?$/;
@@ -63,8 +85,8 @@ var portsField = typeof Symbol === 'undefined' ? '_ports' : Symbol('_ports'); //
 var UTF8_OPTIONS = { encoding: 'utf8' };
 var notLoadPlugins = config.networkMode || config.rulesOnlyMode;
 var allPlugins = notLoadPlugins ? {} : getPluginsSync();
-var authPlugins = [];
-var tunnelKeys = [];
+var authPlugins: any = [];
+var tunnelKeys: any = [];
 var LOCALHOST = '127.0.0.1';
 var MAX_RULES_LENGTH = 1024 * 256;
 var rulesCache = new LRU({ max: 36 });
@@ -90,39 +112,48 @@ var EXCLUDE_NAMES = {
   values: 1
 };
 var debugMode = config.debugMode;
-var whistleProxy;
+var whistleProxy: any;
 
 if (notLoadPlugins) {
-  getPlugin = function (cb) {
+  getPlugin = function (cb: any) {
     cb({});
   };
 }
 
 /*eslint no-console: "off"*/
 Object.keys(config).forEach(function (name) {
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   if (EXCLUDE_NAMES[name]) {
     return;
   }
   var value = config[name];
   if (name === 'passwordHash') {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'password' does not exist on type '{}'.
     conf.password = value;
   }
   if (name === 'globalData') {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'globalData' does not exist on type '{}'.
     conf.globalData = value;
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   } else if (!EXCLUDE_CONF_KEYS[name]) {
     var type = typeof value;
     if (type == 'string' || type == 'number' || type === 'boolean') {
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       conf[name] = value;
     }
   }
 });
+// @ts-expect-error ts-migrate(2339) FIXME: Property 'PLUGIN_HOOKS' does not exist on type '{}... Remove this comment to see the full error message
 conf.PLUGIN_HOOKS = config.PLUGIN_HOOKS;
+// @ts-expect-error ts-migrate(2339) FIXME: Property 'uiHostList' does not exist on type '{}'.
 conf.uiHostList = config.uiHostList;
 var pluginHostMap = config.pluginHostMap;
+// @ts-expect-error ts-migrate(2339) FIXME: Property 'pluginHosts' does not exist on type '{}'... Remove this comment to see the full error message
 var pluginHosts = (conf.pluginHosts = {});
 if (pluginHostMap) {
   Object.keys(pluginHostMap).forEach(function (host) {
     var name = pluginHostMap[host];
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     var list = (pluginHosts[name] = pluginHosts[name] || []);
     list.push(host);
   });
@@ -157,14 +188,14 @@ pluginMgr.on('updateRules', function () {
         authPlugins.push(plugin);
       }
       if (plugin.tunnelKey) {
-        plugin.tunnelKey.forEach(function (key) {
+        plugin.tunnelKey.forEach(function (key: any) {
           if (tunnelKeys.indexOf(key) === -1) {
             tunnelKeys.push(key);
           }
         });
       }
       if (rules) {
-        rules = rules.replace(REMOTE_RULES_RE, function (_, apo, rulesUrl) {
+        rules = rules.replace(REMOTE_RULES_RE, function (_: any, apo: any, rulesUrl: any) {
           hasRulesUrl = true;
           return util.getRemoteRules(apo, rulesUrl);
         });
@@ -185,11 +216,12 @@ httpMgr.addChangeListener(updateRules);
 
 pluginMgr.updateRules = updateRules;
 
-pluginMgr.loadCert = function (req, plugin, callback) {
-  loadPlugin(plugin, function (err, ports) {
+pluginMgr.loadCert = function (req: any, plugin: any, callback: any) {
+  loadPlugin(plugin, function (err: any, ports: any) {
     if (err || !ports || !ports.sniPort) {
       return callback();
     }
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 1.
     var options = getOptions(req);
     options.maxLength = MAX_CERT_SIZE;
     options.headers[PLUGIN_HOOK_NAME_HEADER] = PLUGIN_HOOKS.SNI;
@@ -205,7 +237,8 @@ pluginMgr.loadCert = function (req, plugin, callback) {
       options.headers[CERT_CACHE_INFO] = req.hasCertCache;
     }
     options.port = ports.sniPort;
-    requestPlugin(options, function (err, body, res) {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
+    requestPlugin(options, function (err: any, body: any, res: any) {
       if (err || res.statusCode !== 200) {
         return callback(err || STATUS_ERR);
       }
@@ -241,22 +274,22 @@ pluginMgr.loadCert = function (req, plugin, callback) {
   });
 };
 
-pluginMgr.on('update', function (result) {
+pluginMgr.on('update', function (result: any) {
   Object.keys(result).forEach(function (name) {
     pluginMgr.stopPlugin(result[name]);
   });
 });
-pluginMgr.on('uninstall', function (result) {
+pluginMgr.on('uninstall', function (result: any) {
   Object.keys(result).forEach(function (name) {
     pluginMgr.stopPlugin(result[name]);
   });
 });
 
-function showVerbose(oldData, newData) {
+function showVerbose(oldData: any, newData: any) {
   if (!debugMode) {
     return;
   }
-  var uninstallData, installData, updateData;
+  var uninstallData: any, installData: any, updateData: any;
   Object.keys(oldData).forEach(function (name) {
     var oldItem = oldData[name];
     var newItem = newData[name];
@@ -308,8 +341,9 @@ function showVerbose(oldData, newData) {
     });
 }
 
-function readFile(filepath, callback) {
-  fs.readFile(filepath, UTF8_OPTIONS, function (err, text) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function readFile(filepath: any, callback: any) {
+  fs.readFile(filepath, UTF8_OPTIONS, function (err: any, text: any) {
     if (!err) {
       return callback(err, text);
     }
@@ -317,12 +351,12 @@ function readFile(filepath, callback) {
   });
 }
 
-function readReqRules(dir, callback) {
-  readFile(path.join(path.join(dir, '_rules.txt')), function (err, rulesText) {
+function readReqRules(dir: any, callback: any) {
+  readFile(path.join(path.join(dir, '_rules.txt')), function (err: any, rulesText: any) {
     if (err) {
       readFile(
         path.join(path.join(dir, 'reqRules.txt')),
-        function (_, rulesText) {
+        function (_: any, rulesText: any) {
           callback(util.trim(rulesText));
         }
       );
@@ -332,8 +366,8 @@ function readReqRules(dir, callback) {
   });
 }
 
-function readJson(pkgPath, callback) {
-  fse.readJson(pkgPath, function (err, json) {
+function readJson(pkgPath: any, callback: any) {
+  fse.readJson(pkgPath, function (err: any, json: any) {
     if (!err) {
       return callback(err, json);
     }
@@ -341,7 +375,7 @@ function readJson(pkgPath, callback) {
   });
 }
 
-function readPackages(obj, callback) {
+function readPackages(obj: any, callback: any) {
   var _plugins = {};
   var count = 0;
   var callbackHandler = function () {
@@ -354,7 +388,7 @@ function readPackages(obj, callback) {
     var newPkg = obj[name];
     if (!pkg || pkg.path != newPkg.path || pkg.mtime != newPkg.mtime) {
       ++count;
-      readJson(path.join(newPkg.path, 'package.json'), function (_, result) {
+      readJson(path.join(newPkg.path, 'package.json'), function (_: any, result: any) {
         if (result && result.version && pluginUtil.isPluginName(result.name)) {
           var conf = result.whistleConfig || '';
           var tabs = conf.inspectorTabs || conf.inspectorTab || '';
@@ -403,16 +437,17 @@ function readPackages(obj, callback) {
           newPkg.openInPlugins = conf.openInPlugins ? 1 : undefined;
           newPkg.registry = util.getRegistry(result);
           newPkg.latest = pkg && pkg.latest;
+          // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
           _plugins[name] = newPkg;
           readFile(
             path.join(path.join(newPkg.path, 'rules.txt')),
-            function (err, rulesText) {
+            function (err: any, rulesText: any) {
               newPkg.rules = util.renderPluginRules(
                 util.trim(rulesText),
                 result,
                 simpleName
               );
-              readReqRules(newPkg.path, function (rulesText) {
+              readReqRules(newPkg.path, function (rulesText: any) {
                 newPkg._rules = util.renderPluginRules(
                   util.trim(rulesText),
                   result,
@@ -420,13 +455,13 @@ function readPackages(obj, callback) {
                 );
                 readFile(
                   path.join(path.join(newPkg.path, '_values.txt')),
-                  function (err, rulesText) {
+                  function (err: any, rulesText: any) {
                     newPkg[util.PLUGIN_VALUES] = pluginUtil.parseValues(
                       util.renderPluginRules(rulesText, result, simpleName)
                     );
                     readFile(
                       path.join(path.join(newPkg.path, 'resRules.txt')),
-                      function (err, rulesText) {
+                      function (err: any, rulesText: any) {
                         newPkg.resRules = util.renderPluginRules(
                           util.trim(rulesText),
                           result,
@@ -445,6 +480,7 @@ function readPackages(obj, callback) {
         }
       });
     } else {
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       _plugins[name] = pkg;
     }
   });
@@ -454,10 +490,10 @@ function readPackages(obj, callback) {
   }
 }
 
-function checkUpdate(pluginNames) {
+function checkUpdate(pluginNames: any) {
   pluginNames = pluginNames || Object.keys(allPlugins);
   var name = pluginNames.shift();
-  var plugin;
+  var plugin: any;
   while (name) {
     if ((plugin = allPlugins[name]) && !plugin.isProj) {
       break;
@@ -465,7 +501,7 @@ function checkUpdate(pluginNames) {
     name = pluginNames.shift();
   }
   if (name) {
-    util.getLatestVersion(plugin, function (ver) {
+    util.getLatestVersion(plugin, function (ver: any) {
       if (ver && plugin.version !== ver) {
         plugin.latest = ver;
       }
@@ -480,9 +516,9 @@ setTimeout(checkUpdate, 5000);
 (function update() {
   !config.inspectMode &&
     setTimeout(function () {
-      getPlugin(function (result) {
-        readPackages(result, function (_plugins) {
-          var updatePlugins, uninstallPlugins;
+      getPlugin(function (result: any) {
+        readPackages(result, function (_plugins: any) {
+          var updatePlugins: any, uninstallPlugins: any;
           var pluginNames = Object.keys(allPlugins);
           pluginNames.forEach(function (name) {
             var plugin = allPlugins[name];
@@ -515,7 +551,8 @@ setTimeout(checkUpdate, 5000);
     }, INTERVAL);
 })();
 
-function getValue(rule) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'getValue'.
+function getValue(rule: any) {
   if (!rule) {
     return;
   }
@@ -524,7 +561,7 @@ function getValue(rule) {
   return encodeURIComponent(value);
 }
 
-function addRealUrl(req, newHeaders) {
+function addRealUrl(req: any, newHeaders: any) {
   var realUrl = req._realUrl;
   if (!realUrl) {
     var href = req.options && req.options.href;
@@ -545,7 +582,8 @@ function addRealUrl(req, newHeaders) {
   }
 }
 
-function getPluginVars(value) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function getPluginVars(value: any) {
   if (value) {
     try {
       value = JSON.stringify(value);
@@ -554,7 +592,7 @@ function getPluginVars(value) {
   }
 }
 
-function addPluginVars(req, headers, rule) {
+function addPluginVars(req: any, headers: any, rule: any) {
   addRealUrl(req, headers);
   if (!rule) {
     delete headers[RULE_VALUE_HEADER];
@@ -603,7 +641,7 @@ function addPluginVars(req, headers, rule) {
   }
 }
 
-function addPluginHeaders(req, headers, isKey) {
+function addPluginHeaders(req: any, headers: any, isKey: any) {
   if (req.reqId) {
     headers[REQ_ID_HEADER] = req.reqId;
   }
@@ -633,8 +671,9 @@ function addPluginHeaders(req, headers, isKey) {
   return headers;
 }
 
-function addRuleHeaders(req, rules, headers, isPipe) {
+function addRuleHeaders(req: any, rules: any, headers: any, isPipe: any) {
   headers = headers || req.headers;
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   addPluginHeaders(req, headers);
   if (req._isUIRequest) {
     headers[UI_REQUEST_HEADER] = '1';
@@ -686,7 +725,8 @@ function addRuleHeaders(req, rules, headers, isPipe) {
 
 pluginMgr.addRuleHeaders = addRuleHeaders;
 
-function loadPlugin(plugin, callback) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function loadPlugin(plugin: any, callback: any) {
   if (!plugin) {
     return callback(null, '');
   }
@@ -694,10 +734,12 @@ function loadPlugin(plugin, callback) {
   if (ports) {
     return callback(null, ports);
   }
-  util.getBoundIp(config.host, function (host) {
+  util.getBoundIp(config.host, function (host: any) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'host' does not exist on type '{}'.
     conf.host = host || LOCALHOST;
     var moduleName = plugin.moduleName;
     var name = moduleName.substring(moduleName.indexOf('/') + 1);
+    // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
     var isInline = config.inspectMode || process.env.PFORK_MODE === 'inline';
     p.fork(
       {
@@ -744,7 +786,7 @@ function loadPlugin(plugin, callback) {
         debugMode: debugMode,
         config: isInline ? extend(true, {}, conf) : conf // 防止 inline 时，子进程删除 conf
       },
-      function (err, ports, child, first) {
+      function (err: any, ports: any, child: any, first: any) {
         callback(err, ports);
         if (!first) {
           return;
@@ -752,6 +794,7 @@ function loadPlugin(plugin, callback) {
         if (err) {
           whistleProxy.emit('pluginLoadError', err, name, moduleName);
           logger.error(err);
+          // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
           var mode = process.env.PFORK_MODE;
           if (debugMode || mode === 'inline' || mode === 'bind') {
             console.log(err);
@@ -770,11 +813,11 @@ function loadPlugin(plugin, callback) {
 
 pluginMgr.loadPlugin = loadPlugin;
 
-pluginMgr.loadPluginByName = function (name, callback) {
+pluginMgr.loadPluginByName = function (name: any, callback: any) {
   loadPlugin(getActivePluginByName(name), callback);
 };
 
-pluginMgr.stopPlugin = function (plugin) {
+pluginMgr.stopPlugin = function (plugin: any) {
   p.kill(
     {
       script: PLUGIN_MAIN,
@@ -788,7 +831,7 @@ pluginMgr.getPlugins = function () {
   return allPlugins;
 };
 
-function pluginIsDisabled(name) {
+function pluginIsDisabled(name: any) {
   if (config.notAllowedDisablePlugins) {
     return false;
   }
@@ -799,26 +842,26 @@ function pluginIsDisabled(name) {
   return disabledPlugins[name];
 }
 
-function _getPlugin(protocol) {
+function _getPlugin(protocol: any) {
   return pluginIsDisabled(protocol.slice(0, -1)) ? null : allPlugins[protocol];
 }
 
 pluginMgr.isDisabled = pluginIsDisabled;
 pluginMgr.getPlugin = _getPlugin;
 
-function getActivePluginByName(name) {
+function getActivePluginByName(name: any) {
   return pluginIsDisabled(name) ? null : allPlugins[name + ':'];
 }
 
 rulesMgr.getPlugin = getActivePluginByName;
 
-function getPluginByName(name) {
+function getPluginByName(name: any) {
   return name && allPlugins[name + ':'];
 }
 
 pluginMgr.getPluginByName = getPluginByName;
 
-function getPluginByRuleUrl(ruleUrl) {
+function getPluginByRuleUrl(ruleUrl: any) {
   if (!ruleUrl || typeof ruleUrl != 'string') {
     return;
   }
@@ -832,14 +875,14 @@ function getPluginByRuleUrl(ruleUrl) {
 
 pluginMgr.getPluginByRuleUrl = getPluginByRuleUrl;
 
-function _loadPlugins(plugins, callback) {
+function _loadPlugins(plugins: any, callback: any) {
   var rest = plugins.length;
-  var results = [];
+  var results: any = [];
   var execCallback = function () {
     --rest === 0 && callback(results);
   };
-  plugins.forEach(function (plugin, i) {
-    loadPlugin(plugin, function (err, ports) {
+  plugins.forEach(function (plugin: any, i: any) {
+    loadPlugin(plugin, function (err: any, ports: any) {
       plugin.ports = ports;
       results[i] = ports || null;
       execCallback();
@@ -847,20 +890,20 @@ function _loadPlugins(plugins, callback) {
   });
 }
 
-function loadPlugins(plugins, callback) {
-  plugins = plugins.map(function (plugin) {
+function loadPlugins(plugins: any, callback: any) {
+  plugins = plugins.map(function (plugin: any) {
     return plugin.plugin;
   });
   _loadPlugins(plugins, callback);
 }
 
-pluginMgr.loadAuthPlugins = function (req, callback) {
+pluginMgr.loadAuthPlugins = function (req: any, callback: any) {
   if (!authPlugins.length) {
     return callback();
   }
   req._isUIRequest = true;
-  _loadPlugins(authPlugins, function (ports) {
-    ports = ports.map(function (port, i) {
+  _loadPlugins(authPlugins, function (ports: any) {
+    ports = ports.map(function (port: any, i: any) {
       return {
         authPort: port && port.authPort,
         plugin: authPlugins[i]
@@ -870,8 +913,9 @@ pluginMgr.loadAuthPlugins = function (req, callback) {
     if (!rest) {
       return callback();
     }
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 1.
     var options = getOptions(req);
-    authReq(true, ports, req, options, function (forbidden) {
+    authReq(true, ports, req, options, function (forbidden: any) {
       if (!config.disableAuthUI && forbidden) {
         if (req._redirectUrl || req._authHtmlUrl) {
           return callback(req._redirectUrl, null, req._authHtmlUrl);
@@ -884,10 +928,10 @@ pluginMgr.loadAuthPlugins = function (req, callback) {
   });
 };
 
-function parseRulesList(req, results, isResRules) {
+function parseRulesList(req: any, results: any, isResRules: any) {
   var values = {};
   results = results.filter(emptyFilter);
-  results.reverse().forEach(function (item) {
+  results.reverse().forEach(function (item: any) {
     extend(values, item.values);
   });
   var pluginRulesMgr = new RulesMgr(values);
@@ -899,7 +943,7 @@ function parseRulesList(req, results, isResRules) {
   return pluginRulesMgr;
 }
 
-function getPluginReqOpts(item, req, options, port) {
+function getPluginReqOpts(item: any, req: any, options: any, port: any) {
   var opts = extend({}, options);
   opts.headers = extend({}, options.headers);
   opts.port = port;
@@ -907,25 +951,26 @@ function getPluginReqOpts(item, req, options, port) {
   return opts;
 }
 
-function authReq(isReq, ports, req, options, callback) {
+function authReq(isReq: any, ports: any, req: any, options: any, callback: any) {
   if (!isReq) {
     return callback();
   }
   var rest = ports.length;
-  var forbidden;
+  var forbidden: any;
   var execCallback = function () {
     if (--rest === 0) {
       callback(forbidden);
     }
   };
-  ports.forEach(function (item) {
+  ports.forEach(function (item: any) {
     if (!item.authPort) {
       return execCallback();
     }
     options.headers[PLUGIN_HOOK_NAME_HEADER] = PLUGIN_HOOKS.AUTH;
     var opts = getPluginReqOpts(item, req, options, item.authPort);
     opts.maxLength = MAX_RULES_LENGTH;
-    requestPlugin(opts, function (err, body, res) {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
+    requestPlugin(opts, function (err: any, body: any, res: any) {
       var headers = res && res.headers;
       if (err || body) {
         if (!forbidden) {
@@ -976,10 +1021,10 @@ function authReq(isReq, ports, req, options, callback) {
   });
 }
 
-function getRulesFromPlugins(type, req, res, callback) {
+function getRulesFromPlugins(type: any, req: any, res: any, callback: any) {
   var plugins = req.whistlePlugins;
-  loadPlugins(plugins, function (ports) {
-    ports = ports.map(function (port, i) {
+  loadPlugins(plugins, function (ports: any) {
+    ports = ports.map(function (port: any, i: any) {
       var plugin = plugins[i];
       return {
         port: port && port[type + 'Port'],
@@ -997,7 +1042,8 @@ function getRulesFromPlugins(type, req, res, callback) {
       return callback();
     }
 
-    var results = [];
+    var results: any = [];
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
     var options = getOptions(req, res, type);
     var isResRules = type == 'resRules';
     var enableAuth =
@@ -1005,7 +1051,7 @@ function getRulesFromPlugins(type, req, res, callback) {
       req.justAuth !== false &&
       (!req.isPluginReq || req._isProxyReq) &&
       (!req.fromTunnel || !util.isAuthCapture(req));
-    authReq(enableAuth, ports, req, options, function (forbidden) {
+    authReq(enableAuth, ports, req, options, function (forbidden: any) {
       if (forbidden) {
         var noTunnel = !req.isTunnel;
         req._authForbidden = true;
@@ -1044,7 +1090,7 @@ function getRulesFromPlugins(type, req, res, callback) {
           callback(parseRulesList(req, results, isResRules));
         }
       };
-      ports.forEach(function (item, i) {
+      ports.forEach(function (item: any, i: any) {
         var plugin = item.plugin;
         if (!item.port) {
           var rulesText = isResRules ? plugin.resRules : plugin._rules;
@@ -1061,13 +1107,13 @@ function getRulesFromPlugins(type, req, res, callback) {
         var opts = getPluginReqOpts(item, req, options, item.port);
         var cacheKey = plugin.moduleName + '\n' + type;
         var data = rulesCache.get(cacheKey);
-        var updateMaxAge = function (obj, age) {
+        var updateMaxAge = function (obj: any, age: any) {
           if (age >= 0) {
             obj.maxAge = age;
             obj.now = Date.now();
           }
         };
-        var handleRules = function (err, body, values, raw, res) {
+        var handleRules = function (err: any, body: any, values: any, raw: any, res: any) {
           if (err === false && data) {
             body = data.body;
             values = data.values;
@@ -1083,11 +1129,15 @@ function getRulesFromPlugins(type, req, res, callback) {
             }
             if (etag) {
               newData = newData || {};
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'etag' does not exist on type '{}'.
               newData.etag = etag;
             }
             if (newData) {
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{}'.
               newData.body = body;
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'values' does not exist on type '{}'.
               newData.values = values;
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'raw' does not exist on type '{}'.
               newData.raw = raw;
               rulesCache.set(cacheKey, newData);
             } else {
@@ -1097,7 +1147,7 @@ function getRulesFromPlugins(type, req, res, callback) {
           var pendingCallbacks = data && data.pendingCallbacks;
           if (pendingCallbacks) {
             delete data.pendingCallbacks;
-            pendingCallbacks.forEach(function (cb) {
+            pendingCallbacks.forEach(function (cb: any) {
               cb(err, body, values, raw);
             });
           }
@@ -1126,6 +1176,7 @@ function getRulesFromPlugins(type, req, res, callback) {
         delete opts.headers[ETAG_HEADER];
         if (data) {
           if (Date.now() - data.now <= data.maxAge) {
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 1.
             return handleRules(false);
           }
           if (data.etag) {
@@ -1147,7 +1198,8 @@ function getRulesFromPlugins(type, req, res, callback) {
   });
 }
 
-function getOptions(req, res, type, isPipe) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'getOptions'.
+function getOptions(req: any, res: any, type: any, isPipe: any) {
   var fullUrl = req.fullUrl || util.getFullUrl(req);
   var options = util.parseUrl(fullUrl);
   var isResRules = res && type === 'resRules';
@@ -1191,9 +1243,9 @@ function getOptions(req, res, type, isPipe) {
   return options;
 }
 
-function requestPlugin(options, callback, retryCount) {
+function requestPlugin(options: any, callback: any, retryCount: any) {
   retryCount = retryCount || 0;
-  util.request(options, function (err, body, res) {
+  util.request(options, function (err: any, body: any, res: any) {
     if (err && retryCount < 5) {
       return requestPlugin(options, callback, ++retryCount);
     }
@@ -1204,8 +1256,9 @@ function requestPlugin(options, callback, retryCount) {
   });
 }
 
-function requestRules(options, callback) {
-  requestPlugin(options, function (err, body, res) {
+function requestRules(options: any, callback: any) {
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
+  requestPlugin(options, function (err: any, body: any, res: any) {
     if (err === false) {
       return callback(false, null, null, null, res);
     }
@@ -1220,7 +1273,7 @@ function requestRules(options, callback) {
   });
 }
 
-function rulesToJson(body) {
+function rulesToJson(body: any) {
   if (body && /^\{[\s\S]+\}$/.test(body)) {
     try {
       body = JSON.parse(body);
@@ -1233,11 +1286,11 @@ function rulesToJson(body) {
   }
 }
 
-function emptyFilter(val) {
+function emptyFilter(val: any) {
   return !!val;
 }
 
-function getRulesMgr(type, req, res, callback) {
+function getRulesMgr(type: any, req: any, res: any, callback: any) {
   var plugins = req.whistlePlugins;
   if (!plugins) {
     return callback();
@@ -1245,14 +1298,14 @@ function getRulesMgr(type, req, res, callback) {
   getRulesFromPlugins(type, req, res, callback);
 }
 
-function getPluginRulesCallback(req, callback) {
-  return function (pluginRules) {
+function getPluginRulesCallback(req: any, callback: any) {
+  return function (pluginRules: any) {
     req.pluginRules = pluginRules;
     callback(pluginRules);
   };
 }
 
-function resolvePipePlugin(req, callback) {
+function resolvePipePlugin(req: any, callback: any) {
   if (req._pipePlugin == null) {
     var pipe;
     var hRules = req.headerRulesMgr;
@@ -1269,7 +1322,7 @@ function resolvePipePlugin(req, callback) {
     }
     req._pipePlugin = plugin || '';
   }
-  loadPlugin(req._pipePlugin, function (_, ports) {
+  loadPlugin(req._pipePlugin, function (_: any, ports: any) {
     req._pipePluginPorts = ports || '';
     callback(ports);
   });
@@ -1277,15 +1330,15 @@ function resolvePipePlugin(req, callback) {
 
 pluginMgr.resolvePipePlugin = resolvePipePlugin;
 
-function getPipe(type, hookName) {
+function getPipe(type: any, hookName: any) {
   var isRes = type.toLowerCase().indexOf('res') !== -1;
   hookName = PLUGIN_HOOKS[hookName];
-  return function (req, res, callback) {
+  return function (req: any, res: any, callback: any) {
     if (!isRes) {
       callback = res;
       res = null;
     }
-    resolvePipePlugin(req, function (ports) {
+    resolvePipePlugin(req, function (ports: any) {
       var port = ports && ports[type + 'Port'];
       if (!port || req._hasClosed || req._hasError) {
         return callback();
@@ -1303,7 +1356,7 @@ function getPipe(type, hookName) {
           delete req.headers['sec-websocket-extensions'];
         }
       }
-      var client;
+      var client: any;
       var destroy = function () {
         if (client) {
           client.destroy();
@@ -1311,7 +1364,7 @@ function getPipe(type, hookName) {
           client = null;
         }
       };
-      var handleError = function (err) {
+      var handleError = function (err: any) {
         if (client) {
           destroy();
           if (err) {
@@ -1320,7 +1373,7 @@ function getPipe(type, hookName) {
           }
         }
       };
-      var handleConnect = function (socket, _res) {
+      var handleConnect = function (socket: any, _res: any) {
         if (req._hasError) {
           return socket.destroy();
         }
@@ -1353,12 +1406,14 @@ var getTunnelReqWritePipe = getPipe('tunnelReqWrite', 'TUNNEL_REQ_WRITE');
 var getTunnelResReadPipe = getPipe('tunnelResRead', 'TUNNEL_RES_READ');
 var getTunnelResWritePipe = getPipe('tunnelResWrite', 'TUNNEL_RES_WRITE');
 
-pluginMgr.getWsPipe = function (req, res, callback) {
+pluginMgr.getWsPipe = function (req: any, res: any, callback: any) {
   req._websocketExtensions = res.headers['sec-websocket-extensions'] || '';
-  getWsReqReadPipe(req, function (reqRead) {
-    getWsReqWritePipe(req, function (reqWrite) {
-      getWsResReadPipe(req, res, function (resReadStream) {
-        getWsResWritePipe(req, res, function (resWriteStream) {
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
+  getWsReqReadPipe(req, function (reqRead: any) {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
+    getWsReqWritePipe(req, function (reqWrite: any) {
+      getWsResReadPipe(req, res, function (resReadStream: any) {
+        getWsResWritePipe(req, res, function (resWriteStream: any) {
           callback(reqRead, reqWrite, resReadStream, resWriteStream);
         });
       });
@@ -1366,11 +1421,13 @@ pluginMgr.getWsPipe = function (req, res, callback) {
   });
 };
 
-pluginMgr.getTunnelPipe = function (req, res, callback) {
-  getTunnelReqReadPipe(req, function (reqRead) {
-    getTunnelReqWritePipe(req, function (reqWrite) {
-      getTunnelResReadPipe(req, res, function (resRead) {
-        getTunnelResWritePipe(req, res, function (resWrite) {
+pluginMgr.getTunnelPipe = function (req: any, res: any, callback: any) {
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
+  getTunnelReqReadPipe(req, function (reqRead: any) {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
+    getTunnelReqWritePipe(req, function (reqWrite: any) {
+      getTunnelResReadPipe(req, res, function (resRead: any) {
+        getTunnelResWritePipe(req, res, function (resWrite: any) {
           callback(reqRead, reqWrite, resRead, resWrite);
         });
       });
@@ -1378,11 +1435,11 @@ pluginMgr.getTunnelPipe = function (req, res, callback) {
   });
 };
 
-pluginMgr.getRules = function (req, callback) {
+pluginMgr.getRules = function (req: any, callback: any) {
   getRulesMgr('rules', req, null, getPluginRulesCallback(req, callback));
 };
 
-pluginMgr.getResRules = function (req, res, callback) {
+pluginMgr.getResRules = function (req: any, res: any, callback: any) {
   req.curUrl = req.fullUrl;
   if (!req.resHeaders && res) {
     req.resHeaders = res.headers;
@@ -1397,7 +1454,7 @@ pluginMgr.getResRules = function (req, res, callback) {
   hRules && util.mergeRules(req, hRules, true);
   pRules && util.mergeRules(req, pRules, true);
   !config.multiEnv && util.mergeRules(req, resRules, true);
-  var resScriptRules;
+  var resScriptRules: any;
   var resHeaderRules = res.headers[config.RES_RULES_HEAD];
   if (resHeaderRules) {
     try {
@@ -1409,13 +1466,13 @@ pluginMgr.getResRules = function (req, res, callback) {
     } catch (e) {}
   }
   delete res.headers[config.RES_RULES_HEAD];
-  rulesMgr.resolveResRulesFile(req, res, function (result) {
+  rulesMgr.resolveResRulesFile(req, res, function (result: any) {
     if (result) {
       resScriptRules = resScriptRules || [];
       resScriptRules.push(result);
     }
     req.resScriptRules = resScriptRules;
-    getRulesMgr('resRules', req, res, function (pluginRulesMgr) {
+    getRulesMgr('resRules', req, res, function (pluginRulesMgr: any) {
       if (!pluginRulesMgr && resScriptRules) {
         pluginRulesMgr = parseRulesList(req, resScriptRules, true);
       }
@@ -1425,20 +1482,20 @@ pluginMgr.getResRules = function (req, res, callback) {
   });
 };
 
-pluginMgr.getTunnelRules = function (req, callback) {
+pluginMgr.getTunnelRules = function (req: any, callback: any) {
   getRulesMgr('tunnelRules', req, null, getPluginRulesCallback(req, callback));
 };
 
-function postStats(req, res) {
+function postStats(req: any, res: any) {
   var plugins = req.whistlePlugins;
   var type = res ? '_postResStats' : '_postReqStats';
   if (!plugins || req.isPluginReq || req[type]) {
     return;
   }
   req[type] = true;
-  loadPlugins(plugins, function (ports) {
+  loadPlugins(plugins, function (ports: any) {
     ports = ports
-      .map(function (port, i) {
+      .map(function (port: any, i: any) {
         var plugin = plugins[i];
         var statsPort = port && (res ? port.resStatsPort : port.statsPort);
         if (!statsPort) {
@@ -1456,15 +1513,16 @@ function postStats(req, res) {
     if (!ports.length) {
       return;
     }
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
     var options = getOptions(req, res, 'resRules');
     options.headers[PLUGIN_HOOK_NAME_HEADER] =
       PLUGIN_HOOKS[res ? 'RES_STATS' : 'REQ_STATS'];
-    ports.forEach(function (item) {
+    ports.forEach(function (item: any) {
       var opts = extend({}, options);
       opts.headers = extend({}, options.headers);
       opts.port = item.port;
       addPluginVars(req, opts.headers, item);
-      var request = http.request(opts, function (response) {
+      var request = http.request(opts, function (response: any) {
         response.on('error', util.noop);
         response.on('data', util.noop);
       });
@@ -1480,7 +1538,7 @@ var PLUGIN_RULE_RE = /^([a-z\d_\-]+)(?:\(([\s\S]*)\))?$/;
 var PLUGIN_RULE_RE2 = /^(?:\w+\.)?([a-z\d_\-]+)(?:\:\/\/([\s\S]*))?$/;
 var PLUGIN_RE = /^plugin:\/\//;
 
-function getPluginByPluginRule(pluginRule) {
+function getPluginByPluginRule(pluginRule: any) {
   if (!pluginRule) {
     return;
   }
@@ -1509,7 +1567,7 @@ function getPluginByPluginRule(pluginRule) {
   }
 }
 
-function resolveWhistlePlugins(req) {
+function resolveWhistlePlugins(req: any) {
   var rules = req.rules;
   var plugins = [];
   var plugin = (req.pluginMgr = getPluginByRuleUrl(
@@ -1529,7 +1587,7 @@ function resolveWhistlePlugins(req) {
   }
   if (rules.plugin) {
     var _plugins = [plugin];
-    rules.plugin.list.forEach(function (rule) {
+    rules.plugin.list.forEach(function (rule: any) {
       var info = getPluginByPluginRule(rule);
       if (info && _plugins.indexOf(info.plugin) == -1) {
         info.isRegExp = rule.isRegExp;
@@ -1547,14 +1605,14 @@ function resolveWhistlePlugins(req) {
 
 pluginMgr.resolveWhistlePlugins = resolveWhistlePlugins;
 
-pluginMgr.updatePluginRules = function (name) {
+pluginMgr.updatePluginRules = function (name: any) {
   name &&
     httpMgr.forceUpdate(
       'http://127.0.0.1:' + config.port + '/whistle.' + name + '/'
     );
 };
 
-pluginMgr.setProxy = function (p) {
+pluginMgr.setProxy = function (p: any) {
   whistleProxy = p;
 };
 
@@ -1563,9 +1621,9 @@ httpMgr.setPluginMgr(pluginMgr);
 var PLUGIN_KEY_RE =/^\$(?:whistle\.)?([a-z\d_-]+)[/:]([\S\s]+)$/;
 var MAX_VALUE_LEN = 1024 * 1024 * 16;
 
-function requestValue(options, callback, isBin) {
+function requestValue(options: any, callback: any, isBin: any) {
   options.needRawData = isBin;
-  var handleCallback = function(err, body, res) {
+  var handleCallback = function(err: any, body: any, res: any) {
     var code = res && res.statusCode;
     if (code != 200) {
       body = '';
@@ -1576,7 +1634,7 @@ function requestValue(options, callback, isBin) {
     }
     callback(body, err, res);
   };
-  httpMgr.request(extend({}, options), function(err, body, res) {
+  httpMgr.request(extend({}, options), function(err: any, body: any, res: any) {
     if (err) {
       return  httpMgr.request(options, handleCallback);
     }
@@ -1585,7 +1643,7 @@ function requestValue(options, callback, isBin) {
   return options;
 }
 
-pluginMgr.resolveKey = function(url, rule, req) {
+pluginMgr.resolveKey = function(url: any, rule: any, req: any) {
   if (!PLUGIN_KEY_RE.test(url)) {
     return;
   }
@@ -1615,14 +1673,16 @@ pluginMgr.resolveKey = function(url, rule, req) {
   };
 };
 
-pluginMgr.requestText = function(options, callback) {
+pluginMgr.requestText = function(options: any, callback: any) {
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   return requestValue(options, callback);
 };
 
-pluginMgr.requestBin =function(options, callback) {
+pluginMgr.requestBin =function(options: any, callback: any) {
   return requestValue(options, callback, true);
 };
 
 util.setPluginMgr(pluginMgr);
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = pluginMgr;

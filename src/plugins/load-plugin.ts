@@ -1,22 +1,42 @@
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'listenerCount'.
 var listenerCount = require('../util/patch').listenerCount;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var path = require('path');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var express = require('express');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var LRU = require('lru-cache');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var iconv = require('iconv-lite');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var wsParser = require('ws-parser');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var http = require('http');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var https = require('https');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var extend = require('extend');
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'request'.
 var request = require('../util/http-mgr').request;
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'isUtf8'.
 var isUtf8 = require('../util/is-utf8');
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'Storage'.
 var Storage = require('../rules/storage');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var getServer = require('hagent').create(null, 40500);
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var Buffer = require('safe-buffer').Buffer;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var parseUrl = require('../util/parse-url');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var hparser = require('hparser');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var transproto = require('../util/transproto');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var common = require('../util/common');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var getProxy = require('./proxy');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var rootRequire = require('../../require');
 
 var getEncodeTransform = transproto.getEncodeTransform;
@@ -30,6 +50,7 @@ var sessionStorage = new LRU({
   maxAge: 1000 * 60 * 12,
   max: 1600
 });
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'createServer'.
 var createServer = http.createServer;
 var httpRequest = http.request;
 var httpsRequest = https.request;
@@ -37,24 +58,24 @@ var formatHeaders = hparser.formatHeaders;
 var getRawHeaderNames = hparser.getRawHeaderNames;
 var getRawHeaders = hparser.getRawHeaders;
 var STATUS_CODES = http.STATUS_CODES || {};
-var pluginName;
+var pluginName: any;
 
 var TUNNEL_HOST_RE = /^[^:\/]+\.[^:\/]+:\d+$/;
 var QUERY_RE = /\?.*$/;
 var REQ_ID_RE = /^\d{13,15}-\d{1,5}$/;
-var sessionOpts, sessionTimer, sessionPending;
-var framesOpts, framesTimer, framesPending;
-var customParserOpts, customParserTimer, customParserPending;
+var sessionOpts: any, sessionTimer: any, sessionPending: any;
+var framesOpts: any, framesTimer: any, framesPending: any;
+var customParserOpts: any, customParserTimer: any, customParserPending: any;
 var reqCallbacks = {};
 var resCallbacks = {};
 var parserCallbacks = {};
-var framesList = [];
-var framesCallbacks = [];
+var framesList: any = [];
+var framesCallbacks: any = [];
 var MAX_LENGTH = 100;
 var MAX_BUF_LEN = 1024 * 1024;
 var TIMEOUT = 300;
 var REQ_INTERVAL = 16;
-var pluginOpts, storage;
+var pluginOpts: any, storage: any;
 var pluginKeyMap = {};
 var MASK_OPTIONS = { mask: true };
 var BINARY_MASK_OPTIONS = { mask: true, binary: true };
@@ -72,37 +93,45 @@ var NOT_NAME_RE = /[^\w.-]/;
 /* eslint-enable no-undef */
 var index = 1000;
 var pluginVersion = '';
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'noop'.
 var noop = common.noop;
 var certsCache = new LRU({ max: 256 });
 var certsCallbacks = {};
-var ctx;
+var ctx: any;
 var PLUGIN_HOOK_NAME_HEADER;
+// @ts-expect-error ts-migrate(2403) FIXME: Subsequent variable declarations must have the sam... Remove this comment to see the full error message
 var GLOBAL_PLUGIN_VARS_HEAD;
+// @ts-expect-error ts-migrate(2403) FIXME: Subsequent variable declarations must have the sam... Remove this comment to see the full error message
 var PLUGIN_VARS_HEAD;
+// @ts-expect-error ts-migrate(2403) FIXME: Subsequent variable declarations must have the sam... Remove this comment to see the full error message
 var FROM_TUNNEL_HEADER;
-var REMOTE_ADDR_HEAD;
-var REMOTE_PORT_HEAD;
-var SNI_TYPE_HEADER;
+var REMOTE_ADDR_HEAD: any;
+var REMOTE_PORT_HEAD: any;
+var SNI_TYPE_HEADER: any;
 var PROXY_ID_HEADER;
-var REQ_FROM_HEADER;
+var REQ_FROM_HEADER: any;
 var debugMode;
-var pluginInited;
+var pluginInited: any;
 
-process._handlePforkUncaughtException = function (msg, e) {
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
+process._handlePforkUncaughtException = function (msg: any, e: any) {
   msg = [
     'From: ' + pluginName + pluginVersion,
+    // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
     'Node: ' + process.version,
     'Date: ' + new Date().toLocaleString(),
     msg
   ].join('\n');
   pluginInited && debugMode && console.error(msg); // eslint-disable-line
   common.writeLogSync('\r\n' + msg + '\r\n');
+  // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
   if (typeof process.handleUncaughtPluginErrorMessage === 'function') {
+    // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
     return process.handleUncaughtPluginErrorMessage(msg, e);
   }
 };
 
-var appendTrailers = function (_res, res, newTrailers, req) {
+var appendTrailers = function (_res: any, res: any, newTrailers: any, req: any) {
   if (res.disableTrailer || res.disableTrailers) {
     return;
   }
@@ -133,8 +162,8 @@ var appendTrailers = function (_res, res, newTrailers, req) {
   });
 };
 
-var requestData = function (options, callback) {
-  request(options, function (err, body) {
+var requestData = function (options: any, callback: any) {
+  request(options, function (err: any, body: any) {
     if (err) {
       return callback(err);
     }
@@ -146,23 +175,25 @@ var requestData = function (options, callback) {
   });
 };
 
-var getValue = function (req, name) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'getValue'.
+var getValue = function (req: any, name: any) {
   var value = req.headers[name] || '';
   try {
     return value ? decodeURIComponent(value) : '';
   } catch (e) {}
   return String(value);
 };
-var setContext = function (req) {
+var setContext = function (req: any) {
   if (ctx) {
     req.ctx = ctx;
   }
   req.localStorage = storage;
   req.Storage = Storage;
+  // @ts-expect-error ts-migrate(2575) FIXME: No overload expects 2 arguments, but overloads do ... Remove this comment to see the full error message
   req.clientIp = getValue(req, pluginOpts.CLIENT_IP_HEADER) || '127.0.0.1';
 };
 
-var initState = function (req, name) {
+var initState = function (req: any, name: any) {
   switch (name) {
   case 'pauseSend':
     req.curSendState = 'pause';
@@ -179,6 +210,7 @@ var initState = function (req, name) {
   }
 };
 
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'getFrameId'.
 var getFrameId = function () {
   ++index;
   if (index > 9990) {
@@ -193,14 +225,14 @@ var getFrameId = function () {
   return Date.now() + '-00' + index;
 };
 
-var addFrame = function (frame) {
+var addFrame = function (frame: any) {
   framesList.push(frame);
   if (framesList.length > 720) {
     framesList.splice(0, 80);
   }
 };
 
-var getFrameOpts = function (opts) {
+var getFrameOpts = function (opts: any) {
   if (!opts) {
     return {};
   }
@@ -209,23 +241,28 @@ var getFrameOpts = function (opts) {
   }
   var result = {};
   if (opts.ignore === true) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'ignore' does not exist on type '{}'.
     result.ignore = true;
   }
   if (opts.compressed === true) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'compressed' does not exist on type '{}'.
     result.compressed = true;
   }
   if (opts.opcode > 0) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'opcode' does not exist on type '{}'.
     result.opcode = opts.opcode == 1 ? 1 : 2;
   }
   if (opts.isError) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'isError' does not exist on type '{}'.
     result.isError = true;
   }
   if (typeof opts.charset === 'string') {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'charset' does not exist on type '{}'.
     result.charset = opts.charset;
   }
   return result;
 };
-var pushFrame = function (reqId, data, opts, isClient) {
+var pushFrame = function (reqId: any, data: any, opts: any, isClient: any) {
   if (data == null) {
     return;
   }
@@ -253,18 +290,19 @@ var pushFrame = function (reqId, data, opts, isClient) {
   opts.base64 = data.toString('base64');
   addFrame(opts);
 };
-var addParserApi = function (req, conn, state, reqId) {
-  state = state.split(',').forEach(function (name) {
+var addParserApi = function (req: any, conn: any, state: any, reqId: any) {
+  state = state.split(',').forEach(function (name: any) {
     initState(req, name);
   });
-  req.on('clientFrame', function (data, opts) {
+  req.on('clientFrame', function (data: any, opts: any) {
     pushFrame(reqId, data, opts, true);
   });
-  req.on('serverFrame', function (data, opts) {
+  req.on('serverFrame', function (data: any, opts: any) {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
     pushFrame(reqId, data, opts);
   });
   var on = req.on;
-  req.on = function (eventName) {
+  req.on = function (eventName: any) {
     on.apply(this, arguments);
     var curState, prevState;
     if (eventName === 'sendStateChange') {
@@ -278,8 +316,8 @@ var addParserApi = function (req, conn, state, reqId) {
       req.emit(eventName, curState, prevState);
     }
   };
-  var disconnected;
-  var emitDisconnect = function (err) {
+  var disconnected: any;
+  var emitDisconnect = function (err: any) {
     if (disconnected) {
       return;
     }
@@ -291,12 +329,14 @@ var addParserApi = function (req, conn, state, reqId) {
       err: err && err.message,
       bin: ''
     });
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     delete parserCallbacks[reqId];
     req.emit('disconnect', err);
   };
   conn.on('error', emitDisconnect);
   conn.on('close', emitDisconnect);
-  parserCallbacks[reqId] = function (data) {
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
+  parserCallbacks[reqId] = function (data: any) {
     if (!data) {
       return conn.destroy();
     }
@@ -332,7 +372,7 @@ var addParserApi = function (req, conn, state, reqId) {
       } catch (e) {}
     }
     if (Array.isArray(data.toClient)) {
-      data.toClient.forEach(function (frame) {
+      data.toClient.forEach(function (frame: any) {
         var buf = toBuffer(frame.base64);
         try {
           buf && req.emit('sendToClient', buf, frame.binary);
@@ -340,7 +380,7 @@ var addParserApi = function (req, conn, state, reqId) {
       });
     }
     if (Array.isArray(data.toServer)) {
-      data.toServer.forEach(function (frame) {
+      data.toServer.forEach(function (frame: any) {
         var buf = toBuffer(frame.base64);
         try {
           buf && req.emit('sendToServer', buf, frame.binary);
@@ -348,12 +388,13 @@ var addParserApi = function (req, conn, state, reqId) {
       });
     }
   };
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
   retryCustomParser();
 };
 
-var addSessionStorage = function (req, id) {
+var addSessionStorage = function (req: any, id: any) {
   req.sessionStorage = {
-    set: function (key, value) {
+    set: function (key: any, value: any) {
       var cache = sessionStorage.get(id);
       if (!cache) {
         cache = {};
@@ -362,11 +403,11 @@ var addSessionStorage = function (req, id) {
       cache[key] = value;
       return value;
     },
-    get: function (key) {
+    get: function (key: any) {
       var cache = sessionStorage.get(id);
       return cache && cache[key];
     },
-    remove: function (key) {
+    remove: function (key: any) {
       var cache = sessionStorage.peek(id);
       if (cache) {
         delete cache[key];
@@ -401,7 +442,7 @@ var ADDITIONAL_FIELDS = [
   'sessionStorage'
 ];
 
-function getPluginVars(req, key) {
+function getPluginVars(req: any, key: any) {
   var value = req.headers[key];
   value = toBuffer(value);
   if (value) {
@@ -416,7 +457,7 @@ function getPluginVars(req, key) {
   return [];
 }
 
-var initReq = function (req, res, isServer) {
+var initReq = function (req: any, res: any, isServer: any) {
   if (req.originalReq && req.originalRes) {
     return;
   }
@@ -429,47 +470,70 @@ var initReq = function (req, res, isServer) {
   };
   req.on('error', destroy);
   res.on('error', destroy);
-  req.getReqSession = req.unsafe_getReqSession = function (cb) {
+  req.getReqSession = req.unsafe_getReqSession = function (cb: any) {
     return getSession(req, cb, true);
   };
-  req.getSession = req.unsafe_getSession = function (cb) {
+  req.getSession = req.unsafe_getSession = function (cb: any) {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     return getSession(req, cb);
   };
-  req.getFrames = req.unsafe_getFrames = function (cb) {
+  req.getFrames = req.unsafe_getFrames = function (cb: any) {
     return getFrames(req, cb);
   };
 
+  // @ts-expect-error ts-migrate(2575) FIXME: No overload expects 2 arguments, but overloads do ... Remove this comment to see the full error message
   var reqId = getValue(req, pluginOpts.REQ_ID_HEADER);
   var oReq = (req.originalReq = {});
   var oRes = (req.originalRes = {});
   setContext(req);
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'clientIp' does not exist on type '{}'.
   oReq.clientIp = req.clientIp;
   if (isServer) {
     var parseStatus = req.headers[pluginOpts.CUSTOM_PARSER_HEADER];
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'customParser' does not exist on type '{}... Remove this comment to see the full error message
     req.customParser = oReq.customParser = notEmptyStr(parseStatus);
     req.customParser && addParserApi(req, res, parseStatus, reqId);
   }
   var conf = pluginOpts.config;
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type '{}'.
   req[REQ_ID_KEY] = oReq.id = reqId;
   addSessionStorage(req, reqId);
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'isHttp2' does not exist on type '{}'.
   oReq.isHttp2 = oReq.isH2 = !!req.headers[conf.ALPN_PROTOCOL_HEADER];
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'existsCustomCert' does not exist on type... Remove this comment to see the full error message
   oReq.existsCustomCert = req.headers[pluginOpts.CUSTOM_CERT_HEADER] == '1';
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'isUIRequest' does not exist on type '{}'... Remove this comment to see the full error message
   oReq.isUIRequest = req.isUIRequest =
     req.headers[pluginOpts.UI_REQUEST_HEADER] == '1';
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'enableCapture' does not exist on type '{... Remove this comment to see the full error message
   oReq.enableCapture = req.headers[pluginOpts.ENABLE_CAPTURE_HEADER] == '1';
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'isFromPlugin' does not exist on type '{}... Remove this comment to see the full error message
   oReq.isFromPlugin = req.headers[pluginOpts.PLUGIN_REQUEST_HEADER] == '1';
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'ruleValue' does not exist on type '{}'.
   oReq.ruleValue = getValue(req, pluginOpts.RULE_VALUE_HEADER);
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'ruleUrl' does not exist on type '{}'.
   oReq.ruleUrl = getValue(req, pluginOpts.RULE_URL_HEADER) || oReq.ruleValue;
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'pipeValue' does not exist on type '{}'.
   oReq.pipeValue = getValue(req, pluginOpts.PIPE_VALUE_HEADER);
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'sniValue' does not exist on type '{}'.
   oReq.sniValue = getValue(req, pluginOpts.SNI_VALUE_HEADER);
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'hostValue' does not exist on type '{}'.
   oReq.hostValue = getValue(req, pluginOpts.HOST_VALUE_HEADER);
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'extraUrl' does not exist on type '{}'.
   oReq.extraUrl = getValue(req, pluginOpts.EXTRA_URL_HEADER);
+  // @ts-expect-error ts-migrate(2575) FIXME: No overload expects 2 arguments, but overloads do ... Remove this comment to see the full error message
   var fullUrl = getValue(req, pluginOpts.FULL_URL_HEADER);
+  // @ts-expect-error ts-migrate(2575) FIXME: No overload expects 2 arguments, but overloads do ... Remove this comment to see the full error message
   var pattern = getValue(req, 'x-whistle-raw-pattern_');
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'url' does not exist on type '{}'.
   oReq.url = oReq.fullUrl = req.fullUrl = fullUrl;
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'isHttps' does not exist on type '{}'.
   req.isHttps = oReq.isHttps = HTTPS_RE.test(fullUrl);
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'remoteAddress' does not exist on type '{... Remove this comment to see the full error message
   oReq.remoteAddress = req.headers[REMOTE_ADDR_HEAD] || '127.0.0.1';
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'remotePort' does not exist on type '{}'.
   oReq.remotePort = parseInt(req.headers[REMOTE_PORT_HEAD], 10) || 0;
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'fromTunnel' does not exist on type '{}'.
   req.fromTunnel = oReq.fromTunnel = req.headers[FROM_TUNNEL_HEADER] === '1';
   delete req.headers[FROM_TUNNEL_HEADER];
   delete req.headers[REMOTE_ADDR_HEAD];
@@ -477,23 +541,32 @@ var initReq = function (req, res, isServer) {
   if (pattern) {
     delete req.headers['x-whistle-raw-pattern_'];
     if (pattern[1] === ',') {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'isRexExp' does not exist on type '{}'.
       oReq.isRexExp = oReq.isRegExp = pattern[0] === '1';
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'pattern' does not exist on type '{}'.
       oReq.pattern = pattern.substring(2);
     }
   }
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'fromComposer' does not exist on type '{}... Remove this comment to see the full error message
   req.fromComposer = oReq.fromComposer =
     req.headers[REQ_FROM_HEADER] === 'W2COMPOSER';
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'servername' does not exist on type '{}'.
   oReq.servername = oReq.serverName = getValue(
     req,
     pluginOpts.SERVER_NAME_HEAD
   );
+  // @ts-expect-error ts-migrate(2575) FIXME: No overload expects 2 arguments, but overloads do ... Remove this comment to see the full error message
   var certCacheInfo = getValue(req, pluginOpts.CERT_CACHE_INFO);
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'certCacheName' does not exist on type '{... Remove this comment to see the full error message
   oReq.certCacheName = certCacheInfo;
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'certCacheTime' does not exist on type '{... Remove this comment to see the full error message
   oReq.certCacheTime = 0;
   if (certCacheInfo) {
     var sepIndex = certCacheInfo.indexOf('+');
     if (sepIndex !== -1) {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'certCacheName' does not exist on type '{... Remove this comment to see the full error message
       oReq.certCacheName = certCacheInfo.substring(0, sepIndex);
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'certCacheTime' does not exist on type '{... Remove this comment to see the full error message
       oReq.certCacheTime = parseInt(certCacheInfo.substring(sepIndex + 1)) || 0;
     }
   }
@@ -508,22 +581,37 @@ var initReq = function (req, res, isServer) {
   } else {
     isSNI = true;
   }
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'useSNI' does not exist on type '{}'.
   req.useSNI = oReq.useSNI = req.isSNI = oReq.isSNI = isSNI;
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'commonName' does not exist on type '{}'.
   oReq.commonName = getValue(req, pluginOpts.COMMON_NAME_HEAD);
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'realUrl' does not exist on type '{}'.
   oReq.realUrl = getValue(req, pluginOpts.REAL_URL_HEADER) || oReq.url;
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'relativeUrl' does not exist on type '{}'... Remove this comment to see the full error message
   oReq.relativeUrl = getValue(req, pluginOpts.RELATIVE_URL_HEADER);
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'method' does not exist on type '{}'.
   oReq.method = getValue(req, pluginOpts.METHOD_HEADER) || 'GET';
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'clientPort' does not exist on type '{}'.
   oReq.clientPort = getValue(req, pluginOpts.CLIENT_PORT_HEAD);
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'globalValue' does not exist on type '{}'... Remove this comment to see the full error message
   oReq.globalValue = getValue(req, pluginOpts.GLOBAL_VALUE_HEAD);
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'proxyValue' does not exist on type '{}'.
   oReq.proxyValue = getValue(req, pluginOpts.PROXY_VALUE_HEADER);
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'pacValue' does not exist on type '{}'.
   oReq.pacValue = getValue(req, pluginOpts.PAC_VALUE_HEADER);
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'pluginVars' does not exist on type '{}'.
   oReq.pluginVars = getPluginVars(req, PLUGIN_VARS_HEAD);
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'globalPluginVars' does not exist on type... Remove this comment to see the full error message
   oReq.globalPluginVars = getPluginVars(req, GLOBAL_PLUGIN_VARS_HEAD);
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'serverIp' does not exist on type '{}'.
   oRes.serverIp = getValue(req, pluginOpts.HOST_IP_HEADER) || '';
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'statusCode' does not exist on type '{}'.
   oRes.statusCode = getValue(req, pluginOpts.STATUS_CODE_HEADER);
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'headers' does not exist on type '{}'.
   oReq.headers = extractHeaders(req, pluginKeyMap);
 };
-var getOptions = function (opts, binary, toServer) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'getOptions'.
+var getOptions = function (opts: any, binary: any, toServer: any) {
   if (opts) {
     opts.mask = toServer;
     opts.binary = opts.binary || opts.opcode == 2;
@@ -534,17 +622,19 @@ var getOptions = function (opts, binary, toServer) {
   }
   return binary ? BINARY_OPTIONS : '';
 };
-var toBuffer = function (base64) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'toBuffer'.
+var toBuffer = function (base64: any) {
   if (base64) {
     try {
       return new Buffer(base64, 'base64');
     } catch (e) {}
   }
 };
-var getBuffer = function (item) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'getBuffer'.
+var getBuffer = function (item: any) {
   return toBuffer(item.base64);
 };
-var getText = function (item) {
+var getText = function (item: any) {
   var body = toBuffer(item.base64) || '';
   if (body && !isUtf8(body)) {
     try {
@@ -554,7 +644,7 @@ var getText = function (item) {
   return body + '';
 };
 
-var defineProps = function (obj) {
+var defineProps = function (obj: any) {
   if (!obj) {
     return;
   }
@@ -577,14 +667,14 @@ var defineProps = function (obj) {
   }
 };
 
-var execCallback = function (id, cbs, item) {
+var execCallback = function (id: any, cbs: any, item: any) {
   var cbList = cbs[id];
   if (cbList && (cbs === reqCallbacks || !item || item.endTime)) {
     item = item || '';
     defineProps(item.req);
     defineProps(item.res);
     delete cbs[id];
-    cbList.forEach(function (cb) {
+    cbList.forEach(function (cb: any) {
       try {
         cb(item);
       } catch (e) {}
@@ -592,7 +682,7 @@ var execCallback = function (id, cbs, item) {
   }
 };
 
-var retryRequestSession = function (time) {
+var retryRequestSession = function (time: any) {
   if (!sessionTimer) {
     sessionTimer = setTimeout(requestSessions, time || TIMEOUT);
   }
@@ -618,9 +708,10 @@ var requestSessions = function () {
     '&resList=' +
     JSON.stringify(_resList);
   sessionOpts.path = sessionOpts.path.replace(QUERY_RE, query);
-  requestData(sessionOpts, function (err, result) {
+  requestData(sessionOpts, function (err: any, result: any) {
     sessionPending = false;
     if (err || !result) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
       return retryRequestSession();
     }
     Object.keys(result).forEach(function (id) {
@@ -632,7 +723,7 @@ var requestSessions = function () {
   });
 };
 
-var retryRequestFrames = function (time) {
+var retryRequestFrames = function (time: any) {
   if (!framesTimer) {
     framesTimer = setTimeout(requestFrames, time || TIMEOUT);
   }
@@ -655,10 +746,11 @@ var requestFrames = function () {
   var query =
     '?curReqId=' + req[REQ_ID_KEY] + '&lastFrameId=' + (req[FRAME_KEY] || '');
   framesOpts.path = framesOpts.path.replace(QUERY_RE, query);
-  requestData(framesOpts, function (err, result) {
+  requestData(framesOpts, function (err: any, result: any) {
     framesPending = false;
     if (err || !result) {
       framesCallbacks.push(cb);
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
       return retryRequestFrames();
     }
     var frames = result.frames;
@@ -686,7 +778,7 @@ var requestFrames = function () {
   });
 };
 
-var retryCustomParser = function (time) {
+var retryCustomParser = function (time: any) {
   if (!customParserTimer) {
     customParserTimer = setTimeout(customParser, time || TIMEOUT);
   }
@@ -707,13 +799,15 @@ var customParser = function () {
     idList: idList,
     frames: framesList.splice(0, 10)
   };
-  requestData(customParserOpts, function (err, result) {
+  requestData(customParserOpts, function (err: any, result: any) {
     customParserPending = false;
     customParserOpts.body = undefined;
     if (err || !result) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
       return retryCustomParser();
     }
     idList.forEach(function (reqId) {
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       var cb = parserCallbacks[reqId];
       cb && cb(result[reqId]);
     });
@@ -721,14 +815,15 @@ var customParser = function () {
   });
 };
 
-function isFrames(item) {
+function isFrames(item: any) {
   if (/^wss?:\/\//.test(item.url)) {
     return item.res.statusCode == 101;
   }
   return item.inspect || item.useFrames;
 }
 
-var getFrames = function (req, cb) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'getFrames'.
+var getFrames = function (req: any, cb: any) {
   var reqId = req[REQ_ID_KEY];
   if (!REQ_ID_RE.test(reqId) || typeof cb !== 'function') {
     return;
@@ -737,7 +832,8 @@ var getFrames = function (req, cb) {
     return cb('');
   }
   cb[REQ_KEY] = req;
-  getSession(req, function (session) {
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
+  getSession(req, function (session: any) {
     if (
       !session ||
       session.reqError ||
@@ -752,7 +848,7 @@ var getFrames = function (req, cb) {
   });
 };
 
-var getSession = function (req, cb, isReq) {
+var getSession = function (req: any, cb: any, isReq: any) {
   var reqId = req[REQ_ID_KEY];
   if (!REQ_ID_RE.test(reqId) || typeof cb !== 'function') {
     return;
@@ -766,6 +862,7 @@ var getSession = function (req, cb, isReq) {
       return cb(session);
     }
   }
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   var cbList = isReq ? reqCallbacks[reqId] : resCallbacks[reqId];
   if (cbList) {
     if (cbList.indexOf(cb) === -1) {
@@ -773,30 +870,33 @@ var getSession = function (req, cb, isReq) {
     }
   } else {
     cbList = [
-      function (s) {
+      function (s: any) {
         req[SESSION_KEY] = s;
         cb(s);
       }
     ];
   }
   if (isReq) {
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     reqCallbacks[reqId] = cbList;
   } else {
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     resCallbacks[reqId] = cbList;
   }
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
   retryRequestSession();
 };
 
-var initWsReq = function (req, res) {
+var initWsReq = function (req: any, res: any) {
   initReq(req, res, true);
 };
-var initConnectReq = function (req, res) {
+var initConnectReq = function (req: any, res: any) {
   if (req.originalReq && req.originalRes) {
     return;
   }
-  var established;
+  var established: any;
   initWsReq(req, res);
-  req.sendEstablished = function (err, cb) {
+  req.sendEstablished = function (err: any, cb: any) {
     if (established) {
       return;
     }
@@ -821,7 +921,7 @@ var initConnectReq = function (req, res) {
     }
     resCtn.push('x-whistle-allow-tunnel-ack: 1');
     resCtn.push('\r\n', body);
-    res.once('data', function (chunk) {
+    res.once('data', function (chunk: any) {
       if (!req._hasError) {
         res.pause();
         var on = res.on;
@@ -838,28 +938,29 @@ var initConnectReq = function (req, res) {
   };
 };
 
-var loadModule = function (filepath) {
+var loadModule = function (filepath: any) {
   try {
+    // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
     return require(filepath);
   } catch (e) {}
 };
 
-function getFunction(fn) {
+function getFunction(fn: any) {
   return typeof fn === 'function' ? fn : null;
 }
 
-function notEmptyStr(str) {
+function notEmptyStr(str: any) {
   return str && typeof str === 'string';
 }
 
-function getHookName(req) {
+function getHookName(req: any) {
   var name = req.headers[PLUGIN_HOOK_NAME_HEADER];
   delete req.headers[PLUGIN_HOOK_NAME_HEADER];
   return typeof name === 'string' ? name : null;
 }
 
-function handleError(socket, sender, receiver) {
-  var emitError = function (err) {
+function handleError(socket: any, sender: any, receiver: any) {
+  var emitError = function (err: any) {
     if (socket._emittedError) {
       return;
     }
@@ -870,7 +971,7 @@ function handleError(socket, sender, receiver) {
   receiver && (receiver.onerror = emitError);
 }
 
-function toBinary(data) {
+function toBinary(data: any) {
   if (!data || Buffer.isBuffer(data)) {
     return data && data.length && data;
   }
@@ -884,12 +985,13 @@ function toBinary(data) {
   return Buffer.from(data);
 }
 
-function wrapTunnelWriter(socket, toServer) {
+function wrapTunnelWriter(socket: any, toServer: any) {
   var write = socket.write;
   var end = socket.end;
   var sender = wsParser.getSender(socket, toServer);
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   handleError(socket, sender);
-  socket.write = function (chunk, encoding, cb) {
+  socket.write = function (chunk: any, encoding: any, cb: any) {
     if ((chunk = toBinary(chunk))) {
       if (encoding === 'binary') {
         return write.call(this, chunk, encoding, cb);
@@ -902,32 +1004,35 @@ function wrapTunnelWriter(socket, toServer) {
     }
   };
   if (toServer) {
-    socket.write = function (chunk, opts, cb) {
+    socket.write = function (chunk: any, opts: any, cb: any) {
       if ((chunk = toBinary(chunk))) {
         if (opts === 'binary') {
           return write.call(this, chunk, opts, cb);
         }
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
         sender.send(chunk, getOptions(opts, false, true));
       }
     };
-    socket.writeText = function (chunk) {
+    socket.writeText = function (chunk: any) {
       if ((chunk = toBinary(chunk))) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
         sender.send(chunk, getOptions(null, false, true));
       }
     };
-    socket.writeBin = function (chunk) {
+    socket.writeBin = function (chunk: any) {
       if ((chunk = toBinary(chunk))) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
         sender.send(chunk, getOptions(null, true, true));
       }
     };
-    socket.closeWebSocket = function (code, data, cb) {
+    socket.closeWebSocket = function (code: any, data: any, cb: any) {
       sender.close(code || 1000, data, true, cb);
     };
-    socket.ping = function (data) {
+    socket.ping = function (data: any) {
       return sender.ping(data, { mask: true });
     };
   } else {
-    socket.write = function (chunk, encoding, cb) {
+    socket.write = function (chunk: any, encoding: any, cb: any) {
       if ((chunk = toBinary(chunk))) {
         if (encoding === 'binary') {
           return write.call(this, chunk, encoding, cb);
@@ -936,34 +1041,34 @@ function wrapTunnelWriter(socket, toServer) {
       }
     };
   }
-  socket.end = function (chunk, encoding, cb) {
+  socket.end = function (chunk: any, encoding: any, cb: any) {
     chunk && socket.write(chunk, encoding, cb);
     return end.call(this);
   };
   return socket;
 }
 
-function wrapTunnelReader(socket, fromServer, maxPayload) {
+function wrapTunnelReader(socket: any, fromServer: any, maxPayload: any) {
   socket.wsExts = '';
   var receiver = wsParser.getReceiver(socket, fromServer, maxPayload);
   var emit = socket.emit;
   handleError(socket, null, receiver);
-  socket.emit = function (type, chunk) {
+  socket.emit = function (type: any, chunk: any) {
     if (type === 'data' && chunk) {
       return receiver.add(chunk);
     }
     return emit.apply(this, arguments);
   };
-  receiver.onData = function (chunk, opts) {
+  receiver.onData = function (chunk: any, opts: any) {
     emit.call(socket, 'data', chunk, opts);
   };
-  receiver.onpong = function (data, opts) {
+  receiver.onpong = function (data: any, opts: any) {
     socket.emit('pong', data, opts);
   };
   return socket;
 }
 
-function setReqRules(uri, reqRules) {
+function setReqRules(uri: any, reqRules: any) {
   if (!reqRules) {
     return;
   }
@@ -987,48 +1092,51 @@ function setReqRules(uri, reqRules) {
   uri.headers['x-whistle-key-value'] = encodeURIComponent(values);
 }
 
-function addFrameHandler(req, socket, maxWsPayload, fromClient, toServer) {
+function addFrameHandler(req: any, socket: any, maxWsPayload: any, fromClient: any, toServer: any) {
   socket.wsExts = req.headers['sec-websocket-extensions'] || '';
   var receiver = wsParser.getReceiver(socket, !fromClient, maxWsPayload);
   var emit = socket.emit;
   var write = socket.write;
   var end = socket.end;
-  var lastOpts;
+  var lastOpts: any;
   var sender = wsParser.getSender(socket, toServer);
 
   handleError(socket, sender, receiver);
-  socket.emit = function (type, chunk) {
+  socket.emit = function (type: any, chunk: any) {
     if (type === 'data' && chunk) {
       return receiver.add(chunk);
     }
     return emit.apply(this, arguments);
   };
-  receiver.onData = function (chunk, opts) {
+  receiver.onData = function (chunk: any, opts: any) {
     if (opts && opts.opcode == 2) {
       opts.binary = true;
     }
     lastOpts = opts;
     emit.call(socket, 'data', chunk, opts);
   };
-  socket.write = function (chunk, opts, cb) {
+  socket.write = function (chunk: any, opts: any, cb: any) {
     if ((chunk = toBinary(chunk))) {
       if (opts === 'binary') {
         return write.call(this, chunk, opts, cb);
       }
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
       sender.send(chunk, getOptions(opts || lastOpts, false, toServer));
     }
   };
-  socket.writeText = function (chunk) {
+  socket.writeText = function (chunk: any) {
     if ((chunk = toBinary(chunk))) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
       sender.send(chunk, getOptions(null, false, toServer));
     }
   };
-  socket.writeBin = function (chunk) {
+  socket.writeBin = function (chunk: any) {
     if ((chunk = toBinary(chunk))) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
       sender.send(chunk, getOptions(null, true, toServer));
     }
   };
-  socket.end = function (chunk, opts, cb) {
+  socket.end = function (chunk: any, opts: any, cb: any) {
     chunk && socket.write(chunk, opts, cb);
     return end.call(this);
   };
@@ -1041,7 +1149,7 @@ function addFrameHandler(req, socket, maxWsPayload, fromClient, toServer) {
   };
 }
 
-function formatRawHeaders(headers, req) {
+function formatRawHeaders(headers: any, req: any) {
   var rawHeaders = headers && (req.rawHeaders || req);
   if (!Array.isArray(rawHeaders)) {
     return headers;
@@ -1053,19 +1161,20 @@ function formatRawHeaders(headers, req) {
   return formatHeaders(headers, rawNames);
 }
 
-function extractHeaders(req, exlucdekyes) {
+function extractHeaders(req: any, exlucdekyes: any) {
   var headers = {};
   Object.keys(req.headers).forEach(function (key) {
     if (!exlucdekyes[key]) {
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       headers[key] = req.headers[key];
     }
   });
   return headers;
 }
 
-function addErrorHandler(req, client) {
-  var done;
-  client.on('error', function (err) {
+function addErrorHandler(req: any, client: any) {
+  var done: any;
+  client.on('error', function (err: any) {
     if (!done) {
       done = true;
       req.destroy && req.destroy(err);
@@ -1074,30 +1183,31 @@ function addErrorHandler(req, client) {
   });
 }
 
-function handleWsSignal(receiver, sender) {
+function handleWsSignal(receiver: any, sender: any) {
   receiver.onping = sender.ping.bind(sender);
   receiver.onpong = sender.pong.bind(sender);
-  receiver.onclose = function (code, message, opts) {
+  receiver.onclose = function (code: any, message: any, opts: any) {
     sender.close(code, message, opts.masked);
   };
 }
 
-function destroySocket() {
+function destroySocket(this: any) {
   this.destroy();
 }
 
-module.exports = async function (options, callback) {
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
+module.exports = async function (options: any, callback: any) {
   options.Storage = Storage;
   options.parseUrl = parseUrl;
   options.formatHeaders = formatRawHeaders;
   options.wsParser = wsParser;
   options.RULE_PROTO_HEADER = 'x-whistle-rule-proto';
   pluginVersion = '@' + options.version;
-  var wrapWsReader = function (socket, maxPayload) {
+  var wrapWsReader = function (socket: any, maxPayload: any) {
     wrapTunnelReader(socket, true, maxPayload);
     return socket;
   };
-  var wrapWsWriter = function (socket) {
+  var wrapWsWriter = function (socket: any) {
     wrapTunnelWriter(socket, true);
     var timer = setInterval(function () {
       socket.ping();
@@ -1105,6 +1215,7 @@ module.exports = async function (options, callback) {
     var handleClose = function () {
       if (timer) {
         clearInterval(timer);
+        // @ts-expect-error ts-migrate(2322) FIXME: Type 'null' is not assignable to type 'number'.
         timer = null;
       }
     };
@@ -1133,7 +1244,7 @@ module.exports = async function (options, callback) {
   var boundPort = config.port;
   var PLUGIN_HOOKS = config.PLUGIN_HOOKS;
   var RES_RULES_HEAD = config.RES_RULES_HEAD;
-  var getRulesStr = function (obj) {
+  var getRulesStr = function (obj: any) {
     obj = JSON.stringify({
       rules: typeof obj === 'string' ? obj : obj.rules,
       values: obj.values,
@@ -1174,12 +1285,14 @@ module.exports = async function (options, callback) {
     pluginDataDir += encodeURIComponent('/' + config.storage);
   }
   config.pluginDataDir = pluginDataDir;
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
   storage = new Storage(pluginDataDir);
   options.storage = options.localStorage = storage;
   pluginOpts = options;
   Object.keys(options).forEach(function (key) {
     key = options[key];
     if (typeof key === 'string' && !key.indexOf('x-whistle-')) {
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       pluginKeyMap[key] = 1;
     }
   });
@@ -1200,13 +1313,13 @@ module.exports = async function (options, callback) {
   customParserOpts.headers = headers;
   customParserOpts.method = 'POST';
   var normalizeArgs = function (
-    uri,
-    cb,
-    req,
-    curUrl,
-    isWs,
-    opts,
-    alpnProtocol
+    uri: any,
+    cb: any,
+    req: any,
+    curUrl: any,
+    isWs: any,
+    opts: any,
+    alpnProtocol: any
   ) {
     var type = uri && typeof uri;
     var headers, method;
@@ -1276,23 +1389,23 @@ module.exports = async function (options, callback) {
     return [uri, cb, isHttps, opts];
   };
 
-  var authPort,
-    sniPort,
-    port,
-    statsPort,
-    resStatsPort,
-    uiPort,
-    rulesPort,
-    resRulesPort,
-    tunnelRulesPort,
-    tunnelPort;
-  var reqWritePort, reqReadPort, resWritePort, resReadPort;
-  var wsReqWritePort, wsReqReadPort, wsResWritePort, wsResReadPort;
-  var tunnelReqWritePort,
-    tunnelReqReadPort,
-    tunnelResWritePort,
-    tunnelResReadPort;
-  var upgrade;
+  var authPort: any,
+    sniPort: any,
+    port: any,
+    statsPort: any,
+    resStatsPort: any,
+    uiPort: any,
+    rulesPort: any,
+    resRulesPort: any,
+    tunnelRulesPort: any,
+    tunnelPort: any;
+  var reqWritePort: any, reqReadPort: any, resWritePort: any, resReadPort: any;
+  var wsReqWritePort: any, wsReqReadPort: any, wsResWritePort: any, wsResReadPort: any;
+  var tunnelReqWritePort: any,
+    tunnelReqReadPort: any,
+    tunnelResWritePort: any,
+    tunnelResReadPort: any;
+  var upgrade: any;
   var callbackHandler = function () {
     pluginInited = true;
     callback(null, {
@@ -1323,15 +1436,18 @@ module.exports = async function (options, callback) {
   };
 
   try {
+    // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
     require.resolve(options.value);
   } catch (e) {
     return callbackHandler();
   }
   options.LRU = LRU;
   var cgiHeaders = {};
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   cgiHeaders[PROXY_ID_HEADER] = options.shortName.substring(8);
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   cgiHeaders['x-whistle-auth-key'] = authKey;
-  var parseCgiUrl = function (url) {
+  var parseCgiUrl = function (url: any) {
     var opts = parseUrl(url);
     opts.headers = cgiHeaders;
     return opts;
@@ -1345,14 +1461,14 @@ module.exports = async function (options, callback) {
   var enableOpts = parseCgiUrl(baseUrl + 'plugins/is-enable');
   var updateRulesOpts = parseCgiUrl(baseUrl + 'plugins/update-rules');
   var httpsStatusOpts = parseCgiUrl(baseUrl + 'https-status');
-  var updateTimer;
+  var updateTimer: any;
   composeOpts.method = 'POST';
   composeOpts.headers['Content-Type'] = 'application/json';
-  var requestCgi = function (opts, cb) {
+  var requestCgi = function (opts: any, cb: any) {
     if (typeof cb !== 'function') {
       return;
     }
-    request(opts, function (err, body, res) {
+    request(opts, function (err: any, body: any, res: any) {
       if (body && res.statusCode == 200) {
         try {
           return cb(JSON.parse(body) || '', res);
@@ -1362,7 +1478,7 @@ module.exports = async function (options, callback) {
     });
   };
 
-  var getValue = function (key, cb) {
+  var getValue = function (key: any, cb: any) {
     if (typeof cb !== 'function') {
       return;
     }
@@ -1372,7 +1488,7 @@ module.exports = async function (options, callback) {
     var valueOpts = parseCgiUrl(
       baseUrl + 'values/value?key=' + encodeURIComponent(key)
     );
-    requestCgi(valueOpts, function (data) {
+    requestCgi(valueOpts, function (data: any) {
       if (!data) {
         return getValue(key, cb);
       }
@@ -1380,7 +1496,7 @@ module.exports = async function (options, callback) {
     });
   };
 
-  var getCert = function (domain, callback) {
+  var getCert = function (domain: any, callback: any) {
     if (!domain || typeof domain !== 'string') {
       return callback('');
     }
@@ -1398,17 +1514,20 @@ module.exports = async function (options, callback) {
     if (cert) {
       return callback(cert);
     }
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     var cbs = certsCallbacks[domain];
     if (cbs) {
       return cbs.push(callback);
     }
     cbs = [callback];
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     certsCallbacks[domain] = cbs;
     var opts = parseCgiUrl(baseUrl + 'get-cert?domain=' + domain);
-    requestCgi(opts, function (cert) {
+    requestCgi(opts, function (cert: any) {
       cert && certsCache.set(domain, cert);
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       delete certsCallbacks[domain];
-      cbs.forEach(function (cb) {
+      cbs.forEach(function (cb: any) {
         cb(cert);
       });
     });
@@ -1416,21 +1535,21 @@ module.exports = async function (options, callback) {
 
   options.getValue = getValue;
   options.getCert = getCert;
-  options.getRootCA = function (callback) {
+  options.getRootCA = function (callback: any) {
     return getCert('rootCA', callback);
   };
-  options.getHttpsStatus = function (callback) {
+  options.getHttpsStatus = function (callback: any) {
     requestCgi(httpsStatusOpts, callback);
   };
   options.getTop =
     options.getRuntimeInfo =
     options.getProcessData =
     options.getPerfData =
-      function (callback) {
+      function (callback: any) {
         requestCgi(topOpts, callback);
       };
 
-  var waitingUpdateRules;
+  var waitingUpdateRules: any;
   var updateRules = function () {
     requestCgi(updateRulesOpts, noop);
     if (waitingUpdateRules) {
@@ -1447,7 +1566,7 @@ module.exports = async function (options, callback) {
       updateTimer = setTimeout(updateRules, 600);
     }
   };
-  options.composer = options.compose = function (data, cb) {
+  options.composer = options.compose = function (data: any, cb: any) {
     var needResponse = typeof cb === 'function';
     if (!data) {
       return needResponse ? cb() : '';
@@ -1466,7 +1585,7 @@ module.exports = async function (options, callback) {
       delete data.body;
     }
     composeOpts.body = data;
-    request(composeOpts, function (err, body, res) {
+    request(composeOpts, function (err: any, body: any, res: any) {
       if (!needResponse) {
         return;
       }
@@ -1479,30 +1598,30 @@ module.exports = async function (options, callback) {
     });
   };
 
-  options.getRules = function (cb) {
+  options.getRules = function (cb: any) {
     requestCgi(rulesUrlOpts, cb);
   };
-  options.getValues = function (cb) {
+  options.getValues = function (cb: any) {
     requestCgi(valuesUrlOpts, cb);
   };
-  options.getPlugins = function(cb) {
+  options.getPlugins = function(cb: any) {
     requestCgi(pluginsOpts, cb);
   };
-  var certsInfo;
-  options.getCustomCertsInfo = function (cb) {
+  var certsInfo: any;
+  options.getCustomCertsInfo = function (cb: any) {
     if (typeof cb !== 'function') {
       return;
     }
     if (certsInfo) {
       return cb(certsInfo);
     }
-    requestCgi(certsInfoUrlOpts, function (data) {
+    requestCgi(certsInfoUrlOpts, function (data: any) {
       certsInfo = certsInfo || data;
       cb(certsInfo);
     });
   };
-  var enableCallbacks = [];
-  options.isEnable = options.isActive = function (cb) {
+  var enableCallbacks: any = [];
+  options.isEnable = options.isActive = function (cb: any) {
     if (typeof cb !== 'function') {
       return;
     }
@@ -1511,10 +1630,11 @@ module.exports = async function (options, callback) {
       return;
     }
     var checkEnable = function () {
-      requestCgi(enableOpts, function (data, r) {
+      requestCgi(enableOpts, function (data: any, r: any) {
         if (!data) {
           return setTimeout(checkEnable, 600);
         }
+        // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'callback' implicitly has an 'any' type.
         enableCallbacks.forEach(function (callback) {
           callback(data.enable);
         });
@@ -1523,7 +1643,7 @@ module.exports = async function (options, callback) {
     };
     checkEnable();
   };
-  var initProxy = function(cb) {
+  var initProxy = function(cb: any) {
     getProxy({
       PROXY_ID_HEADER: PROXY_ID_HEADER,
       proxyIp: boundIp,
@@ -1533,8 +1653,9 @@ module.exports = async function (options, callback) {
       wrapWsWriter: wrapWsWriter
     }, cb);
   };
-  var initServers = function (_ctx) {
+  var initServers = function (_ctx: any) {
     ctx = _ctx || ctx;
+    // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
     var execPlugin = require(options.value) || '';
     var execAuth =
       getFunction(execPlugin.auth) || getFunction(execPlugin.verify);
@@ -1610,7 +1731,7 @@ module.exports = async function (options, callback) {
     var staticDir = !startUIServer && options.staticDir;
     if (staticDir) {
       var app = express();
-      startUIServer = function (server) {
+      startUIServer = function (server: any) {
         app.use(
           express.static(path.join(options.value, staticDir), {
             maxAge: 60000
@@ -1646,45 +1767,48 @@ module.exports = async function (options, callback) {
     if (!hasServer) {
       return callbackHandler();
     }
-    getServer(async function (server, _port) {
-      var maxWsPayload;
-      var authServer,
-        sniServer,
-        uiServer,
-        httpServer,
-        statsServer,
-        resStatsServer;
-      var rulesServer, resRulesServer, tunnelRulesServer, tunnelServer;
-      var reqRead, reqWrite, resWrite, resRead;
-      var wsReqRead, wsReqWrite, wsResWrite, wsResRead;
-      var tunnelReqRead, tunnelReqWrite, tunnelResWrite, tunnelResRead;
-      var setMaxWsPayload = function (payload) {
+    getServer(async function (server: any, _port: any) {
+      var maxWsPayload: any;
+      var authServer: any,
+        sniServer: any,
+        uiServer: any,
+        httpServer: any,
+        statsServer: any,
+        resStatsServer: any;
+      var rulesServer: any, resRulesServer: any, tunnelRulesServer: any, tunnelServer: any;
+      var reqRead: any, reqWrite: any, resWrite: any, resRead: any;
+      var wsReqRead: any, wsReqWrite: any, wsResWrite: any, wsResRead: any;
+      var tunnelReqRead: any, tunnelReqWrite: any, tunnelResWrite: any, tunnelResRead: any;
+      var setMaxWsPayload = function (payload: any) {
         maxWsPayload = parseInt(payload, 10) || 0;
       };
       options.ctx = ctx;
       if (startUIServer) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
         uiServer = createServer();
         await startUIServer(uiServer, options);
         uiPort = _port;
       }
 
-      var transferError = function (req, res) {
-        res.once('error', function (err) {
+      var transferError = function (req: any, res: any) {
+        res.once('error', function (err: any) {
           req.emit('error', err);
         });
-        res.once('close', function (err) {
+        res.once('close', function (err: any) {
           req.emit('close', err);
         });
       };
 
       if (execAuth) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
         authServer = createServer();
-        authServer.on('request', async function (req, res) {
+        authServer.on('request', async function (req: any, res: any) {
+          // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
           initReq(req, res);
           transferError(req, res);
           var customHeaders = {};
           var htmlBody, htmlUrl, location;
-          var setHeader = function (key, value) {
+          var setHeader = function (key: any, value: any) {
             if (
                 !notEmptyStr(key) ||
                 NOT_NAME_RE.test(key) ||
@@ -1697,10 +1821,11 @@ module.exports = async function (options, callback) {
                 key.indexOf('x-whistle-') === 0 ||
                 key === 'proxy-authorization'
               ) {
+              // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
               customHeaders[key] = value;
             }
           };
-          req.setHtml = function (html) {
+          req.setHtml = function (html: any) {
             if (!html || html == null) {
               htmlBody = null;
             } else if (typeof html === 'string' || Buffer.isBuffer(html)) {
@@ -1709,7 +1834,7 @@ module.exports = async function (options, callback) {
               htmlUrl = null;
             }
           };
-          req.setUrl = req.setFile = function (url) {
+          req.setUrl = req.setFile = function (url: any) {
             if (!url || /[\s]/.test(url)) {
               htmlUrl = null;
             } else {
@@ -1720,7 +1845,7 @@ module.exports = async function (options, callback) {
             }
           };
           req.set = req.setHeader = setHeader;
-          req.setRedirect = function (url) {
+          req.setRedirect = function (url: any) {
             if (!url) {
               location = null;
             } else if (URL_RE.test(url)) {
@@ -1730,7 +1855,7 @@ module.exports = async function (options, callback) {
               req.showLoginBox = false;
             }
           };
-          req.setLogin = function (login) {
+          req.setLogin = function (login: any) {
             req.showLoginBox = login !== false;
             if (req.showLoginBox) {
               location = null;
@@ -1740,13 +1865,17 @@ module.exports = async function (options, callback) {
           try {
             var result = await execAuth(req, options);
             if (req.showLoginBox) {
+              // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
               customHeaders[SHOW_LOGIN_BOX] = '1';
             }
             if (result === false) {
+              // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
               customHeaders['x-auth-status'] = '1';
               if (location) {
+                // @ts-expect-error ts-migrate(2339) FIXME: Property 'location' does not exist on type '{}'.
                 customHeaders.location = location;
               } else if (htmlUrl) {
+                // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                 customHeaders['x-auth-html-url'] =
                     encodeURIComponent(htmlUrl);
               } else if (typeof htmlBody === 'string') {
@@ -1774,8 +1903,10 @@ module.exports = async function (options, callback) {
       }
 
       if (sniCallback) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
         sniServer = createServer();
-        sniServer.on('request', async function (req, res) {
+        sniServer.on('request', async function (req: any, res: any) {
+          // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
           initReq(req, res);
           transferError(req, res);
           try {
@@ -1810,6 +1941,7 @@ module.exports = async function (options, callback) {
       }
 
       if (startServer) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
         httpServer = createServer();
         await startServer(httpServer, options);
         upgrade = listenerCount(httpServer, 'upgrade');
@@ -1817,24 +1949,28 @@ module.exports = async function (options, callback) {
       }
 
       if (startStatsServer) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
         statsServer = createServer();
         await startStatsServer(statsServer, options);
         statsPort = _port;
       }
 
       if (startResStatsServer) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
         resStatsServer = createServer();
         await startResStatsServer(resStatsServer, options);
         resStatsPort = _port;
       }
 
       if (startRulesServer) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
         rulesServer = createServer();
         await startRulesServer(rulesServer, options);
         rulesPort = _port;
       }
 
       if (startResRulesServer) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
         resRulesServer = createServer();
         await startResRulesServer(resRulesServer, options);
         resRulesPort = _port;
@@ -1844,6 +1980,7 @@ module.exports = async function (options, callback) {
         if (startTunnelRulesServer === startRulesServer) {
           tunnelRulesServer = rulesServer;
         } else {
+          // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
           tunnelRulesServer = createServer();
           await startTunnelRulesServer(tunnelRulesServer, options);
         }
@@ -1857,6 +1994,7 @@ module.exports = async function (options, callback) {
             tunnelPort = _port;
           }
         } else {
+          // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
           tunnelServer = createServer();
           await startTunnelServer(tunnelServer, options);
           tunnelPort = _port;
@@ -1864,30 +2002,35 @@ module.exports = async function (options, callback) {
       }
 
       if (startReqRead) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
         reqRead = createServer();
         await startReqRead(reqRead, options);
         reqReadPort = _port;
       }
 
       if (startReqWrite) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
         reqWrite = createServer();
         await startReqWrite(reqWrite, options);
         reqWritePort = _port;
       }
 
       if (startResRead) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
         resRead = createServer();
         await startResRead(resRead, options);
         resReadPort = _port;
       }
 
       if (startResWrite) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
         resWrite = createServer();
         await startResWrite(resWrite, options);
         resWritePort = _port;
       }
 
       if (startWsReqRead) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
         wsReqRead = createServer();
         wsReqRead.setMaxWsPayload = setMaxWsPayload;
         await startWsReqRead(wsReqRead, options);
@@ -1895,6 +2038,7 @@ module.exports = async function (options, callback) {
       }
 
       if (startWsReqWrite) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
         wsReqWrite = createServer();
         wsReqWrite.setMaxWsPayload = setMaxWsPayload;
         await startWsReqWrite(wsReqWrite, options);
@@ -1902,6 +2046,7 @@ module.exports = async function (options, callback) {
       }
 
       if (startWsResRead) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
         wsResRead = createServer();
         wsResRead.setMaxWsPayload = setMaxWsPayload;
         await startWsResRead(wsResRead, options);
@@ -1909,6 +2054,7 @@ module.exports = async function (options, callback) {
       }
 
       if (startWsResWrite) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
         wsResWrite = createServer();
         wsResWrite.setMaxWsPayload = setMaxWsPayload;
         await startWsResWrite(wsResWrite, options);
@@ -1916,30 +2062,34 @@ module.exports = async function (options, callback) {
       }
 
       if (startTunnelReqRead) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
         tunnelReqRead = createServer();
         await startTunnelReqRead(tunnelReqRead, options);
         tunnelReqReadPort = _port;
       }
 
       if (startTunnelReqWrite) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
         tunnelReqWrite = createServer();
         await startTunnelReqWrite(tunnelReqWrite, options);
         tunnelReqWritePort = _port;
       }
 
       if (startTunnelResRead) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
         tunnelResRead = createServer();
         await startTunnelResRead(tunnelResRead, options);
         tunnelResReadPort = _port;
       }
 
       if (startTunnelResWrite) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 0.
         tunnelResWrite = createServer();
         await startTunnelResWrite(tunnelResWrite, options);
         tunnelResWritePort = _port;
       }
       server.timeout = config.timeout;
-      server.on('request', function (req, res) {
+      server.on('request', function (req: any, res: any) {
         delete req.headers['x-whistle-internal-id'];
         switch (getHookName(req)) {
         case PLUGIN_HOOKS.AUTH:
@@ -1966,23 +2116,25 @@ module.exports = async function (options, callback) {
             var alpnProtocol = req.headers[config.ALPN_PROTOCOL_HEADER];
             var curUrl = req.originalReq.realUrl;
             var svrRes = '';
-            var reqRules, resRules;
+            var reqRules: any, resRules: any;
             var writeHead = res.writeHead;
-            req.setReqRules = res.setReqRules = function (rules) {
+            req.setReqRules = res.setReqRules = function (rules: any) {
               reqRules = rules;
               return true;
             };
-            req.setResRules = res.setResRules = function (rules) {
+            req.setResRules = res.setResRules = function (rules: any) {
               resRules = rules;
               return true;
             };
-            req.writeHead = res.writeHead = function (code, msg, headers) {
+            req.writeHead = res.writeHead = function (code: any, msg: any, headers: any) {
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'statusCode' does not exist on type 'stri... Remove this comment to see the full error message
               code = code > 0 ? code : svrRes.statusCode || 101;
               if (msg && typeof msg !== 'string') {
                 headers = headers || msg;
                 msg = null;
               }
               msg = msg || STATUS_CODES[code] || '';
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'headers' does not exist on type 'string'... Remove this comment to see the full error message
               headers = headers || svrRes.headers;
               if (resRules) {
                 headers = headers || {};
@@ -1994,7 +2146,7 @@ module.exports = async function (options, callback) {
               writeHead.call(res, code, msg, headers);
               res.emit('_wroteHead');
             };
-            req.request = function (uri, cb, opts) {
+            req.request = function (uri: any, cb: any, opts: any) {
               var args = normalizeArgs(
                     uri,
                     cb,
@@ -2013,7 +2165,7 @@ module.exports = async function (options, callback) {
               reqRules = null;
               var client = (args[2] ? httpsRequest : httpRequest)(
                     uri,
-                    function (_res) {
+                    function(this: any, _res: any) {
                       svrRes = _res;
                       res.once('_wroteHead', function () {
                         appendTrailers(_res, res, opts && opts.trailers, req);
@@ -2029,8 +2181,8 @@ module.exports = async function (options, callback) {
               addErrorHandler(req, client);
               return client;
             };
-            req.passThrough = function (uri, newTrailers) {
-              var client = req.request(uri, function (_res) {
+            req.passThrough = function (uri: any, newTrailers: any) {
+              var client = req.request(uri, function (_res: any) {
                 res.writeHead(
                       _res.statusCode,
                       _res.statusMessage,
@@ -2046,6 +2198,7 @@ module.exports = async function (options, callback) {
           break;
         case PLUGIN_HOOKS.REQ_STATS:
           if (statsServer) {
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
             initReq(req, res);
             statsServer.emit('request', req, res);
             res.end();
@@ -2053,6 +2206,7 @@ module.exports = async function (options, callback) {
           break;
         case PLUGIN_HOOKS.RES_STATS:
           if (resStatsServer) {
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
             initReq(req, res);
             resStatsServer.emit('request', req, res);
             res.end();
@@ -2060,18 +2214,21 @@ module.exports = async function (options, callback) {
           break;
         case PLUGIN_HOOKS.REQ_RULES:
           if (rulesServer) {
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
             initReq(req, res);
             rulesServer.emit('request', req, res);
           }
           break;
         case PLUGIN_HOOKS.RES_RULES:
           if (resRulesServer) {
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
             initReq(req, res);
             resRulesServer.emit('request', req, res);
           }
           break;
         case PLUGIN_HOOKS.TUNNEL_RULES:
           if (tunnelRulesServer) {
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
             initReq(req, res);
             tunnelRulesServer.emit('request', req, res);
           }
@@ -2080,7 +2237,7 @@ module.exports = async function (options, callback) {
           res.destroy();
         }
       });
-      server.on('upgrade', function (req, socket, head) {
+      server.on('upgrade', function (req: any, socket: any, head: any) {
         switch (getHookName(req)) {
         case PLUGIN_HOOKS.UI:
           if (uiServer) {
@@ -2094,25 +2251,27 @@ module.exports = async function (options, callback) {
             var curUrl = req.originalReq.realUrl;
             httpServer.setMaxWsPayload = setMaxWsPayload;
             var svrRes = '';
-            var reqRules, resRules;
-            req.setReqRules = socket.setReqRules = function (rules) {
+            var reqRules: any, resRules: any;
+            req.setReqRules = socket.setReqRules = function (rules: any) {
               reqRules = rules;
               return true;
             };
-            req.setResRules = socket.setResRules = function (rules) {
+            req.setResRules = socket.setResRules = function (rules: any) {
               resRules = rules;
               return true;
             };
             req.writeHead = socket.writeHead = function (
-                  code,
-                  msg,
-                  headers
+                  code: any,
+                  msg: any,
+                  headers: any
                 ) {
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'statusCode' does not exist on type 'stri... Remove this comment to see the full error message
               code = code > 0 ? code : svrRes.statusCode || 101;
               if (msg && typeof msg !== 'string') {
                 headers = headers || msg;
                 msg = null;
               }
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'headers' does not exist on type 'string'... Remove this comment to see the full error message
               headers = headers || svrRes.headers;
               if (resRules) {
                 headers = headers || {};
@@ -2124,6 +2283,7 @@ module.exports = async function (options, callback) {
                 'HTTP/1.1 ' +
                       code +
                       ' ' +
+                      // @ts-expect-error ts-migrate(2339) FIXME: Property 'statusMessage' does not exist on type 's... Remove this comment to see the full error message
                       (msg || svrRes.statusMessage || STATUS_CODES[code] || ''),
                 headers
                       ? getRawHeaders(formatRawHeaders(headers, svrRes))
@@ -2132,7 +2292,8 @@ module.exports = async function (options, callback) {
               ];
               socket.write(headers.join('\r\n'), 'binary');
             };
-            req.request = function (uri, cb, opts) {
+            req.request = function (uri: any, cb: any, opts: any) {
+              // @ts-expect-error ts-migrate(2554) FIXME: Expected 7 arguments, but got 6.
               var args = normalizeArgs(uri, cb, req, curUrl, true, opts);
               uri = args[0];
               cb = args[1];
@@ -2142,18 +2303,18 @@ module.exports = async function (options, callback) {
               setReqRules(uri, reqRules);
               reqRules = null;
               var client = (args[2] ? httpsRequest : httpRequest)(uri);
-              var rawFrame;
+              var rawFrame: any;
               if (opts === true) {
                 rawFrame = true;
               } else if (opts) {
                 rawFrame = opts.rawFrame;
               }
-              client.once('response', function(_res) {
+              client.once('response', function(_res: any) {
                 svrRes = _res;
                 socket.writeHead();
                 _res.pipe(socket);
               });
-              client.once('upgrade', function (_res, resSocket) {
+              client.once('upgrade', function (_res: any, resSocket: any) {
                 svrRes = _res;
                 if (rawFrame !== true) {
                   var clientParser = addFrameHandler(
@@ -2171,11 +2332,15 @@ module.exports = async function (options, callback) {
                         true
                       );
                   handleWsSignal(
+                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'receiver' does not exist on type 'void |... Remove this comment to see the full error message
                         clientParser.receiver,
+                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'sender' does not exist on type 'void | {... Remove this comment to see the full error message
                         serverParser.sender
                       );
                   handleWsSignal(
+                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'receiver' does not exist on type 'void |... Remove this comment to see the full error message
                         serverParser.receiver,
+                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'sender' does not exist on type 'void | {... Remove this comment to see the full error message
                         clientParser.sender
                       );
                 }
@@ -2193,10 +2358,10 @@ module.exports = async function (options, callback) {
               client.end();
               return client;
             };
-            req.passThrough = function (uri) {
+            req.passThrough = function (uri: any) {
               req.request(
                     uri,
-                    function (resSock) {
+                    function (resSock: any) {
                       socket.writeHead(
                         resSock.statusCode,
                         resSock.statusMessage,
@@ -2215,20 +2380,20 @@ module.exports = async function (options, callback) {
         }
       });
 
-      var emitHttpPipe = function (httpServer, req, socket) {
+      var emitHttpPipe = function (httpServer: any, req: any, socket: any) {
         if (httpServer) {
           initConnectReq(req, socket);
           req.sendEstablished(function () {
             var decoder = getDecodeTransform();
             var encoder = getEncodeTransform();
-            var done;
-            var handleError = function (err) {
+            var done: any;
+            var handleError = function (err: any) {
               if (!done) {
                 done = true;
                 socket.emit('error', err || new Error('destroyed'));
               }
             };
-            socket.on('error', function (err) {
+            socket.on('error', function (err: any) {
               if (!done) {
                 done = true;
                 decoder.emit('error', err);
@@ -2257,7 +2422,7 @@ module.exports = async function (options, callback) {
         }
       };
 
-      server.on('connect', function (req, socket, head) {
+      server.on('connect', function (req: any, socket: any, head: any) {
         switch (getHookName(req)) {
         case PLUGIN_HOOKS.REQ_READ:
           emitHttpPipe(reqRead, req, socket);
@@ -2293,6 +2458,7 @@ module.exports = async function (options, callback) {
           if (wsResRead) {
             initConnectReq(req, socket);
             req.sendEstablished(function () {
+              // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
               addFrameHandler(req, socket, maxWsPayload);
               wsResRead.emit('connect', req, socket, head);
             });
@@ -2302,6 +2468,7 @@ module.exports = async function (options, callback) {
           if (wsResWrite) {
             initConnectReq(req, socket);
             req.sendEstablished(function () {
+              // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
               addFrameHandler(req, socket, maxWsPayload);
               wsResWrite.emit('connect', req, socket, head);
             });
@@ -2312,9 +2479,9 @@ module.exports = async function (options, callback) {
             initConnectReq(req, socket);
             req.sendEstablished(function () {
               req.writeHead = socket.writeHead = function (
-                    code,
-                    msg,
-                    headers
+                    code: any,
+                    msg: any,
+                    headers: any
                   ) {
                 if (msg && typeof msg !== 'string') {
                   headers = headers || msg;
@@ -2330,10 +2497,12 @@ module.exports = async function (options, callback) {
                 ].join('\r\n')
                     );
               };
-              req.connect = function (uri, cb, opts) {
+              req.connect = function (uri: any, cb: any, opts: any) {
                 var headers = extractHeaders(req, pluginKeyMap);
+                // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                 var policy = headers['x-whistle-policy'];
                 if (TUNNEL_HOST_RE.test(uri)) {
+                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'host' does not exist on type '{}'.
                   headers.host = uri;
                 } else if (typeof uri === 'function') {
                   opts = cb;
@@ -2342,10 +2511,13 @@ module.exports = async function (options, callback) {
                   if (TUNNEL_HOST_RE.test(uri.url)) {
                     if (uri.headers) {
                       headers = extend({}, uri.headers);
+                      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                       if (policy && !headers['x-whistle-policy']) {
+                        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                         headers['x-whistle-policy'] = policy;
                       }
                     }
+                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'host' does not exist on type '{}'.
                     headers.host = uri.url;
                     if (cb && typeof cb !== 'function') {
                       opts = cb;
@@ -2358,15 +2530,19 @@ module.exports = async function (options, callback) {
                 uri = {
                   method: 'CONNECT',
                   agent: false,
+                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'host' does not exist on type '{}'.
                   path: headers.host
                 };
                 if (!opts || !notEmptyStr(opts.host)) {
+                  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                   headers[PROXY_ID_HEADER] = req[REQ_ID_KEY];
                   uri.host = boundIp;
                   uri.port = boundPort;
                   if (req.originalReq) {
+                    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                     headers[REMOTE_ADDR_HEAD] =
                           req.originalReq.remoteAddress;
+                    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                     headers[REMOTE_PORT_HEAD] = req.originalReq.remotePort;
                   }
                 } else {
@@ -2375,14 +2551,16 @@ module.exports = async function (options, callback) {
                 }
                 uri.headers = formatRawHeaders(headers, req);
                 var client = httpRequest(uri);
-                client.on('connect', function (_res, svrSock) {
+                client.on('connect', function (_res: any, svrSock: any) {
                   if (_res.statusCode !== 200) {
                     var err = new Error(
                           'Tunneling socket could not be established, statusCode=' +
                             _res.statusCode
                         );
+                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'statusCode' does not exist on type 'Erro... Remove this comment to see the full error message
                     err.statusCode = _res.statusCode;
                     svrSock.destroy();
+                    // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
                     process.nextTick(function () {
                       client.emit('error', err);
                     });
@@ -2403,8 +2581,8 @@ module.exports = async function (options, callback) {
                 client.end();
                 return client;
               };
-              req.passThrough = function (uri) {
-                req.connect(uri, function (svrSock) {
+              req.passThrough = function (uri: any) {
+                req.connect(uri, function (svrSock: any) {
                   svrSock.pipe(socket).pipe(svrSock);
                 });
               };
@@ -2417,6 +2595,7 @@ module.exports = async function (options, callback) {
             initConnectReq(req, socket);
             req.sendEstablished(function () {
               socket.headers = req.headers;
+              // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
               tunnelReqWrite && wrapTunnelWriter(socket);
               tunnelReqRead.emit('connect', req, socket, head);
             });
@@ -2426,6 +2605,7 @@ module.exports = async function (options, callback) {
           if (tunnelReqWrite) {
             initConnectReq(req, socket);
             req.sendEstablished(function () {
+              // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
               tunnelReqRead && wrapTunnelReader(socket);
               tunnelReqWrite.emit('connect', req, socket, head);
             });
@@ -2436,6 +2616,7 @@ module.exports = async function (options, callback) {
             initConnectReq(req, socket);
             req.sendEstablished(function () {
               socket.headers = req.headers;
+              // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
               tunnelResWrite && wrapTunnelWriter(socket);
               tunnelResRead.emit('connect', req, socket, head);
             });
@@ -2445,6 +2626,7 @@ module.exports = async function (options, callback) {
           if (tunnelResWrite) {
             initConnectReq(req, socket);
             req.sendEstablished(function () {
+              // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
               tunnelResRead && wrapTunnelReader(socket);
               tunnelResWrite.emit('connect', req, socket, head);
             });
@@ -2458,7 +2640,7 @@ module.exports = async function (options, callback) {
     }
     );
   };
-  initProxy(async function(proxy) {
+  initProxy(async function(proxy: any) {
     options.connect = proxy.connect;
     options.request = proxy.request;
     var initial = loadModule(path.join(options.value, 'initial.js')) ||
@@ -2473,6 +2655,7 @@ module.exports = async function (options, callback) {
       }
       ctx = await initial(options);
     }
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
     initServers();
   });
 };

@@ -1,9 +1,13 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var AdmZip = require('adm-zip');
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'parseString'.
 var parseString = require('xml2js').parseString;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var parseUrl = require('url').parse;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var util = require('./util');
 
-function getMetaAttrs(meta) {
+function getMetaAttrs(meta: any) {
   meta = meta && meta.Session;
   if (!meta) {
     return {};
@@ -26,7 +30,7 @@ function getMetaAttrs(meta) {
   return result;
 }
 
-function parseMetaInfo(result) {
+function parseMetaInfo(result: any) {
   var req = result.req;
   if (!req) {
     return false;
@@ -92,22 +96,24 @@ function parseMetaInfo(result) {
   }
 }
 
-function sortKeys(cur, next) {
+function sortKeys(cur: any, next: any) {
   return parseInt(cur, 10) - parseInt(next, 10);
 }
 
-module.exports = function (buffer, cb) {
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
+module.exports = function (buffer: any, cb: any) {
   var zip = new AdmZip(buffer);
   var zipEntries = zip.getEntries();
   var sessions = {};
   var count = 0;
   var execCallback = function () {
     if (count <= 0) {
-      var result = [];
+      var result: any = [];
       var wsLen = 0;
       Object.keys(sessions)
         .sort(sortKeys)
         .forEach(function (key) {
+          // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
           var session = sessions[key];
           if (session.req && session.meta) {
             if (parseMetaInfo(session) !== false) {
@@ -124,7 +130,7 @@ module.exports = function (buffer, cb) {
           if (framesData) {
             delete session.framesData;
             ++wsLen;
-            util.parseFrames(session.res, framesData, function (frames) {
+            util.parseFrames(session.res, framesData, function (frames: any) {
               session.frames = frames;
               if (--wsLen === 0) {
                 wsLen = -1;
@@ -139,7 +145,7 @@ module.exports = function (buffer, cb) {
       }
     }
   };
-  zipEntries.forEach(function (entry) {
+  zipEntries.forEach(function (entry: any) {
     if (entry.isDirectory) {
       return;
     }
@@ -161,10 +167,12 @@ module.exports = function (buffer, cb) {
     if (!content) {
       return;
     }
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     var result = (sessions[index] = sessions[index] || {});
     ++count;
     if (filename === 'c.txt') {
-      util.getReq(content, function (req) {
+      util.getReq(content, function (req: any) {
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'setImmediate'.
         setImmediate(function () {
           result.req = req;
           --count;
@@ -172,7 +180,9 @@ module.exports = function (buffer, cb) {
         });
       });
     } else if (filename === 'm.xml') {
-      parseString(content, function (err, meta) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 2.
+      parseString(content, function (err: any, meta: any) {
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'setImmediate'.
         setImmediate(function () {
           result.meta = meta;
           --count;
@@ -180,6 +190,7 @@ module.exports = function (buffer, cb) {
         });
       });
     } else if (filename === 'whistle.json') {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'setImmediate'.
       setImmediate(function () {
         --count;
         var data = util.parseJSON(String(content));
@@ -231,13 +242,15 @@ module.exports = function (buffer, cb) {
         execCallback();
       });
     } else if (filename === 'w.txt') {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'setImmediate'.
       setImmediate(function () {
         result.framesData = content;
         --count;
         execCallback();
       });
     } else {
-      util.getRes(content, function (res) {
+      util.getRes(content, function (res: any) {
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'setImmediate'.
         setImmediate(function () {
           result.res = res;
           --count;

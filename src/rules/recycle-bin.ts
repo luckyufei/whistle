@@ -1,14 +1,20 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var fs = require('fs');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var fse = require('fs-extra2');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var path = require('path');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var logger = require('../util/logger');
 var ENCODING = { encoding: 'utf8' };
 
 var NAME_RE = /^\d+\.([\s\S]+)$/;
 var MAX_COUNT = 200;
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'noop'.
 var noop = function () {};
 
-function readFileSafe(file, retry) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function readFileSafe(file: any, retry: any) {
   try {
     file = fs.readFileSync(file, ENCODING);
   } catch (e) {
@@ -22,25 +28,29 @@ function readFileSafe(file, retry) {
   return file || '';
 }
 
-function getName(item) {
+function getName(item: any) {
   return item.name;
 }
 
-function RecycleBin(dir) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'RecycleBin'.
+function RecycleBin(this: any, dir: any) {
   fse.ensureDirSync(dir);
-  var list = [];
+  var list: any = [];
   var map = {};
   this._dir = dir;
-  fs.readdirSync(dir).forEach(function (name) {
+  fs.readdirSync(dir).forEach(function (name: any) {
     if (NAME_RE.test(name)) {
       var item = {
         name: name,
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
         data: readFileSafe(path.join(dir, name))
       };
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       map[name] = item;
       list.push(item);
     }
   });
+  // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'a' implicitly has an 'any' type.
   list.sort(function (a, b) {
     a = a.name;
     b = b.name;
@@ -51,8 +61,10 @@ function RecycleBin(dir) {
     return aLen > bLen || (aLen === bLen && a > b) ? -1 : 1;
   });
   if (list.length > MAX_COUNT) {
+    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'item' implicitly has an 'any' type.
     list.slice(MAX_COUNT).forEach(function (item) {
       try {
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         delete map[item.name];
         fs.unlinkSync(path.join(dir, name));
       } catch (e) {}
@@ -65,7 +77,7 @@ function RecycleBin(dir) {
 
 var proto = RecycleBin.prototype;
 
-proto.recycle = function (filename, data) {
+proto.recycle = function (filename: any, data: any) {
   if (!filename) {
     return;
   }
@@ -84,7 +96,7 @@ proto.recycle = function (filename, data) {
   }
 };
 
-proto.recover = function (name) {
+proto.recover = function (name: any) {
   var item = this._map[name];
   if (item) {
     delete this._map[name];
@@ -100,8 +112,9 @@ proto.list = function () {
   return this._list.map(getName);
 };
 
-proto.getFile = function (name) {
+proto.getFile = function (name: any) {
   return this._map[name];
 };
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = RecycleBin;

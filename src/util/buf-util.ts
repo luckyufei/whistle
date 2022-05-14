@@ -1,4 +1,5 @@
-exports.indexOf = function (buf, subBuf, start) {
+// @ts-expect-error ts-migrate(2552) FIXME: Cannot find name 'exports'. Did you mean 'ports'?
+exports.indexOf = function (buf: any, subBuf: any, start: any) {
   start = start || 0;
   if (buf.indexOf) {
     return buf.indexOf(subBuf, start);

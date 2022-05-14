@@ -1,17 +1,25 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var PassThrough = require('stream').PassThrough;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var rules = require('../rules');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var util = require('../util');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var pluginMgr = require('../plugins');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var fileMgr = require('../util/file-mgr');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var transproto = require('../util/transproto');
 var getEncodeTransform = transproto.getEncodeTransform;
 var getDecodeTransform = transproto.getDecodeTransform;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var getRawHeaderNames = require('hparser').getRawHeaderNames;
 
 var HTTP_RE = /^https?:/;
 var MAX_PAYLOAD_SIZE = 1024 * 256;
 
-function resolveRules(req, rules) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function resolveRules(req: any, rules: any) {
   if (!rules) {
     return;
   }
@@ -26,11 +34,11 @@ function resolveRules(req, rules) {
   }
 }
 
-function setupRules(req, next) {
+function setupRules(req: any, next: any) {
   resolveRules(req, rules);
   rules.resolveRulesFile(req, function () {
     pluginMgr.resolveWhistlePlugins(req);
-    pluginMgr.getRules(req, function (pluginRules) {
+    pluginMgr.getRules(req, function (pluginRules: any) {
       req.pluginRules = pluginRules;
       resolveRules(req, pluginRules);
       util.filterWeakRule(req);
@@ -58,20 +66,20 @@ function setupRules(req, next) {
   });
 }
 
-function getDecoder(obj) {
-  return function (socket, callback) {
+function getDecoder(obj: any) {
+  return function (socket: any, callback: any) {
     var encoding = obj._originEncoding;
-    var handleError = function (err) {
+    var handleError = function (err: any) {
       obj.emit('error', err);
     };
-    var decoder;
+    var decoder: any;
     if (
       obj._needGunzip ||
       socket ||
       encoding !== obj.headers['content-encoding']
     ) {
       var stream = encoding && (obj._srcResponse || obj);
-      util.readOneChunk(stream, function (chunk) {
+      util.readOneChunk(stream, function (chunk: any) {
         obj._needGunzip = false;
         if (chunk) {
           if (chunk[0] === 31 && (chunk[1] == null || chunk[1] === 139)) {
@@ -86,9 +94,10 @@ function getDecoder(obj) {
         handleDecode(stream);
       });
     } else {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
       handleDecode();
     }
-    function handleDecode(stream) {
+    function handleDecode(stream: any) {
       decoder && decoder.on('error', handleError);
       if (socket) {
         delete obj.headers['content-length'];
@@ -109,8 +118,8 @@ function getDecoder(obj) {
   };
 }
 
-function getEncoder(obj, req) {
-  return function (socket, callback) {
+function getEncoder(obj: any, req: any) {
+  return function (socket: any, callback: any) {
     var encoding;
     var enable = req && req.enable;
     if (enable && enable.gzip && (obj._needGunzip || !obj._originEncoding)) {
@@ -119,7 +128,7 @@ function getEncoder(obj, req) {
       encoding = obj._needGunzip && obj.headers;
     }
     var encoder = encoding && util.getZipStream(encoding);
-    var handleError = function (err) {
+    var handleError = function (err: any) {
       obj.emit('error', err);
     };
     encoder && encoder.on('error', handleError);
@@ -136,7 +145,7 @@ function getEncoder(obj, req) {
       } else {
         encoder = deTrans;
       }
-      socket.pipe = function (stream) {
+      socket.pipe = function (stream: any) {
         return encoder.pipe(stream);
       };
       obj.emit('bodyStreamReady', socket);
@@ -145,7 +154,8 @@ function getEncoder(obj, req) {
   };
 }
 
-module.exports = function (req, res, next) {
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
+module.exports = function (req: any, res: any, next: any) {
   if (req.isLogRequests !== false) {
     ++util.proc.httpRequests;
     ++util.proc.totalHttpRequests;
@@ -154,27 +164,29 @@ module.exports = function (req, res, next) {
   req.reqId = util.getReqId();
   req.curUrl = req.fullUrl = util.getFullUrl(req);
   req._originEncoding = req.headers['content-encoding'];
-  req.onDecode = function (callback) {
+  req.onDecode = function (callback: any) {
     var decode = getDecoder(req);
-    pluginMgr.getReqReadPipe(req, function (socket) {
+    pluginMgr.getReqReadPipe(req, function (socket: any) {
       decode(socket, callback);
     });
   };
-  req.onEncode = function (callback) {
+  req.onEncode = function (callback: any) {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
     var encode = getEncoder(req);
-    pluginMgr.getReqWritePipe(req, function (socket) {
+    pluginMgr.getReqWritePipe(req, function (socket: any) {
       encode(socket, callback);
     });
   };
-  res.onDecode = function (callback) {
+  res.onDecode = function (callback: any) {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 2.
     var decode = getDecoder(res, req);
-    pluginMgr.getResReadPipe(req, res, function (socket) {
+    pluginMgr.getResReadPipe(req, res, function (socket: any) {
       decode(socket, callback);
     });
   };
-  res.onEncode = function (callback) {
+  res.onEncode = function (callback: any) {
     var encode = getEncoder(res, req);
-    pluginMgr.getResWritePipe(req, res, function (socket) {
+    pluginMgr.getResWritePipe(req, res, function (socket: any) {
       encode(socket, callback);
     });
   };
@@ -192,7 +204,7 @@ module.exports = function (req, res, next) {
       if (!hasBodyFilter) {
         payloadSize = rules.hasReqScript(req) ? 0 : 1;
       }
-      req.getPayload(function (err, payload) {
+      req.getPayload(function (err: any, payload: any) {
         req._reqBody = fileMgr.decode(payload);
         setupRules(req, next);
       }, payloadSize);

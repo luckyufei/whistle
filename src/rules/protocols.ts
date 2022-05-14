@@ -149,17 +149,19 @@ var aliasProtocols = {
   includeFilter: 'filter',
   P: 'G'
 };
-var reqProtocols = protocols.filter(function (name) {
+var reqProtocols = protocols.filter(function (name: any) {
   return pureResProtocols.indexOf(name) === -1;
 });
 
 var RULE_PROTO_RE = /^([\w.-]+):\/\//;
 
-exports.getRuleProto = function(rule) {
+// @ts-expect-error ts-migrate(2552) FIXME: Cannot find name 'exports'. Did you mean 'ports'?
+exports.getRuleProto = function(rule: any) {
   if (!RULE_PROTO_RE.test(rule.matcher)) {
     return;
   }
   var proto = RegExp.$1;
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
   var ruleProto = aliasProtocols[proto];
   if (!ruleProto || ruleProto === 'filter') {
     return proto;
@@ -176,6 +178,7 @@ exports.getRuleProto = function(rule) {
   return ruleProto;
 };
 
+// @ts-expect-error ts-migrate(2552) FIXME: Cannot find name 'exports'. Did you mean 'ports'?
 exports.multiMatchs = [
   'G',
   'ignore',
@@ -217,19 +220,26 @@ exports.multiMatchs = [
   'rulesFile',
   'resScript'
 ];
+// @ts-expect-error ts-migrate(2552) FIXME: Cannot find name 'exports'. Did you mean 'ports'?
 exports.protocols = protocols;
+// @ts-expect-error ts-migrate(2552) FIXME: Cannot find name 'exports'. Did you mean 'ports'?
 exports.pureResProtocols = pureResProtocols;
+// @ts-expect-error ts-migrate(2552) FIXME: Cannot find name 'exports'. Did you mean 'ports'?
 exports.reqProtocols = reqProtocols;
+// @ts-expect-error ts-migrate(2552) FIXME: Cannot find name 'exports'. Did you mean 'ports'?
 exports.resProtocols = resProtocols;
+// @ts-expect-error ts-migrate(2552) FIXME: Cannot find name 'exports'. Did you mean 'ports'?
 exports.aliasProtocols = aliasProtocols;
 
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
 function getRules() {
   return resetRules({});
 }
 
+// @ts-expect-error ts-migrate(2552) FIXME: Cannot find name 'exports'. Did you mean 'ports'?
 exports.getRules = getRules;
 
-function isBinProtocol(protocol) {
+function isBinProtocol(protocol: any) {
   if (binProtocols.indexOf(protocol) != -1) {
     return 1;
   }
@@ -241,10 +251,11 @@ function isBinProtocol(protocol) {
   }
 }
 
+// @ts-expect-error ts-migrate(2552) FIXME: Cannot find name 'exports'. Did you mean 'ports'?
 exports.isBinProtocol = isBinProtocol;
 
-function resetRules(rules) {
-  protocols.forEach(function (protocol) {
+function resetRules(rules: any) {
+  protocols.forEach(function (protocol: any) {
     rules[protocol] = [];
   });
   rules._localRule = [];
@@ -254,35 +265,41 @@ function resetRules(rules) {
   return rules;
 }
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.resetRules = resetRules;
 
-function isResRule(protocol) {
+function isResRule(protocol: any) {
   return resProtocols.indexOf(protocol) != -1;
 }
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.isResRule = isResRule;
 
-function isWebProtocol(protocol) {
+function isWebProtocol(protocol: any) {
   return protocol == 'http:' || protocol == 'https:';
 }
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.isWebProtocol = isWebProtocol;
 
-function isWebsocketProtocol(protocol) {
+function isWebsocketProtocol(protocol: any) {
   return protocol == 'ws:' || protocol == 'wss:';
 }
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.isWebsocketProtocol = isWebsocketProtocol;
 
-function isFileProxy(protocol) {
+function isFileProxy(protocol: any) {
   return RULE_RE.test(protocol);
 }
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.isFileProxy = isFileProxy;
 
-function contains(name) {
+function contains(name: any) {
   if (
     protocols.indexOf(name) != -1 ||
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     aliasProtocols[name] ||
     PROXY_RE.test(name)
   ) {
@@ -297,4 +314,5 @@ function contains(name) {
   );
 }
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.contains = contains;

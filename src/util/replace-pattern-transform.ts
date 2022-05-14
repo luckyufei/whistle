@@ -1,4 +1,6 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var Transform = require('pipestream').Transform;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var util = require('util');
 
 var LENGTH = 5120;
@@ -7,7 +9,7 @@ var SUB_MATCH_RE = /(^|\\{0,2})?(\$[&\d])/g;
 var ALL_RE = /^\/\.[*+]\/g?i?g?$/;
 var MAX_SUB_MATCH_LEN = 512;
 
-function ReplacePatternTransform(pattern, value) {
+function ReplacePatternTransform(this: any, pattern: any, value: any) {
   Transform.call(this);
   this._pattern = pattern;
   this._replaceAll = ALL_RE.test(pattern);
@@ -18,7 +20,7 @@ function ReplacePatternTransform(pattern, value) {
 util.inherits(ReplacePatternTransform, Transform);
 
 var proto = ReplacePatternTransform.prototype;
-proto._transform = function (chunk, _, callback) {
+proto._transform = function (chunk: any, _: any, callback: any) {
   var value = this._value;
   if (this._replaceAll) {
     this._value = '';
@@ -50,14 +52,15 @@ proto._transform = function (chunk, _, callback) {
   callback(null, chunk);
 };
 
-function getSubMatchers(args) {
+function getSubMatchers(args: any) {
   args = slice.call(args);
   return args.slice(0, -2);
 }
-function replacePattern(replacement, args) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'replacePattern'.
+function replacePattern(replacement: any, args: any) {
   var arr = args.length ? getSubMatchers(args) : args;
   return replacement
-    ? replacement.replace(SUB_MATCH_RE, function (_, $1, $2) {
+    ? replacement.replace(SUB_MATCH_RE, function (_: any, $1: any, $2: any) {
       if ($1 === '\\') {
         return $2;
       }
@@ -73,4 +76,5 @@ function replacePattern(replacement, args) {
     : '';
 }
 ReplacePatternTransform.replacePattern = replacePattern;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = ReplacePatternTransform;

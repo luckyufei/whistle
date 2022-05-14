@@ -1,6 +1,10 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var util = require('../util');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var rules = require('../rules');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var pluginMgr = require('../plugins');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var ca = require('./ca');
 
 var remoteCerts = ca.remoteCerts;
@@ -8,7 +12,8 @@ var SNI_CALLBACK_RE =
   /^sniCallback:\/\/(?:whistle\.|plugin\.)?([a-z\d_\-]+)(?:\(([\s\S]*)\))?$/;
 var certCallbacks = {};
 
-module.exports = function (socket, callback) {
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
+module.exports = function (socket: any, callback: any) {
   var servername = socket.servername;
   var curCert = remoteCerts.get(servername);
   var plugin = rules.resolveSNICallback(socket);
@@ -26,8 +31,9 @@ module.exports = function (socket, callback) {
             curCert.name + (curCert.mtime ? '+' + curCert.mtime : '');
         }
         var cbKey = servername + '/' + pluginName;
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         var cbList = certCallbacks[cbKey];
-        var handleCert = function (cert) {
+        var handleCert = function (cert: any) {
           if (cert === false) {
             return callback(false);
           }
@@ -56,12 +62,15 @@ module.exports = function (socket, callback) {
         if (cbList) {
           return cbList.push(handleCert);
         }
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         certCallbacks[cbKey] = [handleCert];
-        return pluginMgr.loadCert(socket, plugin, function (cert) {
+        return pluginMgr.loadCert(socket, plugin, function (cert: any) {
+          // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
           cbList = certCallbacks[cbKey];
+          // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
           delete certCallbacks[cbKey];
           cbList &&
-            cbList.forEach(function (handleCb) {
+            cbList.forEach(function (handleCb: any) {
               handleCb(cert);
             });
         });

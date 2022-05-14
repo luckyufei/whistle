@@ -1,9 +1,16 @@
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'handleWebsocket'.
 var handleWebsocket = require('./https').handleWebsocket;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var hparser = require('hparser');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var net = require('net');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var Buffer = require('safe-buffer').Buffer;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var pluginMgr = require('./plugins');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var util = require('./util');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var config = require('./config');
 
 var formatHeaders = hparser.formatHeaders;
@@ -13,7 +20,7 @@ var WS_RE = /\bwebsocket\b/i;
 var PLUGIN_PATH_RE =
   /^\/(\.\.\.whistle-path\.5b6af7b9884e1165\.\.\.\/\/\/)?(whistle|plugin)\.([^/?#]+)\/?/;
 
-function getPluginNameByReq(req, callback) {
+function getPluginNameByReq(req: any, callback: any) {
   if (!req) {
     return callback();
   }
@@ -33,6 +40,7 @@ function getPluginNameByReq(req, callback) {
   var isPluginUrl;
   var internalPath;
   if (!config.pureProxy && PLUGIN_PATH_RE.test(req.url)) {
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     internalPath = RegExp['$&'];
     req.isInternalUrl = !!RegExp.$1;
     isPluginUrl = RegExp.$2 === 'plugin';
@@ -53,7 +61,7 @@ function getPluginNameByReq(req, callback) {
   if (internalPath) {
     req.url = '/' + req.url.substring(internalPath.length);
   }
-  pluginMgr.loadPlugin(plugin, function (err, ports) {
+  pluginMgr.loadPlugin(plugin, function (err: any, ports: any) {
     var uiPort = ports && ports.uiPort;
     if (err || !uiPort) {
       var msg = [
@@ -75,11 +83,11 @@ function getPluginNameByReq(req, callback) {
   });
 }
 
-function upgradeHandler(req, socket) {
+function upgradeHandler(req: any, socket: any) {
   ++util.proc.allWsRequests;
   ++util.proc.totalAllWsRequests;
-  var done, reqDestroyed, resDestroyed, resSocket;
-  function destroy(err) {
+  var done: any, reqDestroyed: any, resDestroyed: any, resSocket: any;
+  function destroy(err: any) {
     if (resSocket) {
       if (!resDestroyed) {
         resDestroyed = true;
@@ -102,7 +110,7 @@ function upgradeHandler(req, socket) {
   util.onSocketEnd(socket, destroy);
   util.addTunnelData(socket, headers);
   socket._clientId = util.getComposerClientId(headers);
-  var getBuffer = function (method, newHeaders, path) {
+  var getBuffer = function (method: any, newHeaders: any, path: any) {
     var rawData = [
       (method || 'GET') +
         ' ' +
@@ -128,7 +136,7 @@ function upgradeHandler(req, socket) {
   socket.fullUrl = util.getFullUrl(req);
   socket._fwdHost = req._fwdHost;
   var isWs = WS_RE.test(headers.upgrade);
-  getPluginNameByReq(isWs ? req : null, function (err, uiPort) {
+  getPluginNameByReq(isWs ? req : null, function (err: any, uiPort: any) {
     if (err) {
       return socket.write(err);
     }
@@ -162,12 +170,13 @@ function upgradeHandler(req, socket) {
           port: uiPort || config.port,
           localhost: '127.0.0.1'
         },
-        function (err, s) {
+        function (err: any, s: any) {
           resSocket = s;
           if (err || socket._hasError) {
             return destroy(err);
           }
           resSocket.on('error', destroy);
+          // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
           resSocket.write(getBuffer(req.method));
           socket.pipe(resSocket).pipe(socket);
           socket.resume();
@@ -185,13 +194,14 @@ function upgradeHandler(req, socket) {
     socket.enableXFF = req.enableXFF;
     socket.isInternalUrl = req.isInternalUrl;
     delete socket.headers[config.CLIENT_PORT_HEAD];
-    socket.getBuffer = function (newHeaders, path) {
+    socket.getBuffer = function (newHeaders: any, path: any) {
       return getBuffer(null, newHeaders, path);
     };
     handleWebsocket(socket, clientIp, clientPort);
   });
 }
 
-module.exports = function (server) {
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
+module.exports = function (server: any) {
   server.on('upgrade', upgradeHandler);
 };

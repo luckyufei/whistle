@@ -1,12 +1,20 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var net = require('net');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var http = require('http');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var extend = require('extend');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var LRU = require('lru-cache');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var { parse: parseUrl } = require('url');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var getServer = require('hagent').create(function () {
   return net.createServer({ pauseOnConnect: true });
 }, 51500);
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var formatHeaders = require('hparser').formatHeaders;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var common = require('../util/common');
 
 var socketProto = net.Socket.prototype;
@@ -14,20 +22,20 @@ var originConnect = socketProto.connect;
 var SPEC_HOST_RE =
   /.whistle-policy(?:-(internal|capture|tunnel|connect)(?:-([A-Za-z\d]+))?)?(?:\.proto-([\w%.-]+))?$/;
 var lru = new LRU({ max: 5120, maxAge: 30000 });
-var PROXY_ID_HEADER;
-var proxyIp;
-var proxyPort;
+var PROXY_ID_HEADER: any;
+var proxyIp: any;
+var proxyPort: any;
 
-function toNumber(x) {
+function toNumber(x: any) {
   x = Number(x);
   return x >= 0 ? x : false;
 }
 
-function isPipeName(s) {
+function isPipeName(s: any) {
   return typeof s === 'string' && toNumber(s) === false;
 }
 
-function normalizeArgs(args) {
+function normalizeArgs(args: any) {
   if (args.length === 0) {
     return [{}, null];
   }
@@ -42,11 +50,14 @@ function normalizeArgs(args) {
     options = arg0;
   } else if (isPipeName(arg0)) {
     // (path[...][, cb])
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'path' does not exist on type '{}'.
     options.path = arg0;
   } else {
     // ([port][, host][...][, cb])
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'port' does not exist on type '{}'.
     options.port = arg0;
     if (args.length > 1 && typeof args[1] === 'string') {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'host' does not exist on type '{}'.
       options.host = args[1];
     }
   }
@@ -58,11 +69,11 @@ function normalizeArgs(args) {
   return [options, cb];
 }
 
-function createSocket(opts, cb) {
-  var done;
-  var client;
+function createSocket(opts: any, cb: any) {
+  var done: any;
+  var client: any;
   var headers = common.lowerCaseify(opts.headers);
-  var handleCb = function (err, socket, res) {
+  var handleCb = function (err: any, socket: any, res: any) {
     if (!done) {
       done = true;
       cb && cb(err, socket, res);
@@ -107,15 +118,17 @@ function createSocket(opts, cb) {
     path: opts.path,
     headers: headers
   });
-  client.once('connect', function (res, socket) {
+  client.once('connect', function (res: any, socket: any) {
     socket.on('error', handleCb);
     if (res.statusCode !== 200) {
       var err = new Error(
         'Tunneling socket could not be established, statusCode=' +
           res.statusCode
       );
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'statusCode' does not exist on type 'Erro... Remove this comment to see the full error message
       err.statusCode = res.statusCode;
       socket.destroy();
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
       return handleCb(err);
     }
     if (res.headers['x-whistle-allow-tunnel-ack']) {
@@ -127,21 +140,22 @@ function createSocket(opts, cb) {
   client.end();
 }
 
-module.exports = function (options, cb) {
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
+module.exports = function (options: any, cb: any) {
   PROXY_ID_HEADER = options.PROXY_ID_HEADER;
   proxyIp = options.proxyIp;
   proxyPort = options.proxyPort;
   var wrapWsReader = options.wrapWsReader;
   var wrapWsWriter = options.wrapWsWriter;
 
-  getServer(function (server, port) {
+  getServer(function (server: any, port: any) {
     var tempServerOpts = {
       host: '127.0.0.1',
       port: port
     };
-    server.on('connection', function (socket) {
-      var destroyed;
-      var sock;
+    server.on('connection', function (socket: any) {
+      var destroyed: any;
+      var sock: any;
       var destroy = function () {
         if (!destroyed) {
           destroyed = true;
@@ -149,8 +163,8 @@ module.exports = function (options, cb) {
           sock && sock.destroy();
         }
       };
-      var handleProxy = function (connOpts) {
-        createSocket(connOpts, function (err, sock) {
+      var handleProxy = function (connOpts: any) {
+        createSocket(connOpts, function (err: any, sock: any) {
           if (err) {
             return destroy();
           }
@@ -168,7 +182,7 @@ module.exports = function (options, cb) {
         lru.set(key, handleProxy);
       }
     });
-    var handleTempCache = function (socket, opts) {
+    var handleTempCache = function (socket: any, opts: any) {
       socket.once('connect', function () {
         var key = `${socket.localPort}:${port}`;
         var handler = lru.get(key);
@@ -181,13 +195,13 @@ module.exports = function (options, cb) {
       });
       return socket;
     };
-    var connect = function (opts, cb) {
+    var connect = function (opts: any, cb: any) {
       var socket = net.connect(tempServerOpts, cb);
       handleTempCache(socket, opts);
       socket.on('error', common.noop);
       return socket;
     };
-    var request = function (opts, cb) {
+    var request = function (opts: any, cb: any) {
       if (typeof opts === 'string') {
         opts = { url: opts };
       } else {
@@ -222,7 +236,9 @@ module.exports = function (options, cb) {
       if (isWs) {
         headers.connection = 'Upgrade';
         headers.upgrade = 'websocket';
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'connection' does not exist on type '{}'.
         rawNames.connection = 'Connection';
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'upgrade' does not exist on type '{}'.
         rawNames.upgrade = 'Upgrade';
       }
       if (!opts.reserveHost && uri.host) {
@@ -234,6 +250,7 @@ module.exports = function (options, cb) {
           method: opts.method,
           agent: null,
           createConnection: function () {
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
             return connect({
               host: uri.hostname || 'localhost',
               port: uri.port || (isHttps ? 443 : 80),
@@ -249,7 +266,7 @@ module.exports = function (options, cb) {
         cb
       );
       if (isWs) {
-        client.once('upgrade', function (res, socket) {
+        client.once('upgrade', function (res: any, socket: any) {
           socket.headers = res.headers;
           if (!opts.needRawData) {
             wrapWsReader(socket, opts.maxPayload);
@@ -274,6 +291,7 @@ module.exports = function (options, cb) {
       var policy = RegExp.$1;
       var reqId = RegExp.$2;
       var proto = RegExp.$3;
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       var host = opts.host.slice(0, -RegExp['$&'].length);
       originConnect.call(this, tempServerOpts, cb);
       handleTempCache(this, {

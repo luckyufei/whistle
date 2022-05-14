@@ -1,9 +1,13 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var Transform = require('pipestream').Transform;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var util = require('util');
 
-function SpeedTransform(options) {
+// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'SpeedTransform'.
+function SpeedTransform(this: any, options: any) {
   Transform.call(this);
   options = options || {};
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
   var value = parseInt((options.speed * 1000) / 8);
   if (value > 0) {
     this._speed = value;
@@ -15,7 +19,7 @@ function SpeedTransform(options) {
 
 util.inherits(SpeedTransform, Transform);
 
-SpeedTransform.prototype._transform = function (chunk, encoding, callback) {
+SpeedTransform.prototype._transform = function (chunk: any, encoding: any, callback: any) {
   var self = this;
   var cb = function () {
     if (chunk && self._speed) {
@@ -36,4 +40,5 @@ SpeedTransform.prototype._transform = function (chunk, encoding, callback) {
   cb();
 };
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = SpeedTransform;

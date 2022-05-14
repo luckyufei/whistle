@@ -1,14 +1,18 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var PipeStream = require('pipestream');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var util = require('./util');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var socketMgr = require('./socket-mgr');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 var config = require('./config');
 
 var HTTPS_RE = /^https:/i;
 
-function addErrorEvents(req, res) {
+function addErrorEvents(req: any, res: any) {
   ++util.proc.allHttpRequests;
   ++util.proc.totalAllHttpRequests;
-  var finished;
+  var finished: any;
   var countdown = function () {
     if (req.isLogRequests) {
       --util.proc.httpRequests;
@@ -21,10 +25,10 @@ function addErrorEvents(req, res) {
       --util.proc.allHttpRequests;
     }
   };
-  var clientReq;
-  var done;
+  var clientReq: any;
+  var done: any;
   req
-    .on('dest', function (_req) {
+    .on('dest', function (_req: any) {
       clientReq = _req;
       if (!req.noReqBody) {
         clientReq.on('error', abort);
@@ -32,7 +36,7 @@ function addErrorEvents(req, res) {
     })
     .on('error', abort);
   res
-    .on('src', function (_res) {
+    .on('src', function (_res: any) {
       if (clientReq && req.noReqBody) {
         clientReq.on('error', abort);
       }
@@ -42,7 +46,7 @@ function addErrorEvents(req, res) {
     .once('close', abort)
     .once('finish', countdown);
 
-  function abort(err) {
+  function abort(err: any) {
     if (clientReq === false) {
       return;
     }
@@ -82,10 +86,10 @@ function addErrorEvents(req, res) {
   }
 }
 
-function addTransforms(req, res) {
-  var reqIconvPipeStream, resIconvPipeStream, svrRes, initedResTransform;
+function addTransforms(req: any, res: any) {
+  var reqIconvPipeStream: any, resIconvPipeStream: any, svrRes: any, initedResTransform: any;
 
-  req.addTextTransform = function (transform) {
+  req.addTextTransform = function (transform: any) {
     if (!reqIconvPipeStream) {
       reqIconvPipeStream = util.getPipeIconvStream(req.headers);
       initReqZipTransform().add(reqIconvPipeStream);
@@ -94,7 +98,7 @@ function addTransforms(req, res) {
     return req;
   };
 
-  req.addZipTransform = function (transform, head, tail) {
+  req.addZipTransform = function (transform: any, head: any, tail: any) {
     initReqZipTransform()[head ? 'addHead' : tail ? 'addTail' : 'add'](
       transform
     );
@@ -114,7 +118,7 @@ function addTransforms(req, res) {
       initedResTransform = true;
       res._needGunzip = true;
       removeContentLength();
-      res.add(function (src, next) {
+      res.add(function (src: any, next: any) {
         if (resIconvPipeStream) {
           var pipeIconvStream = util.getPipeIconvStream(res.headers);
           pipeIconvStream.add(resIconvPipeStream);
@@ -126,12 +130,12 @@ function addTransforms(req, res) {
     }
   }
 
-  res.addZipTransform = function (transform, head, tail) {
+  res.addZipTransform = function (transform: any, head: any, tail: any) {
     initResZipTransform();
     res[head ? 'addHead' : tail ? 'addTail' : 'add'](transform);
     return res;
   };
-  res.addTextTransform = function (transform, head, tail) {
+  res.addTextTransform = function (transform: any, head: any, tail: any) {
     if (!resIconvPipeStream) {
       resIconvPipeStream = new PipeStream();
       initResZipTransform();
@@ -140,7 +144,7 @@ function addTransforms(req, res) {
     return res;
   };
 
-  res.on('src', function (_res) {
+  res.on('src', function (_res: any) {
     svrRes = _res;
     removeContentLength();
   });
@@ -152,7 +156,8 @@ function addTransforms(req, res) {
   }
 }
 
-module.exports = function (req, res, next) {
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
+module.exports = function (req: any, res: any, next: any) {
   PipeStream.wrapSrc(req);
   PipeStream.wrapDest(res);
   addTransforms(req, res);
@@ -216,7 +221,7 @@ module.exports = function (req, res, next) {
     req.rawHeaders = [];
     delete headers[config.ALPN_PROTOCOL_HEADER];
   }
-  res.response = function (_res) {
+  res.response = function (_res: any) {
     if (req._hasRespond) {
       return;
     }
