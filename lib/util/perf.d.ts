@@ -1,0 +1,33 @@
+export function setProxy(p: any): void;
+export namespace procData {
+    export { memUsage };
+    export const uptime: number;
+    export const cpuPercent: string;
+    export { now as startupTime };
+    export { now as updateTime };
+    export const httpRequests: number;
+    export const allHttpRequests: number;
+    export const wsRequests: number;
+    export const allWsRequests: number;
+    export const tunnelRequests: number;
+    export const totalHttpRequests: number;
+    export const totalWsRequests: number;
+    export const totalTunnelRequests: number;
+    export const totalAllHttpRequests: number;
+    export const totalAllWsRequests: number;
+    export const httpQps: number;
+    export const tunnelQps: number;
+    export const wsQps: number;
+    export const totalQps: number;
+    export const maxQps: number;
+    export const maxAllQps: number;
+    export const maxRss: number;
+    export const maxCpu: number;
+    export { now as maxQpsTime };
+    export { now as maxAllQpsTime };
+    export { now as maxRssTime };
+    export { now as maxCpuTime };
+}
+declare var memUsage: NodeJS.MemoryUsage;
+declare var now: number;
+export {};

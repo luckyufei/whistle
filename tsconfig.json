@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "esnext",
+    "strict": true,
+    "jsx": "preserve",
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "downlevelIteration": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "esModuleInterop": true,
+    "strictNullChecks": true,
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "sourceMap": false,
+    "baseUrl": ".",
+    "rootDir": "./src",
+    "outDir": "./lib",
+    "noErrorTruncation": false,
+    "disableReferencedProjectLoad": true,
+    "disableSolutionSearching": true,
+    "composite": true,
+    "types": ["node"],
+    "typeRoots": [],
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "lib": [
+      "esnext"
+    ]
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.js",
+    "tests/**/*.ts"
+  ],
+  "exclude": [
+    "**/node_modules",
+    "**/.*"
+  ]
+}

@@ -1,0 +1,11 @@
+export function getReqRaw(req: any): Buffer;
+export function getResRaw(res: any): Buffer;
+export function getReq(raw: any, callback: any): void;
+export function getRes(raw: any, callback: any): void;
+export function parseJSON(str: any): any;
+export function getFilename(type: any, filename: any): any;
+export function toISOString(time: any): string;
+export function removeIPV6Prefix(ip: any): string;
+export function parseFrames(res: any, content: any, callback: any): void;
+import Buffer_1 = require("safe-buffer");
+import Buffer = Buffer_1.Buffer;

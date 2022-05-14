@@ -1,237 +1,284 @@
-require('./lib/util/patch');
-var net = require('net');
-var tls = require('tls');
+var express = require('express');
+var http = require('http');
+var https = require('https');
+var socks = require('sockx');
 var extend = require('extend');
-var path = require('path');
-var cluster = require('cluster');
-var os = require('os');
-var assert = require('assert');
-var common = require('./lib/util/common');
+var EventEmitter = require('events');
+var util = require('./util');
+var logger = require('./util/logger');
+var rules = require('./rules');
+var setupHttps = require('./https').setup;
+var httpsUtil = require('./https/ca');
+var rulesUtil = require('./rules/util');
+var initDataServer = require('./util/data-server');
+var initLogServer = require('./util/log-server');
+var pluginMgr = require('./plugins');
+var config = require('./config');
+var loadService = require('./service');
+var initSocketMgr = require('./socket-mgr');
+var tunnelProxy = require('./tunnel');
+var upgradeProxy = require('./upgrade');
+var proc = require('./util/process');
+var perf = require('./util/perf');
+var loadCert = require('./https/load-cert');
+var common = require('./util/common');
 
-var ver = process.version.substring(1).split('.');
-var PROD_RE = /(^|\|)prod(uction)?($|\|)/;
-var noop = function () {};
-var state = {};
-var INTERVAL = 1000;
-var TIMEOUT = 10000;
-var MASTER_TIMEOUT = 12000;
-
-if (ver[0] >= 7 && ver[1] >= 7) {
-  var connect = net.Socket.prototype.connect;
-  if (typeof connect === 'function') {
-    //fix: Node v7.7.0+引入的 `"listener" argument must be a function` 问题
-    net.Socket.prototype.connect = function (options, cb) {
-      if (options && typeof options === 'object' && typeof cb !== 'function') {
-        return connect.call(this, options, null);
-      }
-      return connect.apply(this, arguments);
-    };
+function handleClientError(err, socket) {
+  if (!socket.writable) {
+    return socket.destroy(err);
   }
+  var errCode = err && err.code;
+  var statusCode = errCode === 'HPE_HEADER_OVERFLOW' ? 431 : 400;
+  var stack = util.getErrorStack(
+    'clientError: Bad request' + (errCode ? ' (' + errCode + ')' : '')
+  );
+  socket.end('HTTP/1.1 ' + statusCode + ' Bad Request\r\n\r\n' + stack);
 }
 
-var env = process.env || '';
-env.WHISTLE_ROOT = __dirname;
-if (typeof tls.checkServerIdentity == 'function') {
-  var checkServerIdentity = tls.checkServerIdentity;
-  tls.checkServerIdentity = function () {
-    try {
-      return checkServerIdentity.apply(this, arguments);
-    } catch (err) {
-      return err;
-    }
-  };
-}
-if (env.WHISTLE_PLUGIN_EXEC_PATH) {
-  env.PFORK_EXEC_PATH = env.WHISTLE_PLUGIN_EXEC_PATH;
-}
-
-function isPipeName(s) {
-  return typeof s === 'string' && toNumber(s) === false;
-}
-
-function toNumber(x) {
-  return (x = Number(x)) >= 0 ? x : false;
-}
-
-if (!net._normalizeConnectArgs) {
-  //Returns an array [options] or [options, cb]
-  //It is the same as the argument of Socket.prototype.connect().
-  net._normalizeConnectArgs = function (args) {
-    var options = {};
-
-    if (args[0] !== null && typeof args[0] === 'object') {
-      // connect(options, [cb])
-      options = args[0];
-    } else if (isPipeName(args[0])) {
-      // connect(path, [cb]);
-      options.path = args[0];
-    } else {
-      // connect(port, [host], [cb])
-      options.port = args[0];
-      if (typeof args[1] === 'string') {
-        options.host = args[1];
-      }
-    }
-
-    var cb = args[args.length - 1];
-    return typeof cb === 'function' ? [options, cb] : [options];
-  };
-}
-
-function loadConfig(options) {
-  var config = options.config;
-  if (config) {
-    delete options.config;
-    return require(path.resolve(config));
-  }
-}
-
-function likePromise(p) {
-  return p && typeof p.then === 'function' && typeof p.catch === 'function';
-}
-
-function killWorker(worker) {
-  try {
-    worker.removeAllListeners();
-    worker.on('error', noop);
-    worker.kill('SIGTERM');
-  } catch (err) {}
-}
-
-function forkWorker(index) {
-  var worker = cluster.fork({ workerIndex: index });
-  var reforked;
-  var refork = () => {
-    if (!state[index]) {
-      setTimeout(function () {
-        process.exit(1);
-      }, INTERVAL);
-      return;
-    }
-    if (reforked) {
-      return;
-    }
-    reforked = true;
-    killWorker(worker);
-    clearInterval(worker.timer);
-    clearTimeout(worker.activeTimer);
-    setTimeout(function () {
-      forkWorker(index);
-    }, 600);
-  };
-  worker.once('disconnect', refork);
-  worker.once('exit', refork);
-  worker.on('error', noop);
-  worker.on('message', (msg) => {
-    if (msg !== '1') {
-      return;
-    }
-    state[index] = true;
-    if (!worker.timer) {
-      worker.timer = setInterval(() => {
-        try {
-          worker.send('1', noop);
-        } catch (e) {
-          clearInterval(worker.timer);
-        }
-      }, INTERVAL);
-    } else {
-      clearTimeout(worker.activeTimer);
-    }
-    worker.activeTimer = setTimeout(refork, MASTER_TIMEOUT);
+function proxy(callback, _server) {
+  var app = express();
+  var server = _server || http.createServer();
+  var proxyEvents = new EventEmitter();
+  var middlewares = ['./init', '../biz']
+    .concat(require('./inspectors'))
+    .concat(config.middlewares)
+    .concat(require('./handlers'));
+  server.timeout = config.timeout;
+  proxyEvents.config = config;
+  proxyEvents.server = server;
+  app.disable('x-powered-by');
+  app.logger = logger;
+  middlewares.forEach(function (mw) {
+    mw && app.use((typeof mw == 'string' ? require(mw) : mw).bind(proxyEvents));
   });
-}
-
-module.exports = function (options, callback) {
-  if (typeof options === 'function') {
-    callback = options;
-    options = null;
+  server.on('clientError', handleClientError);
+  pluginMgr.setProxy(proxyEvents);
+  perf.setProxy(proxyEvents);
+  initSocketMgr(proxyEvents);
+  setupHttps(server, proxyEvents);
+  exportInterfaces(proxyEvents);
+  tunnelProxy(server, proxyEvents);
+  upgradeProxy(server);
+  initDataServer(proxyEvents);
+  initLogServer(proxyEvents);
+  rulesUtil.setup(proxyEvents);
+  var properties = rulesUtil.properties;
+  if (config.disableAllRules) {
+    properties.set('disabledAllRules', true);
+  } else if (config.disableAllRules === false) {
+    properties.set('disabledAllRules', false);
   }
-  var startWhistle = function () {
-    var server = options.server;
-    if (server) {
-      assert(options.port > 0, 'options.port of the custom server is required');
-      if (!options.storage && options.storage !== false) {
-        options.storage = '__custom_server_5b6af7b9884e1165__' + options.port;
-      }
+  if (config.disableAllPlugins) {
+    properties.set('disabledAllPlugins', true);
+  } else if (config.disableAllPlugins === false) {
+    properties.set('disabledAllPlugins', false);
+  }
+  if (config.allowMultipleChoice) {
+    properties.set('allowMultipleChoice', true);
+  } else if (config.allowMultipleChoice === false) {
+    properties.set('allowMultipleChoice', false);
+  }
+  rulesUtil.addValues(config.values, config.replaceExistValue);
+  rulesUtil.addRules(config.rules, config.replaceExistRule);
+  config.debug && rules.disableDnsCache();
+  var count = _server ? 1 : 2;
+  var execCallback = function () {
+    if (--count === 0) {
+      process.whistleStarted = true;
+      process.emit('whistleStarted');
+      typeof callback === 'function' && callback.call(server, proxyEvents);
     }
-    var workerIndex = env.workerIndex;
-    if (options && options.cluster && workerIndex >= 0) {
-      options.storage =
-        '.' +
-        (options.storage || '') +
-        '__cluster_worker.' +
-        workerIndex +
-        '_5b6af7b9884e1165__';
-    }
-    var conf = require('./lib/config').extend(options);
-    if (!conf.cluster) {
-      return require('./lib')(callback, server);
-    }
-    var timer;
-    var activeTimeout = function () {
-      clearTimeout(timer);
-      timer = setTimeout(function () {
-        process.exit(1);
-      }, TIMEOUT);
-    };
-    process.once('SIGTERM', function () {
-      process.exit(0);
-    });
-
-    require('./lib')(function () {
-      activeTimeout();
-      process.on('message', activeTimeout);
-      process.send('1', noop);
-      setInterval(() => {
-        try {
-          process.send('1', noop);
-        } catch (e) {}
-      }, INTERVAL);
-    });
   };
-  if (options) {
-    if (/^\d+$/.test(options.cluster)) {
-      options.cluster = Math.min(parseInt(options.cluster, 10), 999);
-    } else if (options.cluster) {
-      options.cluster = Math.min(os.cpus().length, 999);
-    }
-    if (options.cluster && cluster.isMaster) {
-      assert(!options.server, 'cannot exist options.server in cluster mode');
-      for (var i = 0; i < options.cluster; i++) {
-        forkWorker(i);
-      }
+  !_server && util.getBoundIp(config.host, function (host) {
+    util.checkPort(!config.INADDR_ANY && !host && config.port, function () {
+      config.host = host;
+      server.listen(config.port, host, execCallback);
+    });
+  });
+  var createNormalServer = function (port, httpModule, opts) {
+    if (!port) {
       return;
     }
-    if (options.debugMode) {
-      if (PROD_RE.test(options.mode)) {
-        options.debugMode = false;
-      } else {
-        env.PFORK_MODE = 'bind';
+    ++count;
+    var optionServer = httpModule.createServer(opts);
+    var isHttps = !!opts;
+    proxyEvents[isHttps ? 'httpsServer' : 'httpServer'] = optionServer;
+    optionServer.on('request', function (req, res) {
+      req.isHttps = isHttps;
+      app.handle(req, res);
+    });
+    optionServer.isHttps = isHttps;
+    tunnelProxy(optionServer, proxyEvents, isHttps ? 1 : 2);
+    upgradeProxy(optionServer);
+    optionServer.on('clientError', handleClientError);
+    util.getBoundIp(
+      config[isHttps ? 'httpsHost' : 'httpHost'],
+      function (host) {
+        util.checkPort(!config.INADDR_ANY && !host && port, function () {
+          optionServer.listen(port, host, execCallback);
+        });
       }
-    }
-    var config = loadConfig(options);
-    if (typeof config === 'function') {
-      var handleCallback = function (opts) {
-        opts && extend(options, opts);
-        return startWhistle();
-      };
-      if (config.length < 2) {
-        config = config(options);
-        if (likePromise(config)) {
-          return config.then(handleCallback).catch(function (err) {
-            process.nextTick(function () {
-              throw err;
-            });
-          });
+    );
+  };
+  createNormalServer(config.httpPort, http);
+  createNormalServer(
+    config.httpsPort,
+    https,
+    extend(
+      {
+        SNICallback: function (servername, callback) {
+          var curUrl = 'https://' + servername;
+          loadCert(
+            {
+              isHttpsServer: true,
+              fullUrl: curUrl,
+              curUrl: curUrl,
+              useSNI: true,
+              headers: {},
+              servername: servername,
+              serverName: servername,
+              commonName: httpsUtil.getDomain(servername)
+            },
+            function () {
+              httpsUtil.SNICallback(servername, callback);
+            }
+          );
         }
-      } else {
-        config(options, handleCallback);
+      },
+      httpsUtil.createCertificate('*.wproxy.org')
+    )
+  );
+  if (config.socksPort) {
+    ++count;
+    var boundHost;
+    var socksServer = socks.createServer(function (info, accept, deny) {
+      var dstPort = info.dstPort;
+      var dstAddr = info.dstAddr;
+      var connPath = dstAddr + ':' + dstPort;
+      var headers = { host: connPath };
+      headers['x-whistle-server'] = 'socks';
+      if (
+        config.socksMode ||
+        (dstPort != 80 &&
+          dstPort != 443 &&
+          (dstPort != config.port ||
+            (!util.isLocalAddress(dstAddr) && !config.isLocalUIUrl(dstAddr))))
+      ) {
+        headers['x-whistle-policy'] = 'tunnel';
       }
-    }
-    config && extend(options, config);
+      var client = http.request({
+        method: 'CONNECT',
+        agent: false,
+        path: connPath,
+        host: boundHost,
+        port: config.port,
+        headers: headers
+      });
+      var destroy = function () {
+        if (client) {
+          client.abort();
+          client = null;
+          deny();
+        }
+      };
+      client.on('error', destroy);
+      client.on('connect', function (res, socket) {
+        socket.on('error', destroy);
+        if (res.statusCode != 200) {
+          return destroy();
+        }
+        var reqSock = accept(true);
+        if (reqSock) {
+          reqSock.pipe(socket).pipe(reqSock);
+        } else {
+          destroy();
+        }
+      });
+      client.end();
+    });
+    proxyEvents.socksServer = socksServer;
+    util.getBoundIp(config.socksHost, function (host) {
+      boundHost = host || '127.0.0.1';
+      util.checkPort(
+        !config.INADDR_ANY && !host && config.socksPort,
+        function () {
+          socksServer.listen(config.socksPort, host, execCallback);
+        }
+      );
+      socksServer.useAuth(socks.auth.None());
+    });
   }
-  return startWhistle();
-};
+  require('../biz/init')(proxyEvents, function () {
+    server.on('request', app);
+    execCallback();
+  });
+  return proxyEvents;
+}
 
-module.exports.getWhistlePath = common.getWhistlePath;
+function exportInterfaces(obj) {
+  obj.getWhistlePath = common.getWhistlePath;
+  obj.rules = rules;
+  obj.util = util;
+  obj.rulesUtil = rulesUtil;
+  obj.rulesMgr = rules;
+  obj.httpsUtil = httpsUtil;
+  obj.pluginMgr = pluginMgr;
+  obj.logger = logger;
+  obj.loadService = loadService;
+  obj.setAuth = config.setAuth;
+  obj.setUIHost = config.setUIHost;
+  obj.setPluginUIHost = config.setPluginUIHost;
+  obj.socketMgr = initSocketMgr;
+  obj.getRuntimeInfo = function () {
+    return proc;
+  };
+  obj.getShadowRules = function () {
+    return config.shadowRules;
+  };
+  obj.setShadowRules = function (shadowRules) {
+    if (typeof shadowRules === 'string') {
+      config.shadowRules = shadowRules;
+      rulesUtil.parseRules();
+    }
+  };
+  return obj;
+}
+
+function handleGlobalException(err) {
+  var code = err && err.code;
+  if (
+    code === 'EPIPE' ||
+    code === 'ERR_HTTP2_ERROR' ||
+    code === 'ENETUNREACH' ||
+    code === 'ERR_HTTP_TRAILER_INVALID' ||
+    code === 'ERR_INTERNAL_ASSERTION' ||
+    (err && /finishwrite/i.test(err.message))
+  ) {
+    return;
+  }
+  if (
+    !err ||
+    (code !== 'ERR_IPC_CHANNEL_CLOSED' && code !== 'ERR_IPC_DISCONNECTED')
+  ) {
+    var stack = util.getErrorStack(err);
+    common.writeLogSync('\r\n' + stack + '\r\n');
+    /*eslint no-console: "off"*/
+    console.error(stack);
+    if (
+      typeof process.handleUncauthtWhistleErrorMessage === 'function' &&
+      process.handleUncauthtWhistleErrorMessage(stack, err) === false
+    ) {
+      return;
+    }
+  }
+  setTimeout(function () {
+    process.exit(1);
+  }, 360);
+}
+
+process.on('unhandledRejection', handleGlobalException);
+process.on('uncaughtException', handleGlobalException);
+
+rulesUtil.parseRules();
+
+module.exports = exportInterfaces(proxy);
